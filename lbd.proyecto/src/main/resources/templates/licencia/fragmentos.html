@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="~{layout/template-new :: head}">
+    <title>COMAVI</title>
+</head>
+
+<body>
+    <!-- Seccion del Titulo Licencia -->
+    <section th:fragment="titulo-agregar">
+        <div class="py-2 text-center">
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+            <h2>Nueva Licencia</h2>
+            <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva licencia que desea agregar. Podrá modificar sus datos una vez se haya creado con éxito.
+            </p>
+        </div>
+    </section>
+
+    <!-- Seccion de formulario -->
+    <section th:fragment="agregar-licencia">
+        <div class="d-flex justify-content-center">
+            <div style="max-width: 40rem;">
+
+                <!-- Información de licencia -->
+                <h4 class="mb-3">Información de la licencia</h4>
+
+                    <form th:action="@{/empleados/lic/add}"
+                        method="POST"
+                        class="needs-validation" novalidate="">
+
+                        <div class="row g-3">
+
+                        <!-- ID -->
+                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" placeholder="" required="">
+
+                        <!-- Tipo de Licencia -->
+                        <div class="col-md-4">
+                            <label for="licencia" class="form-label">Licencia</label>
+                            <select class="form-select" id="idLicencia" name="idLicencia" required="">
+                                <option th:each="licencia : ${licencias}" th:value="${licencia.idLicencia}">[[${licencia.tipo}]]</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione una licencia.
+                            </div>
+                        </div>
+  
+                        <!-- Fecha de Expedicion -->
+                        <div class="col-md-4">
+                            <label for="fechaExpedicion" class="form-label">Fecha de expedición</label>
+                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" value="">
+                            <div class="invalid-feedback">
+                                Una fecha válida es requerida.
+                            </div>
+                        </div>
+  
+                        <!-- Fecha de Vencimiento -->
+                        <div class="col-md-4">
+                            <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
+                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" value="">
+                            <div class="invalid-feedback">
+                                Una fecha válida es requerida.
+                            </div>
+                        </div>
+
+                        <!-- Divisor -->
+                        <hr class="my-4">
+
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Crear licencia</button>
+
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seccion de ver listado direcciones licencias -->
+    <section th:fragment="ver-licencias">
+        <div class="d-flex justify-content-center">
+            <div th:if="${licenciasEmpleado != null and !licenciasEmpleado.empty}" style="width: 80rem;">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Expedición</th>
+                        <th scope="col">Vencimiento</th>
+                        <th scope="col">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="licenciaEmpleado : ${licenciasEmpleado}">
+                        <th scope="row">[[${licenciaEmpleado.idLicenciaEmpleado}]]</th>
+                        <td>[[${licenciaEmpleado.getLicencia.getTipo}]]</td>
+                        <td>[[${licenciaEmpleado.fechaExpedicion}]]</td>                        
+                        <td>[[${licenciaEmpleado.fechaVencimiento}]]</td>
+                        <td>
+                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/editar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-secondary">Editar</a>
+                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/eliminar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-danger">Eliminar</a>
+                            <!-- <a th:href="@{/clientes/editar/} + ${cliente.idCliente}" class="btn btn-secondary">Editar</a>
+                            <a th:href="@{/clientes/eliminar/} + ${cliente.idCliente}" class="btn btn-danger">Eliminar</a> -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+            <div th:if="${licenciasEmpleado == null or licenciasEmpleado.empty}">
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+                    No se encontraron licencias registradas :(
+                </p>
+            </div>
+
+        </div>
+        <!-- Boton de agregar -->
+        <div class="d-flex justify-content-center">
+            <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/agregar'}" class="btn btn-primary">Agregar licencia</a>
+        </div>
+    </section>
+
+    <!-- Seccion del Titulo Actualizar Licencia -->
+    <section th:fragment="titulo-actualizar">
+        <div class="py-2 text-center">
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+            <h2>Editar Licencia</h2>
+            <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+                Por favor, ingrese los nuevos datos de la licencia. Una vez que haya completado el formulario, haga clic en el botón "Editar" para actualizar la información.
+            </p>
+        </div>
+    </section>
+
+    <!-- Seccion de formulario actualizar -->
+    <section th:fragment="actualizar">
+        <div class="d-flex justify-content-center">
+            <div style="max-width: 40rem;">
+
+                <!-- Información de ubicación -->
+                <h4 class="mb-3">Información de la licencia</h4>
+
+                    <form th:action="@{/empleados/lic/update}"
+                        method="POST"
+                        class="needs-validation" novalidate="">
+
+                        <div class="row g-3">
+
+                        <!-- ID -->
+                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idLicenciaEmpleado" id="idLicenciaEmpleado" th:value="${idLicenciaEmpleado}" placeholder="" required="">
+
+                        <!-- Tipo de Licencia -->
+                        <div class="col-md-4">
+                            <label for="licencia" class="form-label">Licencia</label>
+                            <select class="form-select" id="idLicencia" name="idLicencia" required="">
+                                <option th:each="licencia : ${licencias}" th:value="${licencia.idLicencia}">[[${licencia.tipo}]]</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione una licencia.
+                            </div>
+                        </div>
+  
+                        <!-- Fecha de Expedicion -->
+                        <div class="col-md-4">
+                            <label for="fechaExpedicion" class="form-label">Fecha de expedición</label>
+                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" value="">
+                            <div class="invalid-feedback">
+                                Una fecha válida es requerida.
+                            </div>
+                        </div>
+  
+                        <!-- Fecha de Vencimiento -->
+                        <div class="col-md-4">
+                            <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
+                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" value="">
+                            <div class="invalid-feedback">
+                                Una fecha válida es requerida.
+                            </div>
+                        </div>
+                        
+                        <!-- Divisor -->
+                        <hr class="my-4">
+
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Editar</button>
+
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="~{layout/template-new :: head}">
+    <title>COMAVI</title>
+</head>
+
+<body>
+    <!-- Seccion del Titulo -->
+    <section th:fragment="titulo">
+        <div class="py-2 text-center">
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path d="M9.56443 8.73049L10.0789 10.5926C10.5639 12.3481 10.8064 13.2259 11.5194 13.6252C12.2323 14.0244 13.1374 13.7892 14.9474 13.3188L16.8673 12.8199C18.6774 12.3495 19.5824 12.1143 19.9941 11.4227C20.4057 10.7312 20.1632 9.85344 19.6782 8.09788L19.1638 6.2358C18.6788 4.48023 18.4363 3.60244 17.7233 3.20319C17.0103 2.80394 16.1052 3.03915 14.2952 3.50955L12.3753 4.00849C10.5652 4.47889 9.66021 4.71409 9.24856 5.40562C8.83692 6.09714 9.07943 6.97493 9.56443 8.73049Z" fill="#ffffff"></path>
+                    <path d="M2.27749 5.24694C2.38823 4.84781 2.80157 4.61402 3.2007 4.72476L4.9044 5.19744C5.82129 5.45183 6.5469 6.15866 6.80003 7.07489L8.95106 14.8609L9.10935 15.4075C9.74249 15.6438 10.2863 16.0866 10.6314 16.6747L10.9414 16.579L19.8115 14.2739C20.2124 14.1697 20.6219 14.4102 20.7261 14.8111C20.8303 15.212 20.5897 15.6214 20.1888 15.7256L11.3515 18.0223L11.0228 18.1238C11.0161 19.3947 10.1392 20.5555 8.81236 20.9003C7.22189 21.3136 5.58709 20.3982 5.16092 18.8556C4.73476 17.313 5.67861 15.7274 7.26908 15.3141C7.3479 15.2936 7.42682 15.2764 7.5057 15.2623L5.35419 7.47433C5.24592 7.08242 4.92897 6.76092 4.50338 6.64284L2.79968 6.17016C2.40054 6.05942 2.16675 5.64608 2.27749 5.24694Z" fill="#ffffff"></path>
+                </g>
+            </svg>
+            <h2>Nuevo Viaje</h2>
+            <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+                Por favor, proceda a completar el siguiente formulario con los detalles del nuevo viaje que desea agregar. Podrá modificar sus datos una vez se haya creado con éxito.
+            </p>
+        </div>
+    </section>
+
+    <!-- Seccion de formulario -->
+    <section th:fragment="agregar">
+        <div class="d-flex justify-content-center">
+            <div style="max-width: 40rem;">
+
+                <!-- Información de Contacto -->
+                <h4 class="mb-3">Información de Contacto</h4>
+                <form class="needs-validation" novalidate="">
+                    <div class="row g-3">
+
+                        <!-- Nombre -->
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+                            <div class="invalid-feedback">
+                                Un nombre válido es requerido.
+                            </div>
+                        </div>
+
+                        <!-- Apellido -->
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+                            <div class="invalid-feedback">
+                                Un apellido válido es requerido.
+                            </div>
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="col-6">
+                            <label for="email" class="form-label">Correo</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text">@</span>
+                                <input type="text" class="form-control" id="email" placeholder="you@example.com" required="">
+                                <div class="invalid-feedback">
+                                    Un correo válido es requerido.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Telefono -->
+                        <div class="col-6">
+                            <label for="phone" class="form-label">Teléfono</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text">#</span>
+                                <input type="text" class="form-control" id="phone" placeholder="1234-5678" required="">
+                                <div class="invalid-feedback">
+                                    Un número de teléfono válido es requerido.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empleado asociado -->
+                        <div class="col-12">
+                            <label for="employee" class="form-label">Conductor Asociado</label>
+                            <select class="form-select" id="employee" required="">
+                                <option value="">Seleccione...</option>
+                                <option>Empleado 1</option>
+                                <option>Empleado 2</option>
+                                <option>Empleado 3</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un empleado.
+                            </div>
+                        </div>
+
+                        <!-- Cliente asociado -->
+                        <div class="col-12">
+                            <label for="client" class="form-label">Cliente Asociado</label>
+                            <select class="form-select" id="client" required="">
+                                <option value="">Seleccione...</option>
+                                <option>Cliente 1</option>
+                                <option>Cliente 2</option>
+                                <option>Cliente 3</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un cliente.
+                            </div>
+                        </div>
+
+                        <!-- Divisor -->
+                        <hr class="my-4">
+
+                        <!-- Información de ubicación -->
+                        <h4 class="mb-3">Información de ubicación</h4>
+
+                        <div class="col-12">
+                            <label for="address" class="form-label">Dirección con indicaciones</label>
+                            <input type="text" class="form-control" id="address" placeholder="Calle El Sol, Av. 12" required="">
+                            <div class="invalid-feedback">
+                                Por favor, ingrese una dirección válida.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address2" class="form-label">Indicaciones adicionales<span class="text-body-secondary">(Opcional)</span></label>
+                            <input type="text" class="form-control" id="address2" placeholder="Apartmento o número de casa">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="provincia" class="form-label">Provincia</label>
+                            <select class="form-select" id="provincia" required="">
+                                <option value="">Seleccione...</option>
+                                <option>Heredia</option>
+                                <option>San José</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione una provincia.
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="canton" class="form-label">Cantón</label>
+                            <select class="form-select" id="canton" required="">
+                                <option value="">Seleccione...</option>
+                                <option>Cantón 1</option>
+                                <option>Cantón 2</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un cantón.
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="distrito" class="form-label">Distrito</label>
+                            <select class="form-select" id="distrito" required="">
+                                <option value="">Seleccione...</option>
+                                <option>Distrito 1</option>
+                                <option>Distrito 2</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un distrito.
+                            </div>
+                        </div>
+
+                        <!-- Divisor -->
+                        <hr class="my-4">
+
+                        <!-- Google Maps -->
+                        <div class="text-center">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+
+                        <!-- Divisor -->
+                        <hr class="my-4">
+
+                        <!-- Detalles del pedido -->
+                        <h4 class="mb-3">Detalles del pedido</h4>
+
+                        <!-- Tipo de Carga -->
+                        <div class="col-md-6">
+                            <label for="carga" class="form-label">Tipo de Carga</label>
+                            <select class="form-select" id="carga" required="">
+                                <option value="">Seleccione...</option>
+                                <option>Tipo 1</option>
+                                <option>Tipo 2</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un cantón.
+                            </div>
+                        </div>
+
+                        <!-- Fecha de entrega -->
+                        <div class="col-sm-6">
+                            <label for="date" class="form-label">Fecha de entrega</label>
+                            <input type="datetime-local" class="form-control" id="date" placeholder="" value="" required="">
+                            <div class="invalid-feedback">
+                                Una fecha válida es requerida.
+                            </div>
+                        </div>
+
+                        <!-- Descripcion -->
+                        <div class="col-12">
+                            <label for="description" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="description" placeholder="" value="" required="">
+                            <div class="invalid-feedback">
+                                Una descripción válida es requerida.
+                            </div>
+                        </div>
+
+
+                        <!-- Estado -->
+                        <div class="col-12">
+                            <label for="client" class="form-label">Estado</label>
+                            <select class="form-select" id="client" required="">
+                                <option value="">Seleccione...</option>
+                                <option>Estado 1</option>
+                                <option>Estado 2</option>
+                                <option>Estado 3</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un estado.
+                            </div>
+                        </div>
+
+                        <!-- Entrega de alta prioridad -->
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="priority-delivery">
+                            <label class="form-check-label" for="priority-delivery">Entrega de alta prioridad</label>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Crear viaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

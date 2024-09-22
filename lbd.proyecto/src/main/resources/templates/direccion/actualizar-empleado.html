@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="~{layout/template-new :: head}">
+        <title>COMAVI</title>        
+    </head>
+    <body class="container py-2">
+        <header th:replace="~{layout/template-new :: header}"/>
+
+        <section th:replace="~{direccion/fragmentos :: titulo-act-dir-empleado}"/>
+        <section th:replace="~{direccion/fragmentos :: actualizar-dir-empleado}"/>
+
+        <footer th:replace="~{layout/template-new :: footer}"/>          
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script>
+            // Datos de prueba basados en tus inserts de SQL
+            var data = {
+                "1": { // San Jose
+                    "1": {"1": "Carmen", "2": "Merced", "3": "Catedral"}, // San Jose
+                    "2": {"4": "Escazu", "5": "San Antonio", "6": "San Rafael"}, // Escazu
+                    "3": {"7": "Desamparados", "8": "San Miguel", "9": "San Rafael"} // Desamparados
+                },
+                "2": { // Heredia
+                    "4": {"10": "Heredia", "11": "Mercedes", "12": "Ulloa"}, // Heredia
+                    "5": {"13": "Barva", "14": "San Pedro", "15": "San Roque"}, // Barva
+                    "6": {"16": "Santo Domingo", "17": "Paracito", "18": "Santa Rosa"} // Santo Domingo
+                },
+                "3": { // Cartago
+                    "7": {"19": "Oriental", "20": "Occidental", "21": "Carmen"}, // Cartago
+                    "8": {"22": "Paraíso", "23": "Orosi", "24": "Cachí"}, // Paraiso
+                    "9": {"25": "Tres Ríos", "26": "San Diego", "27": "Concepción"} // La Union
+                }
+            };
+        
+            window.onload = function () {
+                var provinciaSel = document.getElementById("provincia");
+                var cantonSel = document.getElementById("canton");
+                var distritoSel = document.getElementById("idDistrito");
+        
+                // Evento al cambiar de provincia
+                provinciaSel.onchange = function () {
+                    cantonSel.length = 1; // remove all options bar first
+                    distritoSel.length = 1; // remove all options bar first
+                    if (this.selectedIndex < 1) return; // done   
+                    for (var cantonID in data[this.value]) {
+                        var cantonNombre = getCantonNombre(cantonID); // Obtener el nombre del cantón según el ID
+                        cantonSel.options[cantonSel.options.length] = new Option(cantonNombre, cantonID);
+                    }
+                }
+        
+                // Evento al cambiar de canton
+                cantonSel.onchange = function () {
+                    distritoSel.length = 1; // remove all options bar first
+                    if (this.selectedIndex < 1) return; // done   
+                    var distritos = data[provinciaSel.value][this.value];
+                    for (var id in distritos) {
+                        distritoSel.options[distritoSel.options.length] = new Option(distritos[id], id);
+                    }
+                }
+        
+                // Función para obtener el nombre del cantón según su ID
+                function getCantonNombre(cantonID) {
+                    var cantonNombres = {
+                        "1": "San Jose",
+                        "2": "Escazu",
+                        "3": "Desamparados",
+                        "4": "Heredia",
+                        "5": "Barva",
+                        "6": "Santo Domingo",
+                        "7": "Cartago",
+                        "8": "Paraiso",
+                        "9": "La Union"
+                    };
+                    return cantonNombres[cantonID];
+                }
+            }
+        </script>
+            
+
+    </body>
+</html>
