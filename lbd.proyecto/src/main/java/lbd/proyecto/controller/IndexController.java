@@ -667,10 +667,10 @@ public class IndexController {
         // System.out.println(empleadoResult.isDriver());
 
         //Test Pedido.isCanceled
-        Pedido pedido = new Pedido();
-        pedido.setIdPedido(63L);
-        Pedido pedidoResult = pedidoService.getPedido(pedido);
-        System.out.println(pedidoResult.isCanceled());
+//        Pedido pedido = new Pedido();
+//        pedido.setIdPedido(63L);
+//        Pedido pedidoResult = pedidoService.getPedido(pedido);
+//        System.out.println(pedidoResult.isCanceled());
 
         return "index-new";
     }
