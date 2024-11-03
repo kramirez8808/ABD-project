@@ -1,17 +1,17 @@
 -- TABLES
 CREATE TABLE fide_estados_tb (
-    id_estado NUMBER,
+    id_estado NUMBER NOT NULL,
     descripcion VARCHAR2(50)
 );
 
 CREATE TABLE fide_roles_tb (
-    id_rol NUMBER,
+    id_rol NUMBER NOT NULL,
     descripcion VARCHAR2(50)
     id_estado NUMBER
 );
 
 CREATE TABLE fide_usuarios_tb (
-    id_usuario NUMBER,
+    id_usuario NUMBER NOT NULL,
     usuario VARCHAR2(50),
     contrasena VARCHAR2(255),
     id_rol NUMBER,
@@ -19,13 +19,13 @@ CREATE TABLE fide_usuarios_tb (
 );
 
 CREATE TABLE fide_categorias_tb (
-    id_categoria NUMBER,
+    id_categoria NUMBER NOT NULL,
     descripcion VARCHAR2(50),
     id_estado NUMBER
 );
 
 CREATE TABLE fide_productos_tb (
-    id_producto NUMBER,
+    id_producto NUMBER NOT NULL,
     nombre VARCHAR2(50),
     descripcion VARCHAR2(100),
     id_categoria NUMBER,
@@ -33,7 +33,7 @@ CREATE TABLE fide_productos_tb (
 );
 
 CREATE TABLE fide_vehiculos_tb (
-    id_vehiculo NUMBER,
+    id_vehiculo NUMBER NOT NULL,
     marca VARCHAR2(50),
     modelo VARCHAR2(50),
     anio INT,
@@ -42,26 +42,26 @@ CREATE TABLE fide_vehiculos_tb (
 );
 
 CREATE TABLE fide_licencias_tb (
-    id_licencia NUMBER,
+    id_licencia NUMBER NOT NULL,
     tipo VARCHAR2(50),
     id_estado NUMBER
 );
 
 CREATE TABLE fide_puestos_tb (
-    id_puesto VARCHAR2(10),
+    id_puesto VARCHAR2(10) NOT NULL,
     salario NUMBER,
     descripcion VARCHAR2(100),
     id_estado NUMBER
 );
 
 CREATE TABLE fide_tipos_carga_tb (
-    id_tipo_carga NUMBER,
+    id_tipo_carga NUMBER NOT NULL,
     descripcion VARCHAR2(50),
     id_estado NUMBER
 );
 
 CREATE TABLE fide_empleados_tb (
-    id_empleado NUMBER,
+    id_empleado NUMBER NOT NULL,
     nombre VARCHAR2(50),
     apellido VARCHAR2(50),
     fecha_nacimiento DATE,
@@ -71,7 +71,7 @@ CREATE TABLE fide_empleados_tb (
 );
 
 CREATE TABLE fide_licencias_empleado_tb (
-    id_licencia_empleado NUMBER,
+    id_licencia_empleado NUMBER NOT NULL,
     id_empleado NUMBER,
     id_licencia NUMBER,
     fecha_expedicion DATE,
@@ -80,7 +80,7 @@ CREATE TABLE fide_licencias_empleado_tb (
 );
 
 CREATE TABLE fide_clientes_tb (
-    id_cliente NUMBER,
+    id_cliente NUMBER NOT NULL,
     nombre VARCHAR2(50),
     apellido VARCHAR2(50),
     telefono VARCHAR2(15),
@@ -89,20 +89,20 @@ CREATE TABLE fide_clientes_tb (
 );
 
 CREATE TABLE fide_provincias_tb (
-    id_provincia NUMBER,
+    id_provincia NUMBER NOT NULL,
     nombre VARCHAR2(50),
     id_estado NUMBER
 );
 
 CREATE TABLE fide_cantones_tb (
-    id_canton NUMBER,
+    id_canton NUMBER NOT NULL,
     id_provincia NUMBER,
     nombre VARCHAR2(50),
     id_estado NUMBER
 );
 
 CREATE TABLE fide_distritos_tb (
-    id_distrito NUMBER,
+    id_distrito NUMBER NOT NULL,
     id_provincia NUMBER,
     id_canton NUMBER,
     nombre VARCHAR2(50),
@@ -110,7 +110,7 @@ CREATE TABLE fide_distritos_tb (
 );
 
 CREATE TABLE fide_pedidos_tb (
-    id_pedido NUMBER,
+    id_pedido NUMBER NOT NULL,
     id_cliente NUMBER,
     id_vehiculo NUMBER,
     id_tipo_carga NUMBER,
@@ -120,7 +120,7 @@ CREATE TABLE fide_pedidos_tb (
 );
 
 CREATE TABLE fide_detalles_pedido_tb (
-    id_detalle NUMBER,
+    id_detalle NUMBER NOT NULL,
     id_pedido NUMBER,
     id_producto NUMBER,
     cantidad NUMBER,
@@ -129,7 +129,7 @@ CREATE TABLE fide_detalles_pedido_tb (
 );
 
 CREATE TABLE fide_facturas_tb (
-    id_factura NUMBER,
+    id_factura NUMBER NOT NULL,
     id_pedido NUMBER,
     fecha DATE,
     total NUMBER,
@@ -137,7 +137,7 @@ CREATE TABLE fide_facturas_tb (
 );
 
 CREATE TABLE fide_direcciones_empleado_tb (
-    id_direccion NUMBER,
+    id_direccion NUMBER NOT NULL,
     id_empleado NUMBER,
     id_provincia NUMBER,
     id_canton NUMBER,
@@ -147,7 +147,7 @@ CREATE TABLE fide_direcciones_empleado_tb (
 );
 
 CREATE TABLE fide_direcciones_pedido_tb (
-    id_direccion NUMBER,
+    id_direccion NUMBER NOT NULL,
     id_pedido NUMBER,
     id_provincia NUMBER,
     id_canton NUMBER,
@@ -157,7 +157,7 @@ CREATE TABLE fide_direcciones_pedido_tb (
 );
 
 CREATE TABLE fide_direcciones_cliente_tb (
-    id_direccion NUMBER,
+    id_direccion NUMBER NOT NULL,
     id_cliente NUMBER,
     id_provincia NUMBER,
     id_canton NUMBER,
