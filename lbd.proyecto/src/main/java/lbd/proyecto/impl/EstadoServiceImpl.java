@@ -46,15 +46,15 @@ public class EstadoServiceImpl implements EstadoService {
         return transactionTemplate.execute(new TransactionCallback<Estado>() {
             @Override
             public Estado doInTransaction(TransactionStatus status) {
-                // Create a StoredProcedureQuery instance for the stored procedure "ver_estado"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_estado");
+                // Create a StoredProcedureQuery instance for the stored procedure "FIDE_ESTADOS_TB_VER_ESTADO_SP"
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_ESTADOS_TB_VER_ESTADO_SP");
 
                 // Register the input and output parameters
-                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("p_descripcion", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_DESCRIPCION", String.class, ParameterMode.OUT);
 
                 // Set the input parameter
-                query.setParameter("p_id_estado", estado.getIdEstado());
+                query.setParameter("P_ID_ESTADO", estado.getIdEstado());
 
                 // Execute the stored procedure
                 try {
@@ -74,12 +74,12 @@ public class EstadoServiceImpl implements EstadoService {
                 }
 
                 // Print the output parameter
-                System.out.println("Descripcion: " + query.getOutputParameterValue("p_descripcion"));
+                System.out.println("Descripcion: " + query.getOutputParameterValue("P_DESCRIPCION"));
 
                 // Map the output parameters to a Estado object
                 Estado estadoResult = new Estado();
                 estadoResult.setIdEstado(estado.getIdEstado());
-                estadoResult.setDescripcion((String) query.getOutputParameterValue("p_descripcion"));
+                estadoResult.setDescripcion((String) query.getOutputParameterValue("P_DESCRIPCION"));
 
                 System.out.println("Id: " + estadoResult.getIdEstado());
 
@@ -92,7 +92,7 @@ public class EstadoServiceImpl implements EstadoService {
     @Transactional(readOnly = true)
     public List<Estado> getAllEstados() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_estados"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_estados", Estado.class);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_ESTADOS_TB_VER_ESTADOS_SP", Estado.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);

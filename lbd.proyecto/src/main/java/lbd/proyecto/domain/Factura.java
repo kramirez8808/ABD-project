@@ -12,7 +12,7 @@ import lbd.proyecto.domain.Estado;
 
 @Data
 @Entity
-@Table(name = "facturas")
+@Table(name = "FIDE_FACTURAS_TB")
 public class Factura implements Serializable {
     
     //Serial version UID for Serializable classes

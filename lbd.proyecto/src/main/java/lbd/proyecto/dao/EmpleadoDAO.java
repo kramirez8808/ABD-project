@@ -9,28 +9,29 @@ import java.util.List;
 
 // Internal imports
 import lbd.proyecto.domain.Empleado;
+import org.springframework.data.repository.query.Param;
 
 public interface EmpleadoDAO extends JpaRepository<Empleado, Long> {
-    
-    // Method to call an stored procedure to get a (single) employee
-    @Procedure(procedureName = "ver_empleado")
-    Empleado getEmpleado(Long idEmpleado);
-    
-    // Method to call an stored procedure to get all employees
-    @Procedure(procedureName = "ver_empleados")
-    List<Empleado> getAllEmpleados();
 
     // Method to call an stored procedure to insert an employee
-    @Procedure(procedureName = "insertar_empleado")
-    void insertEmpleado(String nombre, String apellido, Date fechaNacimiento, Date fechaContratacion, String idPuesto);
+    @Procedure(procedureName = "FIDE_EMPLEADOS_TB_INSERTAR_SP")
+    void insertEmpleado(String nombre, String apellido, Date fechaNacimiento, Date fechaContratacion, String idPuesto, Long idEstado);
 
     // Method to call an stored procedure to update an employee
-    @Procedure(procedureName = "actualizar_empleado")
-    void updateEmpleado(Long idEmpleado, String nombre, String apellido, Date fechaNacimiento, Date fechaContratacion, String idPuesto);
+    @Procedure(procedureName = "FIDE_EMPLEADOS_TB_ACTUALIZAR_SP")
+    void updateEmpleado(
+        @Param("P_ID_EMPLEADO") Long idEmpleado, 
+        @Param("P_NOMBRE") String nombre, 
+        @Param("P_APELLIDO") String apellido, 
+        @Param("P_FECHA_NACIMIENTO") Date fechaNacimiento, 
+        @Param("P_FECHA_CONTRATACION") Date fechaContratacion, 
+        @Param("P_ID_PUESTO") String idPuesto, 
+        @Param("P_ID_ESTADO") Long idEstado
+    );
 
     // Method to call an stored procedure to delete an employee
-    @Procedure(procedureName = "eliminar_empleado")
-    void deleteEmpleado(Long idEmpleado);
+    @Procedure(procedureName = "FIDE_EMPLEADOS_TB_INACTIVAR_SP")
+    void inactivarEmpleado(Long idEmpleado);
 
     
 }

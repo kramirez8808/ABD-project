@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "producto")
+@Table(name = "FIDE_PRODUCTOS_TB")
 public class Producto implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -29,6 +29,11 @@ public class Producto implements Serializable {
     // @JoinColumn(name = "id_categoria")
     // Categoria categoria; 
     //MySQL => id_categoria FK
+    
+    // Relación con la tabla Estado
+    @ManyToOne // Un producto puede tener un estado
+    @JoinColumn(name = "id_estado") // Clave foránea de estado
+    private Estado estado;
 
     //Constructores
     public Producto() {

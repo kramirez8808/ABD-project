@@ -110,17 +110,17 @@ public class ClienteServiceImpl implements ClienteService {
             @Override
             public Cliente doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "ver_cliente"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_cliente");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_CLIENTES_TB_VER_CLIENTE_SP");
 
                 // Register the input and output parameters
-                query.registerStoredProcedureParameter("p_id_cliente", Long.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("p_nombre", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_apellido", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_telefono", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_correo", String.class, ParameterMode.OUT);
-
+                query.registerStoredProcedureParameter("P_ID_CLIENTE", Long.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_NOMBRE", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_APELLIDO", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_TELEFONO", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_EMAIL", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", String.class, ParameterMode.OUT);
                 // Set the input parameter
-                query.setParameter("p_id_cliente", cliente.getIdCliente());
+                query.setParameter("P_ID_CLIENTE", cliente.getIdCliente());
 
                 // Execute the stored procedure
                 try {
@@ -150,11 +150,10 @@ public class ClienteServiceImpl implements ClienteService {
                 // Map the output parameters to a Cliente object
                 Cliente newCliente = new Cliente();
                 newCliente.setIdCliente(cliente.getIdCliente());
-                newCliente.setNombre((String) query.getOutputParameterValue("p_nombre"));
-                newCliente.setApellido((String) query.getOutputParameterValue("p_apellido"));
-                newCliente.setTelefono((String) query.getOutputParameterValue("p_telefono"));
-                newCliente.setEmail((String) query.getOutputParameterValue("p_correo"));
-
+                newCliente.setNombre((String) query.getOutputParameterValue("P_NOMBRE"));
+                newCliente.setApellido((String) query.getOutputParameterValue("P_APELLIDO"));
+                newCliente.setTelefono((String) query.getOutputParameterValue("P_TELEFONO"));
+                newCliente.setEmail((String) query.getOutputParameterValue("P_EMAIL"));
                 return newCliente;
             }
         });
@@ -165,7 +164,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional(readOnly = true)
     public List<Cliente> getAllClientes() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_clientes"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_clientes", Cliente.class);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_CLIENTES_TB_VER_CLIENTES_SP", Cliente.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);

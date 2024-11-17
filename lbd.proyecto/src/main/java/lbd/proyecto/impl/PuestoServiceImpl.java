@@ -29,6 +29,7 @@ import oracle.jdbc.OracleTypes;
 
 // Internal imports
 import lbd.proyecto.dao.PuestoDAO;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.domain.Licencia;
 import lbd.proyecto.domain.Puesto;
 import lbd.proyecto.service.PuestoService;
@@ -47,55 +48,51 @@ public class PuestoServiceImpl implements PuestoService {
         return transactionTemplate.execute(new TransactionCallback<Puesto>() {
             @Override
             public Puesto doInTransaction(TransactionStatus status) {
-                // Create a StoredProcedureQuery instance for the stored procedure "ver_puesto"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_puesto");
+                // Crear una instancia de StoredProcedureQuery para el procedimiento almacenado "ver_puesto"
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PUESTOS_TB_VER_PUESTO_SP");
 
-                // Register the input and output parameters
-                query.registerStoredProcedureParameter("p_id_puesto", String.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("p_descripcion", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_salario", BigDecimal.class, ParameterMode.OUT);
+                // Registrar los parámetros de entrada y salida
+                query.registerStoredProcedureParameter("P_ID_PUESTO", String.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_DESCRIPCION", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_SALARIO", BigDecimal.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.OUT); // Cambiado a Long
 
+                // Establecer el parámetro de entrada
+                query.setParameter("P_ID_PUESTO", puesto.getIdPuesto());
 
-                // Set the input parameter
-                query.setParameter("p_id_puesto", puesto.getIdPuesto());
-
-                // Execute the stored procedure
+                // Ejecutar el procedimiento almacenado
                 try {
                     query.execute();
                 } catch (PersistenceException e) {
-                    if (e.getCause() instanceof SQLException) {
-                        // Handle the SQLException
-                        SQLException sqlException = (SQLException) e.getCause();
-                        System.err.println("Error Code: " + sqlException.getErrorCode());
-                        System.err.println("SQL State: " + sqlException.getSQLState());
-                        System.err.println("Message: " + sqlException.getMessage());
-                        status.setRollbackOnly();
-                        return null;
-                    } else {
-                        throw e;
-                    }
+                    handlePersistenceException(e, status);
+                    return null;
                 }
 
-                // Print the output parameter
-                // System.out.println("Puesto: " + query.getOutputParameterValue("p_descripcion"));
-                // System.out.println("Tipo de p_salario: " + query.getOutputParameterValue("p_salario").getClass());
-
-                // Map the output parameters to a Licencia object
+                // Mapear los parámetros de salida a un objeto Puesto
                 Puesto puestoResult = new Puesto();
                 puestoResult.setIdPuesto(puesto.getIdPuesto());
-                puestoResult.setSalario(((BigDecimal) query.getOutputParameterValue("p_salario")).doubleValue());
-                puestoResult.setDescripcion((String) query.getOutputParameterValue("p_descripcion"));
+                puestoResult.setSalario(((BigDecimal) query.getOutputParameterValue("P_SALARIO")).doubleValue());
+                puestoResult.setDescripcion((String) query.getOutputParameterValue("P_DESCRIPCION"));
+
+                Long estadoId = (Long) query.getOutputParameterValue("P_ID_ESTADO"); // Cambiado a Long
+
+                // Buscar el estado en la base de datos usando el idEstado
+                Estado estado = entityManager.find(Estado.class, estadoId); // Buscar el estado por idEstado
+
+                puestoResult.setEstado(estado); // Asignar el objeto Estado al puesto
 
                 return puestoResult;
             }
         });
     }
 
+
+
     @Override
     @Transactional(readOnly = true)
     public List<Puesto> getAllPuestos() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_puestos"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_puestos", Puesto.class);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PUESTOS_TB_VER_PUESTOS_SP", Puesto.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -104,38 +101,48 @@ public class PuestoServiceImpl implements PuestoService {
         try {
             query.execute();
         } catch (PersistenceException e) {
-            if (e.getCause() instanceof SQLException) {
-                // Handle the SQLException
-                SQLException sqlException = (SQLException) e.getCause();
-                System.err.println("Error Code: " + sqlException.getErrorCode());
-                System.err.println("SQL State: " + sqlException.getSQLState());
-                System.err.println("Message: " + sqlException.getMessage());
-                return null;
-            } else {
-                throw e;
-            }
+            handlePersistenceException(e, null);
+            return new ArrayList<>();
         }
 
         // Get the result set
         ResultSet resultSet = (ResultSet) query.getOutputParameterValue(1);
 
-        // Create a list of licenses
+        // Use a RowMapper to map the result set to a list of Puesto objects
         List<Puesto> puestos = new ArrayList<>();
-
-        // Iterate over the result set
         try {
             while (resultSet.next()) {
-                Puesto puesto = new Puesto();
-                puesto.setIdPuesto(resultSet.getString("id_puesto"));
-                puesto.setSalario(resultSet.getDouble("salario"));
-                puesto.setDescripcion(resultSet.getString("descripcion"));
+                Puesto puesto = mapPuestoFromResultSet(resultSet);
                 puestos.add(puesto);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
 
         return puestos;
+    }
+
+    private void handlePersistenceException(PersistenceException e, TransactionStatus status) {
+        if (e.getCause() instanceof SQLException) {
+            SQLException sqlException = (SQLException) e.getCause();
+            System.err.println("Error Code: " + sqlException.getErrorCode());
+            System.err.println("SQL State: " + sqlException.getSQLState());
+            System.err.println("Message: " + sqlException.getMessage());
+            if (status != null) {
+                status.setRollbackOnly();
+            }
+        } else {
+            throw e; // Re-throw if the exception is not an SQL exception
+        }
+    }
+
+    private Puesto mapPuestoFromResultSet(ResultSet resultSet) throws SQLException {
+        Puesto puesto = new Puesto();
+        puesto.setIdPuesto(resultSet.getString("id_puesto"));
+        puesto.setSalario(resultSet.getDouble("salario"));
+        puesto.setDescripcion(resultSet.getString("descripcion"));
+        // You can map additional fields as needed, e.g. Estado
+        return puesto;
     }
 }

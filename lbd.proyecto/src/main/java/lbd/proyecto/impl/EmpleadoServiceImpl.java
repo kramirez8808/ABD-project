@@ -25,11 +25,13 @@ import java.text.SimpleDateFormat;
 import lbd.proyecto.dao.EmpleadoDAO;
 // Internal imports
 import lbd.proyecto.domain.Empleado;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.domain.Pedido;
 import lbd.proyecto.domain.Puesto;
 import lbd.proyecto.domain.direcciones.Canton;
 import lbd.proyecto.domain.direcciones.Provincia;
 import lbd.proyecto.service.EmpleadoService;
+import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.PuestoService;
 
 @Service
@@ -37,6 +39,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Autowired
     private PuestoService puestoService;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Autowired
     private EmpleadoDAO empleadoDAO;
@@ -51,30 +56,36 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Transactional
     public void insertEmpleado(Empleado empleado) {
         empleadoDAO.insertEmpleado(empleado.getNombre(), empleado.getApellido(), empleado.getFechaNacimiento(),
-                empleado.getFechaContratacion(), empleado.getPuesto().getIdPuesto());
+                empleado.getFechaContratacion(), empleado.getPuesto().getIdPuesto(), empleado.getEstado().getIdEstado());
     }
 
     @Override
     @Transactional
     public void updateEmpleado(Long idEmpleado, Empleado empleado) {
-        empleadoDAO.updateEmpleado(idEmpleado, empleado.getNombre(), empleado.getApellido(), empleado.getFechaNacimiento(),
-                empleado.getFechaContratacion(), empleado.getPuesto().getIdPuesto());
+        empleadoDAO.updateEmpleado(
+            idEmpleado, 
+            empleado.getNombre(),
+            empleado.getApellido(),
+            empleado.getFechaNacimiento(),
+            empleado.getFechaContratacion(),
+            empleado.getPuesto().getIdPuesto(),
+            empleado.getEstado().getIdEstado()
+        );
     }
 
     @Override
     @Transactional
-    public void deleteEmpleado(Long idEmpleado) {
-        empleadoDAO.deleteEmpleado(idEmpleado);
+    public void inactivarEmpleado(Long idEmpleado) {
+        empleadoDAO.inactivarEmpleado(idEmpleado);
     }
 
     @Override
     public Empleado getEmpleado(Empleado empleado) {
-
         return transactionTemplate.execute(new TransactionCallback<Empleado>() {
             @Override
             public Empleado doInTransaction(TransactionStatus status) {
-                // Create a StoredProcedureQuery instance for the stored procedure "ver_empleado"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_empleado");
+                // Create a StoredProcedureQuery instance for the stored procedure "FIDE_EMPLEADOS_TB_VER_EMPLEADO_SP"
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_EMPLEADOS_TB_VER_EMPLEADO_SP");
 
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("p_id_empleado", Long.class, ParameterMode.IN);
@@ -83,64 +94,72 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 query.registerStoredProcedureParameter("p_fecha_nacimiento", Date.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_fecha_contratacion", Date.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_id_puesto", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
                 query.setParameter("p_id_empleado", empleado.getIdEmpleado());
 
-                // Execute the stored procedure
                 try {
+                    // Execute the stored procedure
                     query.execute();
+
+                    // Map the output parameters to an Empleado object
+                    Empleado newEmpleado = new Empleado();
+                    newEmpleado.setIdEmpleado(empleado.getIdEmpleado());
+                    newEmpleado.setNombre((String) query.getOutputParameterValue("p_nombre"));
+                    newEmpleado.setApellido((String) query.getOutputParameterValue("p_apellido"));
+                    newEmpleado.setFechaNacimiento((Date) query.getOutputParameterValue("p_fecha_nacimiento"));
+                    newEmpleado.setFechaContratacion((Date) query.getOutputParameterValue("p_fecha_contratacion"));
+
+                    // Map the Puesto to the Empleado object
+                    String puestoId = (String) query.getOutputParameterValue("p_id_puesto");
+                    if (puestoId != null) {
+                        Puesto puesto = new Puesto();
+                        puesto.setIdPuesto(puestoId);
+                        Puesto newPuesto = puestoService.getPuesto(puesto);
+                        newEmpleado.setPuesto(newPuesto);
+                    }
+
+                    // Map the Estado to the Empleado object
+                    Long estadoId = (Long) query.getOutputParameterValue("p_id_estado");
+                    if (estadoId != null) {
+                        Estado estado = new Estado();
+                        estado.setIdEstado(estadoId);
+                        Estado newEstado = estadoService.getEstado(estado);
+                        newEmpleado.setEstado(newEstado);
+                    }
+
+                    return newEmpleado;
+
                 } catch (PersistenceException e) {
                     if (e.getCause() instanceof SQLException) {
-                        // Handle the SQLException
+                        // Handle the SQLException and log it
                         SQLException sqlException = (SQLException) e.getCause();
                         System.err.println("Error Code: " + sqlException.getErrorCode());
                         System.err.println("SQL State: " + sqlException.getSQLState());
                         System.err.println("Message: " + sqlException.getMessage());
                         status.setRollbackOnly();
-                        return null;
                     } else {
+                        // Rethrow the exception if it's not related to SQL
                         throw e;
                     }
                 } catch (Exception e) {
+                    // Log any other exceptions
                     e.printStackTrace();
                 }
 
-                // Print the output parameters
-                // System.out.println("Output Parameters:");
-                // System.out.println("Nombre: " + query.getOutputParameterValue("p_nombre"));
-                // System.out.println("Apellido: " + query.getOutputParameterValue("p_apellido"));
-                // System.out.println("Fecha de Nacimiento: " + query.getOutputParameterValue("p_fecha_nacimiento"));
-                // System.out.println("Fecha de Contratacion: " + query.getOutputParameterValue("p_fecha_contratacion"));
-                // System.out.println("ID Puesto: " + query.getOutputParameterValue("p_id_puesto"));
-
-                // Map the output parameters to an Empleado object
-                Empleado newEmpleado = new Empleado();
-                newEmpleado.setIdEmpleado(empleado.getIdEmpleado());
-                newEmpleado.setNombre((String) query.getOutputParameterValue("p_nombre"));
-                newEmpleado.setApellido((String) query.getOutputParameterValue("p_apellido"));
-                newEmpleado.setFechaNacimiento((Date) query.getOutputParameterValue("p_fecha_nacimiento"));
-                newEmpleado.setFechaContratacion((Date) query.getOutputParameterValue("p_fecha_contratacion"));
-
-                // Map the job to the Empleado object
-                Puesto puesto = new Puesto();
-                puesto.setIdPuesto((String) query.getOutputParameterValue("p_id_puesto"));
-                Puesto newPuesto = puestoService.getPuesto(puesto);
-
-                newEmpleado.setPuesto(newPuesto);
-
-                return newEmpleado;
-
+                // Return null in case of an error or exception
+                return null;
             }
         });
-
     }
+
 
     @Override
     @Transactional(readOnly = true)
     public List<Empleado> getAllEmpleados () {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_empleados"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_empleados", Empleado.class);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_EMPLEADOS_TB_VER_EMPLEADOS_SP", Empleado.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -183,9 +202,11 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 Puesto puesto = new Puesto();
                 puesto.setIdPuesto(rs.getString("id_puesto"));
                 Puesto newPuesto = puestoService.getPuesto(puesto);
-
                 empleado.setPuesto(newPuesto);
-
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                empleado.setEstado(newEstado);
                 empleados.add(empleado);
 
             }

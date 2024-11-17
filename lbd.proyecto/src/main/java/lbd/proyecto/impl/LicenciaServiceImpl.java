@@ -28,7 +28,9 @@ import oracle.jdbc.OracleTypes;
 
 // Internal imports
 import lbd.proyecto.dao.LicenciaDAO;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.domain.Licencia;
+import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.LicenciaService;
 
 @Service
@@ -36,6 +38,9 @@ public class LicenciaServiceImpl implements LicenciaService {
     
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -46,15 +51,15 @@ public class LicenciaServiceImpl implements LicenciaService {
         return transactionTemplate.execute(new TransactionCallback<Licencia>() {
             @Override
             public Licencia doInTransaction(TransactionStatus status) {
-                // Create a StoredProcedureQuery instance for the stored procedure "ver_licencia"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_licencia");
+                // Create a StoredProcedureQuery instance for the stored procedure "FIDE_LICENCIAS_TB_VER_LICENCIA_SP"
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_LICENCIAS_TB_VER_LICENCIA_SP");
 
                 // Register the input and output parameters
-                query.registerStoredProcedureParameter("p_id_licencia", Long.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("p_tipo", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_LICENCIA", Long.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_TIPO", String.class, ParameterMode.OUT);
 
                 // Set the input parameter
-                query.setParameter("p_id_licencia", licencia.getIdLicencia());
+                query.setParameter("P_ID_LICENCIA", licencia.getIdLicencia());
 
                 // Execute the stored procedure
                 try {
@@ -74,12 +79,16 @@ public class LicenciaServiceImpl implements LicenciaService {
                 }
 
                 // Print the output parameter
-                System.out.println("Tipo: " + query.getOutputParameterValue("p_tipo"));
+                System.out.println("Tipo: " + query.getOutputParameterValue("P_TIPO"));
 
                 // Map the output parameters to a Licencia object
                 Licencia licenciaResult = new Licencia();
                 licenciaResult.setIdLicencia(licencia.getIdLicencia());
-                licenciaResult.setTipo((String) query.getOutputParameterValue("p_tipo"));
+                licenciaResult.setTipo((String) query.getOutputParameterValue("P_TIPO"));
+                Estado estado = new Estado();
+                estado.setIdEstado((Long)query.getOutputParameterValue("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                licenciaResult.setEstado(newEstado);
 
                 return licenciaResult;
             }
@@ -89,8 +98,8 @@ public class LicenciaServiceImpl implements LicenciaService {
     @Override
     @Transactional(readOnly = true)
     public List<Licencia> getAllLicencias() {
-        // Create a StoredProcedureQuery instance for the stored procedure "ver_licencias"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_licencias", Licencia.class);
+        // Create a StoredProcedureQuery instance for the stored procedure "FIDE_LICENCIAS_TB_VER_LICENCIAS_SP"
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_LICENCIAS_TB_VER_LICENCIAS_SP", Licencia.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -123,6 +132,10 @@ public class LicenciaServiceImpl implements LicenciaService {
                 Licencia licencia = new Licencia();
                 licencia.setIdLicencia(resultSet.getLong("id_licencia"));
                 licencia.setTipo(resultSet.getString("tipo"));
+                Estado estado = new Estado();
+                estado.setIdEstado(resultSet.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                licencia.setEstado(newEstado);
                 licencias.add(licencia);
             }
         } catch (SQLException e) {

@@ -16,7 +16,7 @@ import lbd.proyecto.domain.Estado;
 
 @Data
 @Entity
-@Table(name = "pedidos")
+@Table(name = "FIDE_PEDIDOS_TB")
 public class Pedido implements Serializable {
 
     //Serial version UID for Serializable classes

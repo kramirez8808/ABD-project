@@ -13,7 +13,7 @@ import lbd.proyecto.domain.Licencia;
 
 @Data
 @Entity
-@Table(name = "licencias_empleado")
+@Table(name = "FIDE_LICENCIAS_EMPLEADO_TB")
 public class LicenciaEmpleado implements Serializable {
     
     //Serial version UID for Serializable classes
@@ -24,7 +24,9 @@ public class LicenciaEmpleado implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental value
     @Column(name = "id_licencia_empleado")
     private Long idLicenciaEmpleado; //Hibernate converts this to => id_licencia_empleado
+    
     private java.sql.Date fechaExpedicion; //Column => fecha_expedicion
+    
     private java.sql.Date fechaVencimiento; //Column => fecha_vencimiento
 
     //Relationship with table Empleado
@@ -36,6 +38,11 @@ public class LicenciaEmpleado implements Serializable {
     @ManyToOne // Many licenses can be assigned to one employee
     @JoinColumn(name = "id_licencia") // Foreign key
     private Licencia licencia; // License
+    
+    // Relationship with table Estado
+    @ManyToOne // Many license-employee relations can share the same state
+    @JoinColumn(name = "id_estado") // Foreign key
+    private Estado estado; // License-employee state
 
     //Constructors
     public LicenciaEmpleado() {

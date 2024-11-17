@@ -12,7 +12,7 @@ import lbd.proyecto.domain.direcciones.DireccionEmpleado;
 
 @Data
 @Entity
-@Table(name = "empleados")
+@Table(name = "FIDE_EMPLEADOS_TB")
 public class Empleado implements Serializable {
     
     //Serial version UID for Serializable classes
@@ -40,16 +40,22 @@ public class Empleado implements Serializable {
     //Relationship with table Direcciones_Empleado
     @OneToMany(mappedBy = "empleado") // One employee can have many addresses
     private List<DireccionEmpleado> direccionEmpleado; // Addresses
+    
+    // Relationship with table FIDE_ESTADOS_TB
+    @ManyToOne
+    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
+    private Estado estado;
 
     //Constructors
     public Empleado() {
     }
 
-    public Empleado(String nombre, String apellido, java.sql.Date fechaNacimiento, java.sql.Date fechaContratacion) {
+    public Empleado(String nombre, String apellido, java.sql.Date fechaNacimiento, java.sql.Date fechaContratacion, Estado estado) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaContratacion = fechaContratacion;
+        this.estado = estado;
     }
 
     //Function to get the date returned by the HTML input and convert it to a java.sql.Date
@@ -66,8 +72,6 @@ public class Empleado implements Serializable {
             e.printStackTrace();
             return null;
         }
-        
-        
     }
 
     //Function to return if the employee is a driver
@@ -79,6 +83,4 @@ public class Empleado implements Serializable {
             return false;
         }
     }
-
-
 }

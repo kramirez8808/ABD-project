@@ -70,17 +70,17 @@ public class VehiculoServiceImpl implements VehiculoService {
             @Override
             public Vehiculo doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "ver_vehiculo"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_vehiculo");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_VEHICULOS_TB_VER_VEHICULO_SP");
 
                 // Register the input and output parameters
-                query.registerStoredProcedureParameter("p_id_vehiculo", Long.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("p_marca", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_modelo", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_anio", Integer.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_placa", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_VEHICULO", Long.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_MARCA", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_MODELO", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ANIO", Integer.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_PLACA", String.class, ParameterMode.OUT);
 
                 // Set the input parameter
-                query.setParameter("p_id_vehiculo", vehiculo.getIdVehiculo());
+                query.setParameter("P_ID_VEHICULO", vehiculo.getIdVehiculo());
 
                 // Execute the stored procedure
                 try {
@@ -121,7 +121,7 @@ public class VehiculoServiceImpl implements VehiculoService {
     @Transactional(readOnly = true)
     public List<Vehiculo> getAllVehiculos() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_vehiculos"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_vehiculos", Vehiculo.class);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_VEHICULOS_TB_VER_VEHICULOS_SP", Vehiculo.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);

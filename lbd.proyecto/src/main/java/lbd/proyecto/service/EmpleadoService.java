@@ -21,7 +21,7 @@ public interface EmpleadoService {
     void updateEmpleado(Long idEmpleado, Empleado empleado);
 
     // Method to delete a employee with the Stored Procedure
-    void deleteEmpleado(Long idEmpleado);
+    void inactivarEmpleado(Long idEmpleado);
 
     // Method to convert a string to a Date
     public java.sql.Date convertDate(String input);

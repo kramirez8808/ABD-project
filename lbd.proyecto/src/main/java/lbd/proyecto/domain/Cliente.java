@@ -12,7 +12,7 @@ import lbd.proyecto.domain.Pedido;
 
 @Data
 @Entity
-@Table(name = "clientes")
+@Table(name = "FIDE_CLIENTES_TB")
 public class Cliente implements Serializable {
     
     //Serial version UID for Serializable classes
@@ -37,6 +37,11 @@ public class Cliente implements Serializable {
     @OneToMany(mappedBy = "cliente") // One client can have many addresses
     private List<DireccionCliente> direccionesCliente; // List of addresses of the client
 
+    // Relationship with table FIDE_ESTADOS_TB
+    @ManyToOne
+    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
+    private Estado estado;
+    
     //Constructors
     public Cliente() {
     }

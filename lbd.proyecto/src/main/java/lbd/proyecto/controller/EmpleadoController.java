@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import jakarta.persistence.NoResultException;
 // Internal imports
 import lbd.proyecto.domain.Empleado;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.domain.Licencia;
 import lbd.proyecto.domain.LicenciaEmpleado;
 import lbd.proyecto.domain.Puesto;
@@ -30,6 +31,7 @@ import lbd.proyecto.service.LicenciaEmpleadoService;
 import lbd.proyecto.service.direcciones.DireccionEmpleadoService;
 import lbd.proyecto.service.direcciones.DistritoService;
 import lbd.proyecto.domain.direcciones.DireccionEmpleado;
+import lbd.proyecto.service.EstadoService;
 
 @Controller
 @RequestMapping("/empleados")
@@ -40,6 +42,9 @@ public class EmpleadoController {
 
     @Autowired
     PuestoService puestoService;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Autowired
     LicenciaService licenciaService;
@@ -68,6 +73,11 @@ public class EmpleadoController {
             empleado.setApellido(apellido);
             empleado.setFechaNacimiento(empleado.convertDate(fechaNacimiento));
             empleado.setFechaContratacion(empleado.convertDate(fechaContratacion));
+            if (empleado.getEstado() == null) {
+                Estado estado = new Estado();
+                estado.setIdEstado((long)7); 
+                empleado.setEstado(estado);
+            }
             Puesto puesto = new Puesto();
             puesto.setIdPuesto(idPuesto);
             empleado.setPuesto(puestoService.getPuesto(puesto));
@@ -88,12 +98,12 @@ public class EmpleadoController {
         model.addAttribute("fechaNacimiento", empleadoResult.getFechaNacimiento());
         model.addAttribute("fechaContratacion", empleadoResult.getFechaContratacion());
         model.addAttribute("puestos", puestoService.getAllPuestos());
-
+        model.addAttribute("estados", estadoService.getAllEstados());
         return "/empleado/actualizar";
     }
 
     @PostMapping("/update")
-    public String actualizarEmpleado(@RequestParam Long idEmpleado, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String fechaNacimiento, @RequestParam String fechaContratacion, @RequestParam String idPuesto, RedirectAttributes redirectAttributes) {
+    public String actualizarEmpleado(@RequestParam Long idEmpleado, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String fechaNacimiento, @RequestParam String fechaContratacion, @RequestParam String idPuesto, @RequestParam Long idEstado, RedirectAttributes redirectAttributes) {
         Empleado empleado = new Empleado();
         empleado.setIdEmpleado(idEmpleado);
         empleado.setNombre(nombre);
@@ -103,6 +113,9 @@ public class EmpleadoController {
         Puesto puesto = new Puesto();
         puesto.setIdPuesto(idPuesto);
         empleado.setPuesto(puestoService.getPuesto(puesto));
+        Estado estado = new Estado();
+        estado.setIdEstado(idEstado);
+        empleado.setEstado(estadoService.getEstado(estado));
         empleadoService.updateEmpleado(idEmpleado, empleado);
 
         return "redirect:/empleados/ver";
@@ -115,11 +128,11 @@ public class EmpleadoController {
         return "/empleado/ver";
     }
 
-    @GetMapping("/eliminar/{idEmpleado}")
-    public String eliminarEmpleado(@PathVariable Long idEmpleado, RedirectAttributes redirectAttributes) {
+    @GetMapping("/inactivar/{idEmpleado}")
+    public String inactivarEmpleado(@PathVariable Long idEmpleado, RedirectAttributes redirectAttributes) {
         Empleado empleado = new Empleado();
         empleado.setIdEmpleado(idEmpleado);
-        empleadoService.deleteEmpleado(idEmpleado);
+        empleadoService.inactivarEmpleado(idEmpleado);
         return "redirect:/empleados/ver";
     }
 

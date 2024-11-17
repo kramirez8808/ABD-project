@@ -124,20 +124,20 @@ public class PedidoServiceImpl implements PedidoService {
             @Override
             public Pedido doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "ver_pedido"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_pedido");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PEDIDOS_TB_VER_PEDIDO_SP");
 
                 // Register the input and output parameters
-                query.registerStoredProcedureParameter("p_id_pedido", Long.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("p_descripcion", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_id_cliente", Long.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_id_vehiculo", Long.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_id_tipo_carga", Long.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_fecha", Date.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_id_licencia_empleado", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_PEDIDO", Long.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_DESCRIPCION", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_CLIENTE", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_VEHICULO", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_TIPO_CARGA", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_FECHA", Date.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_LICENCIAS_EMPLEADO", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
-                query.setParameter("p_id_pedido", pedido.getIdPedido());
+                query.setParameter("P_ID_PEDIDO", pedido.getIdPedido());
 
                 // Execute the stored procedure
                 try {
@@ -210,7 +210,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional(readOnly = true)
     public List<Pedido> getAllPedidos() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_pedidos"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_pedidos");
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PEDIDOS_TB_VER_PEDIDOS_SP");
 
         // Register the output parameters
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);

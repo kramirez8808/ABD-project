@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "vehiculo")
+@Table(name = "FIDE_VEHICULOS_TB")
 public class Vehiculo implements Serializable {
     
     //Serial version UID for Serializable classes
@@ -27,6 +27,11 @@ public class Vehiculo implements Serializable {
     //Relationship with table Pedido
     @OneToMany(mappedBy = "vehiculo") // One vehicle can be assigned to many orders
     private List<Pedido> pedidos; // List of orders
+    
+    // Relationship with table Estado
+    @ManyToOne // A vehicule can have one states
+    @JoinColumn(name = "id_estado") // Foreign key to Estado
+    private Estado estado;
 
     //Constructors
     public Vehiculo() {
