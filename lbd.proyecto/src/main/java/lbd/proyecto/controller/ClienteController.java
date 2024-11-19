@@ -213,13 +213,13 @@ public class ClienteController {
         cliente.setIdCliente(idCliente);
         Distrito distrito = new Distrito();
         distrito.setIdDistrito(Long.parseLong(idDistrito));
-        
+        /*
         Distrito distritoResult = distritoService.getDistrito(distrito);
         DireccionCliente direccionCliente = new DireccionCliente(detalles, distritoResult);
         direccionCliente.setCliente(cliente);
-
+        
         direccionClienteService.insertDireccionCliente(direccionCliente, cliente, distritoResult);
-
+        */
         redirectAttributes.addAttribute("idCliente", idCliente);
 
         return "redirect:/clientes/{idCliente}/dir/ver";
@@ -264,7 +264,7 @@ public class ClienteController {
     public String eliminarDireccion(@PathVariable Long idCliente, @PathVariable Long idDireccion, RedirectAttributes redirectAttributes) {
         DireccionCliente direccion = new DireccionCliente();
         direccion.setIdDireccion(idDireccion);
-        direccionClienteService.deleteDireccionCliente(direccion);
+        direccionClienteService.inactivarDireccionCliente(direccion);
         redirectAttributes.addAttribute("idCliente", idCliente);
         return "redirect:/clientes/{idCliente}/dir/ver";
     }

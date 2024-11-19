@@ -25,9 +25,12 @@ public class Vehiculo implements Serializable {
     private Integer anio; // Column => anio
 
     //Relationship with table Pedido
+    @OneToMany(mappedBy = "vehiculo") // One state can be assigned to many clients
+    private List<Pedido> pedidos; // List of clients
+    /*
     @OneToMany(mappedBy = "vehiculo") // One vehicle can be assigned to many orders
     private List<Pedido> pedidos; // List of orders
-    
+    */
     // Relationship with table Estado
     @ManyToOne // A vehicule can have one states
     @JoinColumn(name = "id_estado") // Foreign key to Estado

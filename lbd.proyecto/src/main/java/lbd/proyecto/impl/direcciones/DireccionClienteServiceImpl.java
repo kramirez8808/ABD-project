@@ -37,6 +37,7 @@ import lbd.proyecto.dao.ClienteDAO;
 import lbd.proyecto.domain.direcciones.Distrito;
 import lbd.proyecto.service.direcciones.DistritoService;
 import lbd.proyecto.dao.direcciones.DistritoDAO;
+import lbd.proyecto.service.EstadoService;
 
 @Service
 public class DireccionClienteServiceImpl implements DireccionClienteService {
@@ -46,6 +47,9 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
 
     @Autowired
     private DistritoService distritoService;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Autowired
     private ClienteService clienteService;
@@ -61,7 +65,7 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
     public void insertDireccionCliente(DireccionCliente direccionCliente, Cliente cliente, Distrito distrito) {
         Distrito distritoResult = distritoService.getDistrito(distrito);
         Cliente clienteResult = clienteService.getCliente(cliente);
-        direccionClienteDAO.insertDireccionCliente(clienteResult.getIdCliente(), direccionCliente.getDetalles(), distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito());
+        direccionClienteDAO.insertDireccionCliente(clienteResult.getIdCliente(), direccionCliente.getDetalles(), distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito(), distritoResult.getEstado().getIdEstado());
 
         direccionCliente.setCliente(clienteResult);
         direccionCliente.setDistrito(distritoResult);
@@ -72,7 +76,7 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
     @Transactional
     public void updateDireccionCliente(DireccionCliente direccionCliente, Distrito distrito) {
         Distrito distritoResult = distritoService.getDistrito(distrito);
-        direccionClienteDAO.updateDireccionCliente(direccionCliente.getIdDireccion(), direccionCliente.getDetalles(), distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito());
+        direccionClienteDAO.updateDireccionCliente(direccionCliente.getIdDireccion(), direccionCliente.getDetalles(), distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito(),distritoResult.getEstado().getIdEstado());
         
         direccionCliente.setDistrito(distritoResult);
         System.out.println(direccionCliente.toString());
@@ -223,7 +227,7 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
 
     @Override
     @Transactional
-    public void deleteDireccionCliente(DireccionCliente direccionCliente) {
-        direccionClienteDAO.deleteDireccionCliente(direccionCliente.getIdDireccion());
+    public void inactivarDireccionCliente(DireccionCliente direccionCliente) {
+        direccionClienteDAO.inactivarDireccionCliente(direccionCliente.getIdDireccion());
     }
 }

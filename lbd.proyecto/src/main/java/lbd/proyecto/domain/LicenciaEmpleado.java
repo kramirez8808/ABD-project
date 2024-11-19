@@ -39,6 +39,10 @@ public class LicenciaEmpleado implements Serializable {
     @JoinColumn(name = "id_licencia") // Foreign key
     private Licencia licencia; // License
     
+    // Relationship with table pedidos
+    @OneToMany(mappedBy = "licenciaEmpleado") // One state can be assigned to many pedidos
+    private List<Pedido> pedidos; // List of pedidos
+    
     // Relationship with table Estado
     @ManyToOne // Many license-employee relations can share the same state
     @JoinColumn(name = "id_estado") // Foreign key
@@ -48,11 +52,12 @@ public class LicenciaEmpleado implements Serializable {
     public LicenciaEmpleado() {
     }
 
-    public LicenciaEmpleado(java.sql.Date fechaExpedicion, java.sql.Date fechaVencimiento, Empleado empleado, Licencia licencia) {
+    public LicenciaEmpleado(java.sql.Date fechaExpedicion, java.sql.Date fechaVencimiento, Empleado empleado, Licencia licencia, Estado estado) {
         this.fechaExpedicion = fechaExpedicion;
         this.fechaVencimiento = fechaVencimiento;
         this.empleado = empleado;
         this.licencia = licencia;
+        this.estado = estado;
     }
 
     //Function to get the date returned by the HTML input and convert it to a java.sql.Date

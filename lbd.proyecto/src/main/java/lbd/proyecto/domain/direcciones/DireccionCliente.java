@@ -1,6 +1,7 @@
 package lbd.proyecto.domain.direcciones;
 
 // External imports
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import jakarta.persistence.*;
@@ -10,11 +11,12 @@ import java.util.List;
 // Internal imports
 import lbd.proyecto.domain.direcciones.Direccion;
 import lbd.proyecto.domain.Cliente;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.domain.Pedido;
 
 @Data
 @Entity
-@Table(name = "direccion_cliente")
+@Table(name = "FIDE_DIRECCIONES_CLIENTE_TB")
 @EqualsAndHashCode(callSuper = true)
 public class DireccionCliente extends Direccion {
 
@@ -32,16 +34,24 @@ public class DireccionCliente extends Direccion {
     @JoinColumn(name = "id_cliente") // Foreign key
     private Cliente cliente; // Client to which the address belongs
 
-    //Relationship with table Pedidos
-    @OneToMany(mappedBy = "direccionCliente") // One client can have many orders
-    private List<Pedido> pedidos; // Orders that the client has made
+    //Relationship with table estado
+    @ManyToOne // Many addresses can belong to one estado
+    @JoinColumn(name = "id_estado") // Foreign key
+    private Estado estado; // Client to which the address belongs
+    
+    @Override
+    public String toString() {
+        return "DireccionCliente{id=" + idDireccion;
+    }
 
+    
     //Constructors
     public DireccionCliente() {
     }
 
-    public DireccionCliente(String detalles, Distrito distrito) {
+    public DireccionCliente(String detalles, Distrito distrito, Estado estado) {
         super(detalles, distrito);
+        this.estado = estado;
     }
     
 

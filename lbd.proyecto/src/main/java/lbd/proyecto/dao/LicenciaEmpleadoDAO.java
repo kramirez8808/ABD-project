@@ -15,27 +15,27 @@ import lbd.proyecto.domain.LicenciaEmpleado;
 public interface LicenciaEmpleadoDAO extends JpaRepository<LicenciaEmpleado, Long> {
 
     // Method to call an stored procedure to insert a new license for an employee
-    @Procedure(procedureName = "insertar_licencia_empleado")
-    void insertLicenciaEmpleado(Long idEmpleado, Long idLicencia, Date fechaExpedicion, Date fechaVencimiento);
+    @Procedure(procedureName = "FIDE_LICENCIAS_EMPLEADO_TB_INSERTAR_SP")
+    void insertLicenciaEmpleado(Long idEmpleado, Long idLicencia, Date fechaExpedicion, Date fechaVencimiento, Long idEstado);
 
     // Method to call an stored procedure to update a license for an employee
-    @Procedure(procedureName = "actualizar_licencia_empleado")
-    void updateLicenciaEmpleado(Long idLicenciaEmpleado, Long idLicencia, Date fechaInicio, Date fechaFin);
+    @Procedure(procedureName = "FIDE_LICENCIAS_EMPLEADO_TB_ACTUALIZAR_SP")
+    void updateLicenciaEmpleado(Long idLicenciaEmpleado, Long idLicencia, Date fechaInicio, Date fechaFin, Long idEstado);
 
     // Method to call an stored procedure to delete a license for an employee
-    @Procedure(procedureName = "eliminar_licencia_empleado")
-    void deleteLicenciaEmpleado(Long idLicencia);
+    @Procedure(procedureName = "FIDE_LICENCIAS_EMPLEADO_TB_INACTIVAR_SP")
+    void inactivarLicenciaEmpleado(Long idLicencia);
 
     // Method to call an stored procedure to get a (single) license for an employee
-    @Procedure(procedureName = "ver_licencia_empleado")
+    @Procedure(procedureName = "FIDE_LICENCIAS_EMPLEADO_TB_VER_LICENCIA_SP")
     LicenciaEmpleado getLicenciaEmpleado(Long idLicencia);
 
     // Method to call an stored procedure to get all licenses for employees
-    @Procedure(procedureName = "ver_licencias_empleados")
+    @Procedure(procedureName = "FIDE_LICENCIAS_EMPLEADO_TB_VER_LICENCIAS_SP")
     List<LicenciaEmpleado> getAllLicenciasEmpleado();
 
     // Method to call a SQL function to get all the licenses by employee ID
-    @Query(value = "SELECT * FROM TABLE(buscar_licencias_empleado(:p_id_empleado))", nativeQuery = true)
+    @Query(value = "SELECT * FROM TABLE(FIDE_LICENCIAS_EMPLEADO_TB_BUSCAR_LICENCIA_POR_EMPLEADO_FN(:p_id_empleado))", nativeQuery = true)
     List<LicenciaEmpleado> buscarLicenciasEmpleado(@Param("p_id_empleado") Long idEmpleado);
     
 }

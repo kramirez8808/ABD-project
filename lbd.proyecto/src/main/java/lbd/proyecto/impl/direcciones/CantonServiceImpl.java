@@ -19,10 +19,12 @@ import jakarta.persistence.StoredProcedureQuery;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lbd.proyecto.domain.Estado;
 
 // Internal imports
 import lbd.proyecto.domain.direcciones.Canton;
 import lbd.proyecto.domain.direcciones.Provincia;
+import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.direcciones.ProvinciaService;
 import lbd.proyecto.service.direcciones.CantonService;
 
@@ -34,6 +36,9 @@ public class CantonServiceImpl implements CantonService {
 
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -45,12 +50,13 @@ public class CantonServiceImpl implements CantonService {
             @Override
             public Canton doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "canton"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_canton");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_CANTONES_TB_VER_CANTON_SP");
 
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("p_id_canton", Long.class, ParameterMode.IN);
                 query.registerStoredProcedureParameter("p_nombre", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_id_provincia", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
                 query.setParameter("p_id_canton", canton.getIdCanton());
@@ -83,10 +89,14 @@ public class CantonServiceImpl implements CantonService {
                 // Map the province to the Canton object
                 Provincia provincia = new Provincia();
                 provincia.setIdProvincia((Long) query.getOutputParameterValue("p_id_provincia"));
-                Provincia newProvincia = provinciaService.getProvincia(provincia);                
-
+                Provincia newProvincia = provinciaService.getProvincia(provincia); 
                 newCanton.setProvincia(newProvincia);
-
+                
+                Estado estado = new Estado();
+                estado.setIdEstado((Long) query.getOutputParameterValue("p_id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);  
+                newCanton.setEstado(newEstado);
+                
                 return newCanton;
             }
         });
@@ -97,7 +107,7 @@ public class CantonServiceImpl implements CantonService {
     @Transactional(readOnly = true)
     public List<Canton> getAllCantones() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_cantones"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_cantones", Canton.class);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_CANTONES_TB_VER_CANTONES_SP", Canton.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -121,9 +131,13 @@ public class CantonServiceImpl implements CantonService {
                 // Map the province to the Canton object
                 Provincia provincia = new Provincia();
                 provincia.setIdProvincia(rs.getLong("id_provincia"));
-                Provincia newProvincia = provinciaService.getProvincia(provincia);                
-
+                Provincia newProvincia = provinciaService.getProvincia(provincia);  
                 canton.setProvincia(newProvincia);
+                
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                canton.setEstado(newEstado);
 
                 cantones.add(canton);
             }

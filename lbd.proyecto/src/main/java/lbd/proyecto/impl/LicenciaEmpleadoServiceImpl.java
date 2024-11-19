@@ -41,6 +41,8 @@ import lbd.proyecto.dao.EmpleadoDAO;
 import lbd.proyecto.domain.Licencia;
 import lbd.proyecto.service.LicenciaService;
 import lbd.proyecto.dao.LicenciaEmpleadoDAO;
+import lbd.proyecto.domain.Estado;
+import lbd.proyecto.service.EstadoService;
 
 @Service
 public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
@@ -53,6 +55,9 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
 
     @Autowired
     private LicenciaService licenciaService;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -65,20 +70,20 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
     public void insertLicenciaEmpleado(LicenciaEmpleado licenciaEmpleado, Empleado empleado, Licencia licencia) {
         Licencia licenciaResult = licenciaService.getLicencia(licencia);
         Empleado empleadoResult = empleadoService.getEmpleado(empleado);
-        licenciaEmpleadoDAO.insertLicenciaEmpleado(empleadoResult.getIdEmpleado(), licenciaResult.getIdLicencia(), licenciaEmpleado.getFechaExpedicion(), licenciaEmpleado.getFechaVencimiento());
+        licenciaEmpleadoDAO.insertLicenciaEmpleado(empleadoResult.getIdEmpleado(), licenciaResult.getIdLicencia(), licenciaEmpleado.getFechaExpedicion(), licenciaEmpleado.getFechaVencimiento(), licenciaEmpleado.getEstado().getIdEstado());
     }
 
     @Override
     @Transactional
     public void updateLicenciaEmpleado(Licencia licencia, LicenciaEmpleado licenciaEmpleado) {
         Licencia licenciaResult = licenciaService.getLicencia(licencia);
-        licenciaEmpleadoDAO.updateLicenciaEmpleado(licenciaEmpleado.getIdLicenciaEmpleado(), licenciaResult.getIdLicencia(), licenciaEmpleado.getFechaExpedicion(), licenciaEmpleado.getFechaVencimiento());
+        licenciaEmpleadoDAO.updateLicenciaEmpleado(licenciaEmpleado.getIdLicenciaEmpleado(), licenciaResult.getIdLicencia(), licenciaEmpleado.getFechaExpedicion(), licenciaEmpleado.getFechaVencimiento(), licenciaEmpleado.getEstado().getIdEstado());
     }
 
     @Override
     @Transactional
-    public void deleteLicenciaEmpleado(LicenciaEmpleado licenciaEmpleado) {
-        licenciaEmpleadoDAO.deleteLicenciaEmpleado(licenciaEmpleado.getIdLicenciaEmpleado());
+    public void inactivarLicenciaEmpleado(LicenciaEmpleado licenciaEmpleado) {
+        licenciaEmpleadoDAO.inactivarLicenciaEmpleado(licenciaEmpleado.getIdLicenciaEmpleado());
     }
 
     @Override
@@ -87,18 +92,20 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
         return transactionTemplate.execute(new TransactionCallback<LicenciaEmpleado>() {
             @Override
             public LicenciaEmpleado doInTransaction(TransactionStatus status) {
-                // Create a StoredProcedureQuery instance for the stored procedure "ver_licencia_empleado"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_licencia_empleado");
+                // Create a StoredProcedureQuery instance for the stored procedure "FIDE_LICENCIAS_EMPLEADO_TB_VER_LICENCIA_SP"
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_LICENCIAS_EMPLEADO_TB_VER_LICENCIA_SP");
 
                 // Register the input and output parameters
-                query.registerStoredProcedureParameter("p_id_licencia_empleado", Long.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("p_id_empleado", Long.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_id_licencia", Long.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_fecha_expedicion", Date.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("p_fecha_vencimiento", Date.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_LICENCIA_EMPLEADO", Long.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_ID_EMPLEADO", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_LICENCIA", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_FECHA_EXPEDICION", Date.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_FECHA_VENCIMIENTO", Date.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.OUT);
+
 
                 // Set the input parameter
-                query.setParameter("p_id_licencia_empleado", licenciaEmpleado.getIdLicenciaEmpleado());
+                query.setParameter("P_ID_LICENCIA_EMPLEADO", licenciaEmpleado.getIdLicenciaEmpleado());
 
                 // Execute the stored procedure
                 try {
@@ -120,25 +127,31 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
                 // Map the output parameters to a LicenciaEmpleado object
                 LicenciaEmpleado licenciaEmpleadoResult = new LicenciaEmpleado();
                 licenciaEmpleadoResult.setIdLicenciaEmpleado(licenciaEmpleado.getIdLicenciaEmpleado());
-                licenciaEmpleadoResult.setFechaExpedicion((Date) query.getOutputParameterValue("p_fecha_expedicion"));
-                licenciaEmpleadoResult.setFechaVencimiento((Date) query.getOutputParameterValue("p_fecha_vencimiento"));
+                licenciaEmpleadoResult.setFechaExpedicion((Date) query.getOutputParameterValue("P_FECHA_EXPEDICION"));
+                licenciaEmpleadoResult.setFechaVencimiento((Date) query.getOutputParameterValue("P_FECHA_VENCIMIENTO"));
 
                 System.out.println("Parametros");
-                System.out.println("id_licencia_empleado: " + licenciaEmpleadoResult.getIdLicenciaEmpleado());
+                System.out.println("P_ID_LICENCIA_EMPLEADO: " + licenciaEmpleadoResult.getIdLicenciaEmpleado());
 
                 // Map the licencia to the LicenciaEmpleado object
                 Licencia licencia = new Licencia();
-                licencia.setIdLicencia((Long) query.getOutputParameterValue("p_id_licencia"));
+                licencia.setIdLicencia((Long) query.getOutputParameterValue("P_ID_LICENCIA"));
                 licenciaEmpleadoResult.setLicencia(licenciaService.getLicencia(licencia));
 
                 System.out.println("id_licencia: " + licenciaEmpleadoResult.getLicencia().getIdLicencia());
 
                 // Map the empleado to the LicenciaEmpleado object
                 Empleado empleado = new Empleado();
-                empleado.setIdEmpleado((Long) query.getOutputParameterValue("p_id_empleado"));
+                empleado.setIdEmpleado((Long) query.getOutputParameterValue("P_ID_EMPLEADO"));
                 licenciaEmpleadoResult.setEmpleado(empleadoService.getEmpleado(empleado));
 
                 System.out.println("id_empleado: " + licenciaEmpleadoResult.getEmpleado().getIdEmpleado());
+                
+                Estado estado = new Estado();
+                estado.setIdEstado((Long)query.getOutputParameterValue("P_ID_ESTADO"));
+                licenciaEmpleadoResult.setEstado(estadoService.getEstado(estado));
+
+                System.out.println("id_estado: " + licenciaEmpleadoResult.getEstado().getIdEstado());
 
                 return licenciaEmpleadoResult;
 
@@ -149,8 +162,8 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
     @Override
     @Transactional(readOnly = true)
     public List<LicenciaEmpleado> getAllLicenciasEmpleados() {
-        // Create a StoredProcedureQuery instance for the stored procedure "ver_licencias_empleados"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_licencias_empleados");
+        // Create a StoredProcedureQuery instance for the stored procedure "FIDE_LICENCIAS_EMPLEADO_TB_VER_LICENCIAS_SP"
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_LICENCIAS_EMPLEADO_TB_VER_LICENCIAS_SP");
 
         // Register the output parameters
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -195,6 +208,10 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
                 empleado.setIdEmpleado(rs.getLong("id_empleado"));
                 licenciaEmpleado.setEmpleado(empleadoService.getEmpleado(empleado));
 
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                licenciaEmpleado.setEstado(estadoService.getEstado(estado));
+                
                 licenciasEmpleados.add(licenciaEmpleado);
             }
         } catch (SQLException e) {
@@ -231,7 +248,7 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
         session.doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call buscar_licencias_por_empleado(?) }")) {
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_LICENCIAS_EMPLEADO_TB_BUSCAR_LICENCIA_POR_EMPLEADO_FN(?) }")) {
                     callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
                     callableStatement.setLong(2, idEmpleado);
                     callableStatement.execute();
@@ -252,7 +269,11 @@ public class LicenciaEmpleadoServiceImpl implements LicenciaEmpleadoService {
                             Empleado empleado = new Empleado();
                             empleado.setIdEmpleado(rs.getLong("id_empleado"));
                             licenciasEmpleado.setEmpleado(empleadoService.getEmpleado(empleado));
-
+                            
+                            Estado estado = new Estado();
+                            estado.setIdEstado(rs.getLong("id_estado"));
+                            licenciasEmpleado.setEstado(estadoService.getEstado(estado));
+                            
                             licenciasEmpleados.add(licenciasEmpleado);
 
                         }

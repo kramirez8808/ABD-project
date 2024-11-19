@@ -9,9 +9,11 @@ import java.util.List;
 //Internal imports
 import lbd.proyecto.domain.direcciones.DireccionCliente;
 import lbd.proyecto.domain.Pedido;
+import lombok.ToString;
 
 @Data
 @Entity
+@ToString(exclude = "pedidos")
 @Table(name = "FIDE_CLIENTES_TB")
 public class Cliente implements Serializable {
     
@@ -41,6 +43,11 @@ public class Cliente implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
     private Estado estado;
+    
+    @Override
+    public String toString() {
+        return "Cliente{id=" + idCliente + ", nombre=" + nombre + ", direcciones=" + (direccionesCliente != null ? direccionesCliente.size() : 0) + "}";
+    }
     
     //Constructors
     public Cliente() {

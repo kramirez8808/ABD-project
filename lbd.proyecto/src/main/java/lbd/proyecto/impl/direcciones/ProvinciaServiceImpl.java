@@ -19,9 +19,11 @@ import jakarta.persistence.StoredProcedureQuery;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lbd.proyecto.domain.Estado;
 
 // Internal imports
 import lbd.proyecto.domain.direcciones.Provincia;
+import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.direcciones.ProvinciaService;
 
 @Service
@@ -32,6 +34,9 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 
     @Autowired
     private TransactionTemplate transactionTemplate;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Override
     public Provincia getProvincia(Provincia provincia) {
@@ -40,11 +45,12 @@ public class ProvinciaServiceImpl implements ProvinciaService {
             @Override
             public Provincia doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "provincia"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_provincia");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PROVINCIAS_TB_VER_PROVINCIA_SP");
 
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("p_id_provincia", Long.class, ParameterMode.IN);
                 query.registerStoredProcedureParameter("p_nombre", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
                 query.setParameter("p_id_provincia", provincia.getIdProvincia());
@@ -73,6 +79,11 @@ public class ProvinciaServiceImpl implements ProvinciaService {
                 Provincia newProvincia = new Provincia();
                 newProvincia.setIdProvincia(provincia.getIdProvincia());
                 newProvincia.setNombre((String) query.getOutputParameterValue("p_nombre"));
+                
+                Estado estado = new Estado();
+                estado.setIdEstado((Long) query.getOutputParameterValue("p_id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);  
+                newProvincia.setEstado(newEstado);
 
                 return newProvincia;
             }
@@ -84,7 +95,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
     @Transactional(readOnly = true)
     public List<Provincia> getAllProvincias() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_provincias"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_provincias", Provincia.class);
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PROVINCIAS_TB_VER_PROVINCIAS_SP", Provincia.class);
 
         // Register the output parameter
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -117,6 +128,12 @@ public class ProvinciaServiceImpl implements ProvinciaService {
                 Provincia provincia = new Provincia();
                 provincia.setIdProvincia(rs.getLong("id_provincia"));
                 provincia.setNombre(rs.getString("nombre"));
+                
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                provincia.setEstado(newEstado);
+                
                 provincias.add(provincia);
             }
         } catch (Exception e) {

@@ -891,7 +891,7 @@ RETURN SYS_REFCURSOR AS
     V_CURSOR SYS_REFCURSOR;
 BEGIN
     OPEN V_CURSOR FOR
-    SELECT ID_Direccion, ID_Cliente, Detalles, ID_Distrito
+    SELECT ID_Direccion, ID_Cliente, Detalles, ID_Distrito, Id_estado
     FROM FIDE_DIRECCIONES_CLIENTE_TB
     WHERE ID_Cliente = P_ID_CLIENTE;
     RETURN V_CURSOR;
@@ -904,7 +904,7 @@ RETURN SYS_REFCURSOR AS
     V_CURSOR SYS_REFCURSOR;
 BEGIN
     OPEN V_CURSOR FOR
-    SELECT ID_Direccion, ID_Empleado, Detalles, ID_Distrito
+    SELECT ID_Direccion, ID_Empleado, Detalles, ID_Distrito, Id_estado
     FROM FIDE_DIRECCIONES_EMPLEADO_TB
     WHERE ID_Empleado = P_ID_EMPLEADO;
     RETURN V_CURSOR;
@@ -930,7 +930,7 @@ RETURN SYS_REFCURSOR AS
     V_CURSOR SYS_REFCURSOR;
 BEGIN
     OPEN V_CURSOR FOR
-    SELECT ID_Direccion, ID_Pedido, Detalles, ID_Distrito
+    SELECT ID_Direccion, ID_Pedido, Detalles, ID_Distrito, Id_estado
     FROM FIDE_DIRECCIONES_PEDIDO_TB
     WHERE ID_Pedido = P_ID_PEDIDO;
     RETURN V_CURSOR;
@@ -943,7 +943,7 @@ RETURN SYS_REFCURSOR AS
     V_CURSOR SYS_REFCURSOR;
 BEGIN
     OPEN V_CURSOR FOR
-    SELECT ID_Licencia_Empleado, ID_Empleado, ID_Licencia, Fecha_Expedicion, Fecha_Vencimiento
+    SELECT ID_Licencia_Empleado, ID_Empleado, ID_Licencia, Fecha_Expedicion, Fecha_Vencimiento, id_estado
     FROM FIDE_LICENCIAS_EMPLEADO_TB
     WHERE ID_Empleado = P_ID_EMPLEADO;
     RETURN V_CURSOR;
@@ -2191,7 +2191,7 @@ CREATE OR REPLACE PACKAGE BODY FIDE_PROYECTO_DIRECCIONES_PKG AS
         V_CURSOR SYS_REFCURSOR;
     BEGIN
         OPEN V_CURSOR FOR
-        SELECT ID_Direccion, ID_Empleado, Detalles, ID_Distrito
+        SELECT ID_Direccion, ID_Empleado, Detalles, ID_Distrito, Id_estado
         FROM FIDE_DIRECCIONES_EMPLEADO_TB
         WHERE ID_Empleado = P_ID_EMPLEADO;
         RETURN V_CURSOR;
@@ -2202,7 +2202,7 @@ CREATE OR REPLACE PACKAGE BODY FIDE_PROYECTO_DIRECCIONES_PKG AS
         V_CURSOR SYS_REFCURSOR;
     BEGIN
         OPEN V_CURSOR FOR
-        SELECT ID_Direccion, ID_Pedido, Detalles, ID_Distrito
+        SELECT ID_Direccion, ID_Pedido, Detalles, ID_Distrito, Id_estado
         FROM FIDE_DIRECCIONES_PEDIDO_TB
         WHERE ID_Pedido = P_ID_PEDIDO;
         RETURN V_CURSOR;
@@ -2213,7 +2213,7 @@ CREATE OR REPLACE PACKAGE BODY FIDE_PROYECTO_DIRECCIONES_PKG AS
         V_CURSOR SYS_REFCURSOR;
     BEGIN
         OPEN V_CURSOR FOR
-        SELECT ID_Direccion, ID_Cliente, Detalles, ID_Distrito
+        SELECT ID_Direccion, ID_Cliente, Detalles, ID_Distrito, Id_estado
         FROM FIDE_DIRECCIONES_CLIENTE_TB
         WHERE ID_Cliente = P_ID_CLIENTE;
         RETURN V_CURSOR;

@@ -20,6 +20,7 @@ import jakarta.persistence.StoredProcedureQuery;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import lbd.proyecto.domain.Estado;
 
 // Internal imports
 import lbd.proyecto.domain.direcciones.Canton;
@@ -27,6 +28,7 @@ import lbd.proyecto.domain.direcciones.Provincia;
 import lbd.proyecto.service.direcciones.ProvinciaService;
 import lbd.proyecto.service.direcciones.CantonService;
 import lbd.proyecto.domain.direcciones.Distrito;
+import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.direcciones.DistritoService;
 
 @Service
@@ -37,6 +39,12 @@ public class DistritoServiceImpl implements DistritoService {
 
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Autowired
+    private EstadoService estadoService;
+    
+    @Autowired
+    private ProvinciaService provinciaService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -49,12 +57,14 @@ public class DistritoServiceImpl implements DistritoService {
             @Override
             public Distrito doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "ver_distrito"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_distrito");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_DISTRITOS_TB_VER_DISTRITO_SP");
 
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("p_id_distrito", Long.class, ParameterMode.IN);
                 query.registerStoredProcedureParameter("p_nombre", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_id_canton", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("p_id_provincia", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
                 query.setParameter("p_id_distrito", distrito.getIdDistrito());
@@ -88,7 +98,17 @@ public class DistritoServiceImpl implements DistritoService {
                 Canton canton = new Canton();
                 canton.setIdCanton((Long) query.getOutputParameterValue("p_id_canton"));
                 newDistrito.setCanton(cantonService.getCanton(canton));
+                
+                Provincia provincia = new Provincia();
+                provincia.setIdProvincia((Long) query.getOutputParameterValue("p_id_provincia"));
+                Provincia newProvincia = provinciaService.getProvincia(provincia); 
+                newDistrito.setProvincia(newProvincia);
 
+                Estado estado = new Estado();
+                estado.setIdEstado((Long) query.getOutputParameterValue("p_id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);  
+                newDistrito.setEstado(newEstado);
+                
                 return newDistrito;
             }
         });
@@ -98,7 +118,7 @@ public class DistritoServiceImpl implements DistritoService {
     @Transactional(readOnly = true)
     public List<Distrito> getAllDistritos() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_distritos"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_distritos");
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_DISTRITOS_TB_VER_DISTRITOS_SP");
 
         // Register the output parameters
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -123,8 +143,17 @@ public class DistritoServiceImpl implements DistritoService {
                 Canton canton = new Canton();
                 canton.setIdCanton(rs.getLong("id_canton"));
                 Canton newCanton = cantonService.getCanton(canton);
-
                 distrito.setCanton(newCanton);
+                
+                Provincia provincia = new Provincia();
+                provincia.setIdProvincia(rs.getLong("id_provincia"));
+                Provincia newProvincia = provinciaService.getProvincia(provincia);  
+                distrito.setProvincia(newProvincia);
+                
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                distrito.setEstado(newEstado);
 
                 distritos.add(distrito);
             }

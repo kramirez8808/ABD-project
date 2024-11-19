@@ -37,6 +37,8 @@ import lbd.proyecto.dao.EmpleadoDAO;
 import lbd.proyecto.domain.direcciones.Distrito;
 import lbd.proyecto.service.direcciones.DistritoService;
 import lbd.proyecto.dao.direcciones.DistritoDAO;
+import lbd.proyecto.domain.Estado;
+import lbd.proyecto.service.EstadoService;
 
 @Service
 public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
@@ -49,6 +51,9 @@ public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
 
     @Autowired
     private DistritoService distritoService;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,7 +67,8 @@ public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
         Distrito distritoResult = distritoService.getDistrito(distrito);
         Empleado empleadoResult = empleadoService.getEmpleado(empleado);
         direccionEmpleadoDAO.insertDireccionEmpleado(empleadoResult.getIdEmpleado(), direccionEmpleado.getDetalles(),
-                distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito());
+                distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), 
+                distritoResult.getIdDistrito(), direccionEmpleado.getEstado().getIdEstado());
     }
 
     @Override
@@ -70,13 +76,14 @@ public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
     public void updateDireccionEmpleado(DireccionEmpleado direccionEmpleado, Distrito distrito) {
         Distrito distritoResult = distritoService.getDistrito(distrito);
         direccionEmpleadoDAO.updateDireccionEmpleado(direccionEmpleado.getIdDireccion(), direccionEmpleado.getDetalles(),
-                distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito());
+                distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), 
+                distritoResult.getIdDistrito(), direccionEmpleado.getEstado().getIdEstado());
     }
 
     @Override
     @Transactional
-    public void deleteDireccionEmpleado(DireccionEmpleado direccionEmpleado) {
-        direccionEmpleadoDAO.deleteDireccionEmpleado(direccionEmpleado.getIdDireccion());
+    public void inactivarDireccionEmpleado(DireccionEmpleado direccionEmpleado) {
+        direccionEmpleadoDAO.inactivarDireccionEmpleado(direccionEmpleado.getIdDireccion());
     }
 
     @Override
@@ -85,63 +92,77 @@ public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
         return transactionTemplate.execute(new TransactionCallback<DireccionEmpleado>() {
             @Override
             public DireccionEmpleado doInTransaction(TransactionStatus status) {
-                // Create a StoredProcedureQuery instance for the stored procedure "ver_direccion_empleado"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_direccion_empleado");
+                // Crear instancia de StoredProcedureQuery para llamar al procedimiento almacenado
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_DIRECCIONES_EMPLEADO_TB_VER_DIRECION_SP");
 
-                // Register the input and output parameters
+                // Registrar los parámetros de entrada y salida
                 query.registerStoredProcedureParameter("p_id_direccion", Long.class, ParameterMode.IN);
                 query.registerStoredProcedureParameter("p_id_empleado", Long.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_detalles", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_id_distrito", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.OUT);
 
-                // Set the input parameter
+                // Establecer el parámetro de entrada
                 query.setParameter("p_id_direccion", direccionEmpleado.getIdDireccion());
 
-                // Execute the stored procedure
+                // Ejecutar el procedimiento almacenado
                 try {
                     query.execute();
                 } catch (PersistenceException e) {
                     if (e.getCause() instanceof SQLException) {
-                        // Handle the SQLException
+                        // Manejo de excepciones SQL
                         SQLException sqlException = (SQLException) e.getCause();
                         System.err.println("Error Code: " + sqlException.getErrorCode());
                         System.err.println("SQL State: " + sqlException.getSQLState());
                         System.err.println("Message: " + sqlException.getMessage());
                         status.setRollbackOnly();
-                        return null;
+                        return null;  // Retorna null si ocurre un error
                     } else {
-                        throw e;
+                        throw e;  // Rethrow si no es una SQLException
                     }
                 }
 
-                //Print the Output Parameters
-                // System.out.println("Detalles: " + query.getOutputParameterValue("p_detalles"));
-
-                // Map the output parameters to a DireccionEmpleado object
-                DireccionEmpleado newDireccionEmpleado  = new DireccionEmpleado();
+                // Crear un objeto nuevo de DireccionEmpleado
+                DireccionEmpleado newDireccionEmpleado = new DireccionEmpleado();
                 newDireccionEmpleado.setIdDireccion(direccionEmpleado.getIdDireccion());
-                newDireccionEmpleado.setDetalles((String) query.getOutputParameterValue("p_detalles"));
-                System.out.println(" *** TEST ***");
-                System.out.println("p_detalles: " + query.getOutputParameterValue("p_detalles"));
-                System.out.println("p_id_distrito: " + query.getOutputParameterValue("p_id_distrito"));
-                // System.out.println("p_id_distrito: " + query.getOutputParameterValue("p_id_distrito"));
-                // System.out.println("p_id_empleado: " + query.getOutputParameterValue("p_id_empleado"));
 
-                // Map the empleado to the Empleado object
-                Empleado empleado = new Empleado();
-                empleado.setIdEmpleado((Long) query.getOutputParameterValue("p_id_empleado"));
-                newDireccionEmpleado.setEmpleado(empleadoService.getEmpleado(empleado));
+                // Obtener y verificar los parámetros de salida
+                String detalles = (String) query.getOutputParameterValue("p_detalles");
+                newDireccionEmpleado.setDetalles(detalles);
 
-                // Map the distrito to the Distrito object
-                Distrito distrito = new Distrito();
-                distrito.setIdDistrito((Long) query.getOutputParameterValue("p_id_distrito"));
-                // System.out.println(" *** TEST ***");
-                // System.out.println("distrito.getIdDistrito(): " + distrito.getIdDistrito());
+                // Verificar si los valores de salida no son nulos antes de asignarlos
+                Long idEmpleado = (Long) query.getOutputParameterValue("p_id_empleado");
+                if (idEmpleado != null) {
+                    Empleado empleado = new Empleado();
+                    empleado.setIdEmpleado(idEmpleado);
+                    // Asegurarse de que el empleado existe en el sistema
+                    newDireccionEmpleado.setEmpleado(empleadoService.getEmpleado(empleado));
+                } else {
+                    System.out.println("Empleado no encontrado para la dirección: " + direccionEmpleado.getIdDireccion());
+                }
 
-                newDireccionEmpleado.setDistrito(distritoService.getDistrito(distrito));
+                Long idDistrito = (Long) query.getOutputParameterValue("p_id_distrito");
+                if (idDistrito != null) {
+                    Distrito distrito = new Distrito();
+                    distrito.setIdDistrito(idDistrito);
+                    // Asegurarse de que el distrito existe
+                    newDireccionEmpleado.setDistrito(distritoService.getDistrito(distrito));
+                } else {
+                    System.out.println("Distrito no encontrado para la dirección: " + direccionEmpleado.getIdDireccion());
+                }
+
+                Long estadoId = (Long) query.getOutputParameterValue("p_id_estado");
+                if (estadoId != null) {
+                    Estado estado = new Estado();
+                    estado.setIdEstado(estadoId);
+                    // Asegurarse de que el estado existe
+                    Estado newEstado = estadoService.getEstado(estado);
+                    newDireccionEmpleado.setEstado(newEstado);
+                } else {
+                    System.out.println("Estado no encontrado para la dirección: " + direccionEmpleado.getIdDireccion());
+                }
 
                 return newDireccionEmpleado;
-
             }
         });
     }
@@ -149,8 +170,8 @@ public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
     @Override
     @Transactional(readOnly = true)
     public List<DireccionEmpleado> getAllDirecciones() {
-        // Create a StoredProcedureQuery instance for the stored procedure "ver_direcciones_empleados"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_direcciones_empleados");
+        // Create a StoredProcedureQuery instance for the stored procedure "FIDE_DIRECCIONES_EMPLEADO_TB_VER_DIRECIONES_SP"
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_DIRECCIONES_EMPLEADO_TB_VER_DIRECIONES_SP");
 
         // Register the output parameters
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -191,6 +212,11 @@ public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
                 Empleado empleado = new Empleado();
                 empleado.setIdEmpleado(rs.getLong("id_empleado"));
                 direccion.setEmpleado(empleadoService.getEmpleado(empleado));
+                
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                direccion.setEstado(newEstado);
 
                 direcciones.add(direccion);
 
@@ -211,36 +237,62 @@ public class DireccionEmpleadoServiceImpl implements DireccionEmpleadoService {
         session.doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call buscar_direcciones_por_empleado(?) }")) {
+                // Usar try-with-resources para garantizar el cierre automático de recursos
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_DIRECCIONES_EMPLEADO_TB_BUSCAR_POR_ID_FN(?) }")) {
+                    // Registrar el parámetro de salida del cursor
                     callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
                     callableStatement.setLong(2, idEmpleado);
+
+                    // Ejecutar la llamada a la función
                     callableStatement.execute();
 
+                    // Obtener el resultado del cursor
                     try (ResultSet rs = (ResultSet) callableStatement.getObject(1)) {
+                        // Procesar los resultados del cursor
                         while (rs.next()) {
                             DireccionEmpleado direccion = new DireccionEmpleado();
                             direccion.setIdDireccion(rs.getLong("id_direccion"));
                             direccion.setDetalles(rs.getString("detalles"));
 
-                            Distrito distrito = new Distrito();
-                            distrito.setIdDistrito(rs.getLong("id_distrito"));
-                            direccion.setDistrito(distritoService.getDistrito(distrito));
+                            // Obtener y establecer el distrito
+                            Long idDistrito = rs.getLong("id_distrito");
+                            if (!rs.wasNull()) {
+                                Distrito distrito = new Distrito();
+                                distrito.setIdDistrito(idDistrito);
+                                direccion.setDistrito(distritoService.getDistrito(distrito));
+                            }
 
-                            Empleado empleado = new Empleado();
-                            empleado.setIdEmpleado(rs.getLong("id_empleado"));
-                            direccion.setEmpleado(empleadoService.getEmpleado(empleado));
+                            // Obtener y establecer el empleado
+                            Long idEmpleado = rs.getLong("id_empleado");
+                            if (!rs.wasNull()) {
+                                Empleado empleado = new Empleado();
+                                empleado.setIdEmpleado(idEmpleado);
+                                direccion.setEmpleado(empleadoService.getEmpleado(empleado));
+                            }
 
+                            // Obtener y establecer el estado
+                            Long idEstado = rs.getLong("id_estado");
+                            if (!rs.wasNull()) {
+                                Estado estado = new Estado();
+                                estado.setIdEstado(idEstado);
+                                Estado newEstado = estadoService.getEstado(estado);
+                                direccion.setEstado(newEstado);
+                            }
+
+                            // Añadir la dirección a la lista
                             direcciones.add(direccion);
                         }
                     }
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    // Manejo de excepciones con mensaje más detallado
+                    throw new RuntimeException("Error al ejecutar la función FIDE_DIRECCIONES_EMPLEADO_TB_BUSCAR_POR_ID_FN: " + e.getMessage(), e);
                 }
             }
         });
 
         return direcciones;
     }
+
 
 
 }

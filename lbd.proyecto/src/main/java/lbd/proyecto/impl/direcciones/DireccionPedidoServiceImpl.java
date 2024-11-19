@@ -61,20 +61,23 @@ public class DireccionPedidoServiceImpl implements DireccionPedidoService {
     public void insertDireccionPedido(DireccionPedido direccionPedido, Pedido pedido, Distrito distrito) {
         Distrito distritoResult = distritoService.getDistrito(distrito);
         Pedido pedidoResult = pedidoService.getPedido(pedido);
-        direccionPedidoDAO.insertDireccionPedido(pedidoResult.getIdPedido(), direccionPedido.getDetalles(), distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito());    
+        direccionPedidoDAO.insertDireccionPedido(pedidoResult.getIdPedido(), direccionPedido.getDetalles(), 
+                distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), 
+                distritoResult.getIdDistrito(), pedidoResult.getEstado().getIdEstado());    
     }
 
     @Override
     @Transactional
     public void updateDireccionPedido(DireccionPedido direccionPedido, Distrito distrito) {
         Distrito distritoResult = distritoService.getDistrito(distrito);
-        direccionPedidoDAO.updateDireccionPedido(direccionPedido.getIdDireccion(), direccionPedido.getDetalles(), distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito());
+        direccionPedidoDAO.updateDireccionPedido(direccionPedido.getIdDireccion(), direccionPedido.getDetalles(), distritoResult.getCanton().
+                getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito(), distritoResult.getEstado().getIdEstado());
     }
 
     @Override
     @Transactional
-    public void deleteDireccionPedido(DireccionPedido direccionPedido) {
-        direccionPedidoDAO.deleteDireccionPedido(direccionPedido.getIdDireccion());
+    public void inactivarDireccionPedido(DireccionPedido direccionPedido) {
+        direccionPedidoDAO.inactivarDireccionPedido(direccionPedido.getIdDireccion());
     }
 
     @Override

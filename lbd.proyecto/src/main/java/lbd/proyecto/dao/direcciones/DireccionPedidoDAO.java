@@ -13,27 +13,27 @@ import lbd.proyecto.domain.direcciones.DireccionPedido;
 public interface DireccionPedidoDAO extends JpaRepository<DireccionPedido, Long> {
     
     // Method to call an stored procedure to insert a new direction
-    @Procedure(procedureName = "insertar_direccion_pedido")
-    void insertDireccionPedido(Long idPedido, String detalles, Long idProvincia, Long idCanton, Long idDistrito);
+    @Procedure(procedureName = "FIDE_DIRECCIONES_PEDIDO_TB_INSERTAR_SP")
+    void insertDireccionPedido(Long idPedido, String detalles, Long idProvincia, Long idCanton, Long idDistrito, Long idEstado);
 
     // Method to call an stored procedure to update a direction
-    @Procedure(procedureName = "actualizar_direccion_pedido")
-    void updateDireccionPedido(Long idDireccion, String detalles, Long idProvincia, Long idCanton, Long idDistrito);
+    @Procedure(procedureName = "FIDE_DIRECCIONES_PEDIDO_TB_ACTUALIZAR_SP")
+    void updateDireccionPedido(Long idDireccion, String detalles, Long idProvincia, Long idCanton, Long idDistrito, Long idEstado);
 
     // Method to call an stored procedure to delete a direction
-    @Procedure(procedureName = "eliminar_direccion_pedido")
-    void deleteDireccionPedido(Long idDireccion);
+    @Procedure(procedureName = "FIDE_DIRECCIONES_PEDIDO_TB_INACTIVAR_SP")
+    void inactivarDireccionPedido(Long idDireccion);
 
     // Method to call an stored procedure to get a (single) distrito
-    @Procedure(procedureName = "ver_direccion_pedido")
+    @Procedure(procedureName = "FIDE_DIRECCIONES_PEDIDO_TB_VER_DIRECCION_SP")
     DireccionPedido getDireccionPedido(Long idDireccion);
 
     // Method to call an stored procedure to get all distritos
-    @Procedure(procedureName = "ver_direcciones_pedidos")
+    @Procedure(procedureName = "FIDE_DIRECCIONES_PEDIDO_TB_VER_DIRECCIONES_SP")
     List<DireccionPedido> getAllDireccionesPedido();
 
     // Method to call a SQL function to get all the directions by client ID
-    @Query(value = "SELECT * FROM TABLE(buscar_direcciones_pedido(:p_id_pedido))", nativeQuery = true)
+    @Query(value = "SELECT * FROM TABLE(FIDE_DIRECCIONES_PEDIDO_TB_BUSCAR_POR_PEDIDO_FN(:p_id_pedido))", nativeQuery = true)
     List<DireccionPedido> buscarDireccionesPedido(@Param("p_id_pedido") Long idPedido);
     
 }

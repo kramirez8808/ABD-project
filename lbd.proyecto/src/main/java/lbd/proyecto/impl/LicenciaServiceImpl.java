@@ -57,6 +57,7 @@ public class LicenciaServiceImpl implements LicenciaService {
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("P_ID_LICENCIA", Long.class, ParameterMode.IN);
                 query.registerStoredProcedureParameter("P_TIPO", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
                 query.setParameter("P_ID_LICENCIA", licencia.getIdLicencia());
@@ -85,8 +86,12 @@ public class LicenciaServiceImpl implements LicenciaService {
                 Licencia licenciaResult = new Licencia();
                 licenciaResult.setIdLicencia(licencia.getIdLicencia());
                 licenciaResult.setTipo((String) query.getOutputParameterValue("P_TIPO"));
+                
+                // Print the output parameter
+                System.out.println("Estado: " + query.getOutputParameterValue("P_ID_ESTADO"));
+                
                 Estado estado = new Estado();
-                estado.setIdEstado((Long)query.getOutputParameterValue("id_estado"));
+                estado.setIdEstado((Long)query.getOutputParameterValue("P_ID_ESTADO"));
                 Estado newEstado = estadoService.getEstado(estado);
                 licenciaResult.setEstado(newEstado);
 

@@ -203,10 +203,12 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 puesto.setIdPuesto(rs.getString("id_puesto"));
                 Puesto newPuesto = puestoService.getPuesto(puesto);
                 empleado.setPuesto(newPuesto);
+                
                 Estado estado = new Estado();
                 estado.setIdEstado(rs.getLong("id_estado"));
                 Estado newEstado = estadoService.getEstado(estado);
                 empleado.setEstado(newEstado);
+                
                 empleados.add(empleado);
 
             }

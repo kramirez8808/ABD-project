@@ -10,10 +10,11 @@ import java.util.List;
 // Internal imports
 import lbd.proyecto.domain.direcciones.Direccion;
 import lbd.proyecto.domain.Empleado;
+import lbd.proyecto.domain.Estado;
 
 @Data
 @Entity
-@Table(name = "direcciones_empleado")
+@Table(name = "FIDE_DIRECCIONES_EMPLEADO_TB")
 @EqualsAndHashCode(callSuper = true)
 public class DireccionEmpleado extends Direccion {
     
@@ -31,15 +32,18 @@ public class DireccionEmpleado extends Direccion {
     @JoinColumn(name = "id_empleado") // Foreign key
     private Empleado empleado; // Employee to which the address belongs
 
+    // Relationship with table FIDE_ESTADOS_TB
+    @ManyToOne
+    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
+    private Estado estado;
+    
     //Constructors
     public DireccionEmpleado() {
     }
     
-    public DireccionEmpleado(String detalles, Distrito distrito) {
+    public DireccionEmpleado(String detalles, Distrito distrito, Estado estado) {
         super(detalles, distrito);
+        this.estado = estado;
     }
 
-    // public DireccionEmpleado(String detalles, Provincia provincia, Canton canton, Distrito distrito) {
-    //     super(detalles, provincia, canton, distrito);
-    // }
 }

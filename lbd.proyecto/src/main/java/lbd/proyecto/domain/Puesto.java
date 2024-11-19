@@ -38,5 +38,16 @@ public class Puesto implements Serializable {
         this.descripcion = descripcion;
         this.estado = estado;
     }
+    
+    @Override
+    public String toString() {
+        return "Puesto{" +
+                "idPuesto='" + idPuesto + '\'' +
+                ", salario=" + salario +
+                ", descripcion='" + descripcion + '\'' +
+                ", estado=" + (estado != null ? estado.getDescripcion() : "No asignado") +
+                ", empleados=" + (empleados != null ? empleados.size() : 0) +
+                '}';
+    }
 
 }

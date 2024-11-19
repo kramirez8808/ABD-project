@@ -73,6 +73,11 @@ public class Empleado implements Serializable {
             return null;
         }
     }
+    
+    @Override
+    public String toString() {
+        return "Empleado [idEmpleado=" + idEmpleado + ", nombre=" + nombre + ", puestos=" + puesto + "]";
+    }
 
     //Function to return if the employee is a driver
     public boolean isDriver() {

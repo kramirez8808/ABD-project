@@ -7,6 +7,7 @@ import java.util.List;
 import lbd.proyecto.domain.direcciones.DireccionEmpleado;
 import lbd.proyecto.domain.direcciones.Distrito;
 import lbd.proyecto.domain.Empleado;
+import lbd.proyecto.domain.Estado;
 
 public interface DireccionEmpleadoService {
 
@@ -17,7 +18,7 @@ public interface DireccionEmpleadoService {
     void updateDireccionEmpleado(DireccionEmpleado direccionEmpleado, Distrito distrito);
 
     // Method to delete a direction with the Stored Procedure
-    void deleteDireccionEmpleado(DireccionEmpleado direccionEmpleado);
+    void inactivarDireccionEmpleado(DireccionEmpleado direccionEmpleado);
 
     // Method to get a direction with the Stored Procedure
     DireccionEmpleado getDireccionEmpleado(DireccionEmpleado direccionEmpleado);

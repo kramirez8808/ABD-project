@@ -95,7 +95,7 @@ public class PedidoServiceImpl implements PedidoService {
         Estado estadoResult = estadoService.getEstado(estado);
         LicenciaEmpleado licenciaEmpleadoResult = licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado);
 
-        pedidoDAO.insertPedido(pedido.getDescripcion(), clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
+        //pedidoDAO.insertPedido(pedido.getDescripcion(), clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
     }
 
     @Override
@@ -107,7 +107,7 @@ public class PedidoServiceImpl implements PedidoService {
         Estado estadoResult = estadoService.getEstado(estado);
         LicenciaEmpleado licenciaEmpleadoResult = licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado);
 
-        pedidoDAO.updatePedido(pedido.getIdPedido(), pedido.getDescripcion(), clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
+        //pedidoDAO.updatePedido(pedido.getIdPedido(), pedido.getDescripcion(), clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
     }
 
     @Override
@@ -161,7 +161,7 @@ public class PedidoServiceImpl implements PedidoService {
                     // Map the output parameters to the Pedido object
                     Pedido pedidoResult = new Pedido();
                     pedidoResult.setIdPedido(pedido.getIdPedido());
-                    pedidoResult.setDescripcion((String) query.getOutputParameterValue("p_descripcion"));
+                    //pedidoResult.setDescripcion((String) query.getOutputParameterValue("p_descripcion"));
                     pedidoResult.setFechaPedido((Date) query.getOutputParameterValue("p_fecha"));
 
                     // Map the client, vehicle, type of load, state and employee license to the Pedido object
@@ -175,7 +175,7 @@ public class PedidoServiceImpl implements PedidoService {
 
                     TipoCarga tipoCarga = new TipoCarga();
                     tipoCarga.setIdTipo((Long) query.getOutputParameterValue("p_id_tipo_carga"));
-                    pedidoResult.setTiposCarga(tipoCargaService.getTipoCarga(tipoCarga));
+                    pedidoResult.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
 
                     Estado estado = new Estado();
                     estado.setIdEstado((Long) query.getOutputParameterValue("p_id_estado"));
@@ -189,11 +189,11 @@ public class PedidoServiceImpl implements PedidoService {
                     Factura factura = new Factura();
                     factura.setPedido(pedidoResult);
                     Factura facturaResulFactura = facturaService.searchFacturaByPedido(pedidoResult.getIdPedido());
-
+                    /*
                     if (facturaResulFactura.getIdFactura() != null && facturaResulFactura.getIdFactura() != 0) {
-                        pedidoResult.setFactura(facturaResulFactura);
+                        pedidoResult.(facturaResulFactura);
                     }
-
+                    */
                     return pedidoResult;
 
                 } catch (Exception e) {
@@ -242,7 +242,7 @@ public class PedidoServiceImpl implements PedidoService {
             while (rs.next()) {
                 Pedido pedido = new Pedido();
                 pedido.setIdPedido(rs.getLong("id_pedido"));
-                pedido.setDescripcion(rs.getString("descripcion"));
+                //pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setFechaPedido(rs.getDate("fecha"));
 
                 Cliente cliente = new Cliente();
@@ -255,7 +255,7 @@ public class PedidoServiceImpl implements PedidoService {
 
                 TipoCarga tipoCarga = new TipoCarga();
                 tipoCarga.setIdTipo(rs.getLong("id_tipo_carga"));
-                pedido.setTiposCarga(tipoCargaService.getTipoCarga(tipoCarga));
+                pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
 
                 Estado estado = new Estado();
                 estado.setIdEstado(rs.getLong("id_estado"));
@@ -268,10 +268,10 @@ public class PedidoServiceImpl implements PedidoService {
                 Factura factura = new Factura();
                 factura.setPedido(pedido);
                 Factura facturaResulFactura = facturaService.searchFacturaByPedido(pedido.getIdPedido());
-
+/*
                 if (facturaResulFactura.getIdFactura() != null && facturaResulFactura.getIdFactura() != 0) {
                     pedido.setFactura(facturaResulFactura);
-                }
+                }*/
 
                 pedidos.add(pedido);
                 
@@ -302,7 +302,7 @@ public class PedidoServiceImpl implements PedidoService {
                         while (rs.next()) {
                             Pedido pedido = new Pedido();
                             pedido.setIdPedido(rs.getLong("id_pedido"));
-                            pedido.setDescripcion(rs.getString("descripcion"));
+                            //pedido.setDescripcion(rs.getString("descripcion"));
                             pedido.setFechaPedido(rs.getDate("fecha"));
 
                             Cliente cliente = new Cliente();
@@ -315,7 +315,7 @@ public class PedidoServiceImpl implements PedidoService {
 
                             TipoCarga tipoCarga = new TipoCarga();
                             tipoCarga.setIdTipo(rs.getLong("id_tipo_carga"));
-                            pedido.setTiposCarga(tipoCargaService.getTipoCarga(tipoCarga));
+                            pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
 
                             Estado estado = new Estado();
                             estado.setIdEstado(rs.getLong("id_estado"));

@@ -17,7 +17,7 @@ public interface LicenciaEmpleadoService {
     void updateLicenciaEmpleado(Licencia licencia, LicenciaEmpleado licenciaEmpleado);
 
     // Method to delete a license for an employee with the Stored Procedure
-    void deleteLicenciaEmpleado(LicenciaEmpleado licenciaEmpleado);
+    void inactivarLicenciaEmpleado(LicenciaEmpleado licenciaEmpleado);
 
     // Method to get a license for an employee with the Stored Procedure
     LicenciaEmpleado getLicenciaEmpleado(LicenciaEmpleado licenciaEmpleado);

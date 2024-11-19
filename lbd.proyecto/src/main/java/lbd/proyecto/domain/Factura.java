@@ -27,7 +27,8 @@ public class Factura implements Serializable {
     private double total; // Column => total
 
     //Relationship with table Pedido
-    @OneToOne(mappedBy = "factura") // One invoice can be assigned to one order 
+    @ManyToOne
+    @JoinColumn(name = "id_pedido") // One invoice can be assigned to one order 
     private Pedido pedido; // Order of the invoice
 
     //Relationship with table Estado
@@ -39,9 +40,10 @@ public class Factura implements Serializable {
     public Factura() {
     }
 
-    public Factura(java.sql.Date fecha, double total) {
+    public Factura(java.sql.Date fecha, double total, Estado estado) {
         this.fecha = fecha;
         this.total = total;
+        this.estado = estado;
     }
 
 }

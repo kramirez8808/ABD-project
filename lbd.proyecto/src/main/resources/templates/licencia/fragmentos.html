@@ -92,6 +92,7 @@
                         <th scope="col">Tipo</th>
                         <th scope="col">Expedición</th>
                         <th scope="col">Vencimiento</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
@@ -101,11 +102,10 @@
                         <td>[[${licenciaEmpleado.getLicencia.getTipo}]]</td>
                         <td>[[${licenciaEmpleado.fechaExpedicion}]]</td>                        
                         <td>[[${licenciaEmpleado.fechaVencimiento}]]</td>
+                        <td>[[${licenciaEmpleado.estado != null ? licenciaEmpleado.estado.descripcion : 'Sin estado'}]]</td>
                         <td>
                             <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/editar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/eliminar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-danger">Eliminar</a>
-                            <!-- <a th:href="@{/clientes/editar/} + ${cliente.idCliente}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{/clientes/eliminar/} + ${cliente.idCliente}" class="btn btn-danger">Eliminar</a> -->
+                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/inactivar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-danger">Inactivar</a>
                         </td>
                       </tr>
                     </tbody>
@@ -171,21 +171,38 @@
                             </div>
                         </div>
   
-                        <!-- Fecha de Expedicion -->
                         <div class="col-md-4">
                             <label for="fechaExpedicion" class="form-label">Fecha de expedición</label>
-                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" value="">
+                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" 
+                                   th:value="${licenciaEmpleado.fechaExpedicion}">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
                         </div>
-  
+
                         <!-- Fecha de Vencimiento -->
                         <div class="col-md-4">
                             <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
-                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" value="">
+                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" 
+                                   th:value="${licenciaEmpleado.fechaVencimiento}">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
+                            </div>
+                        </div>
+                        
+                        <!-- Estado -->
+                        <div class="col-md-12">
+                            <label for="carga" class="form-label">Estado</label>
+                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                                <option value="">Seleccione...</option>
+                                <option th:each="estado : ${estados}" 
+                                        th:value="${estado.idEstado}"
+                                        th:text="${estado.descripcion}" 
+                                        th:selected="${estado.idEstado == licenciaEmpleado.estado.idEstado}"> 
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un estado.
                             </div>
                         </div>
                         

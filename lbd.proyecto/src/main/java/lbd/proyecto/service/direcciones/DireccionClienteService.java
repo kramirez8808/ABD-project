@@ -17,7 +17,7 @@ public interface DireccionClienteService {
     void updateDireccionCliente(DireccionCliente direccionCliente, Distrito distrito);
 
     // Method to delete a direction with the Stored Procedure
-    void deleteDireccionCliente(DireccionCliente direccionCliente);
+    void inactivarDireccionCliente(DireccionCliente direccionCliente);
 
     // Method to get a direction with the Stored Procedure
     DireccionCliente getDireccionCliente(DireccionCliente direccionCliente);

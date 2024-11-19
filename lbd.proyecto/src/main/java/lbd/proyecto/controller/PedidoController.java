@@ -93,10 +93,10 @@ public class PedidoController {
         @RequestParam String descripcion, RedirectAttributes redirectAttributes) {
             Pedido pedido = new Pedido();
             pedido.setFechaPedido(pedidoService.convertDate(fechaPedido));
-            pedido.setDescripcion(descripcion);
+            //pedido.setDescripcion(descripcion);
             TipoCarga tipoCarga = new TipoCarga();
             tipoCarga.setIdTipo(Long.parseLong(idTipo));
-            pedido.setTiposCarga(tipoCargaService.getTipoCarga(tipoCarga));
+            pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
             Estado estado = new Estado();
             estado.setIdEstado(Long.parseLong(idEstado));
             pedido.setEstado(estadoService.getEstado(estado));
@@ -123,8 +123,8 @@ public class PedidoController {
         model.addAttribute("pedido", pedidoResult);
         model.addAttribute("idPedido", idPedido);
         model.addAttribute("fechaPedido", pedidoResult.getFechaPedido());
-        model.addAttribute("descripcion", pedidoResult.getDescripcion());
-        model.addAttribute("idTipo", pedidoResult.getTiposCarga().getIdTipo());
+        //model.addAttribute("descripcion", pedidoResult.getDescripcion());
+        model.addAttribute("idTipo", pedidoResult.getTipoCarga().getIdTipo());
         model.addAttribute("idEstado", pedidoResult.getEstado().getIdEstado());
         model.addAttribute("idCliente", pedidoResult.getCliente().getIdCliente());
         model.addAttribute("idVehiculo", pedidoResult.getVehiculo().getIdVehiculo());
@@ -143,11 +143,11 @@ public class PedidoController {
         @RequestParam String idEstado, @RequestParam String descripcion, @RequestParam String idLicenciaEmpleado, @RequestParam String idCliente, @RequestParam String idVehiculo, RedirectAttributes redirectAttributes) {
             Pedido pedido = new Pedido();
             pedido.setIdPedido(idPedido);
-            pedido.setDescripcion(descripcion);
+            //pedido.setDescripcion(descripcion);
             pedido.setFechaPedido(pedidoService.convertDate(fechaPedido));
             TipoCarga tipoCarga = new TipoCarga();
             tipoCarga.setIdTipo(Long.parseLong(idTipo));
-            pedido.setTiposCarga(tipoCargaService.getTipoCarga(tipoCarga));
+            pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
             Estado estado = new Estado();
             estado.setIdEstado(Long.parseLong(idEstado));
             pedido.setEstado(estadoService.getEstado(estado));
@@ -200,7 +200,7 @@ public class PedidoController {
     }
 
     @PostMapping("/dir/add")
-    public String insertarDireccion(@RequestParam Long idPedido, @RequestParam String idDistrito, @RequestParam String detalles, RedirectAttributes redirectAttributes) {
+    public String insertarDireccion(@RequestParam Long idPedido, @RequestParam String idDistrito, @RequestParam String detalles, Long idEstado, RedirectAttributes redirectAttributes) {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(idPedido);
         
@@ -208,10 +208,10 @@ public class PedidoController {
         distrito.setIdDistrito(Long.parseLong(idDistrito));
         
         Distrito distritoResult = distritoService.getDistrito(distrito);
-        DireccionPedido direccionPedido = new DireccionPedido(detalles, distritoResult);
-        direccionPedido.setPedido(pedido);
+        //DireccionPedido direccionPedido = new DireccionPedido(detalles, distritoResult);
+        //direccionPedido.setPedido(pedido);
 
-        direccionPedidoService.insertDireccionPedido(direccionPedido, pedido, distritoResult);
+        //direccionPedidoService.insertDireccionPedido(direccionPedido, pedido, distritoResult);
 
         redirectAttributes.addAttribute("idPedido", idPedido);
 
@@ -256,7 +256,7 @@ public class PedidoController {
     public String eliminarDireccion(@PathVariable Long idPedido, @PathVariable Long idDireccion, RedirectAttributes redirectAttributes) {
         DireccionPedido direccion = new DireccionPedido();
         direccion.setIdDireccion(idDireccion);
-        direccionPedidoService.deleteDireccionPedido(direccion);
+        direccionPedidoService.inactivarDireccionPedido(direccion);
         redirectAttributes.addAttribute("idPedido", idPedido);
         
         return "redirect:/pedidos/{idPedido}/dir/ver";
