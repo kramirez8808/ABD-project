@@ -94,6 +94,7 @@
                         <th scope="col">Modelo</th>
                         <th scope="col">Placa</th>
                         <th scope="col">Año</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
@@ -104,9 +105,10 @@
                         <td>[[${vehiculo.modelo}]]</td>                        
                         <td>[[${vehiculo.placa}]]</td>
                         <td>[[${vehiculo.anio}]]</td>
+                        <td>[[${vehiculo.estado != null ? vehiculo.estado.descripcion : 'Sin estado'}]]</td>
                         <td>
                             <a th:href="@{/vehiculos/editar/} + ${vehiculo.idVehiculo}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{/vehiculos/eliminar/} + ${vehiculo.idVehiculo}" class="btn btn-danger">Eliminar</a>
+                            <a th:href="@{/vehiculos/inactivar/} + ${vehiculo.idVehiculo}" class="btn btn-danger">Inactivar</a>
                         </td>
                       </tr>
                     </tbody>
@@ -152,7 +154,7 @@
                         <input type="text" class="form-control" hidden name="idVehiculo" id="idVehiculo" th:value="${idVehiculo}" placeholder="" required="">
 
                         <!-- Marca -->
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label for="marca" class="form-label">Marca</label>
                             <input type="text" class="form-control" id="marca" name="marca" placeholder="Toyota" th:value="${marca}" required="">
                             <div class="invalid-feedback">
@@ -161,7 +163,7 @@
                         </div>
 
                         <!-- Modelo -->
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label for="modelo" class="form-label">Modelo</label>
                             <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Hilux" th:value="${modelo}" required="">
                             <div class="invalid-feedback">
@@ -170,7 +172,7 @@
                         </div>
 
                         <!-- Placa -->
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label for="placa" class="form-label">Placa</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">ID</span>
@@ -187,6 +189,21 @@
                             <input type="number" min="1900" max="2099" class="form-control" id="anio" name="anio" placeholder="2020" th:value="${anio}" required="">
                             <div class="invalid-feedback">
                                 Una año válido es requerida.
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="carga" class="form-label">Estado</label>
+                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                                <option value="">Seleccione...</option>
+                                <option th:each="estado : ${estados}" 
+                                        th:value="${estado.idEstado}"
+                                        th:text="${estado.descripcion}" 
+                                        th:selected="${estado.idEstado == vehiculo.estado.idEstado}"> 
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un estado.
                             </div>
                         </div>
 

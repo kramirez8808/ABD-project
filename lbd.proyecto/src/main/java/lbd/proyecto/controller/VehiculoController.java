@@ -16,9 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import jakarta.persistence.NoResultException;
+import lbd.proyecto.domain.Estado;
 
 // Internal imports
 import lbd.proyecto.domain.Vehiculo;
+import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.VehiculoService;
 
 @Controller
@@ -28,6 +30,9 @@ public class VehiculoController {
     @Autowired
     VehiculoService vehiculoService;
     
+    @Autowired
+    EstadoService estadoService;
+    
     @GetMapping("/agregar")
     public String agregarVehiculo(Model model) { 
         return "vehiculo/agregar";
@@ -35,7 +40,16 @@ public class VehiculoController {
 
     @PostMapping("/add")
     public String insertarVehiculo(@RequestParam String placa, @RequestParam String marca, @RequestParam String modelo, @RequestParam Integer anio) {
-        Vehiculo vehiculo = new Vehiculo(placa, marca, modelo, anio);
+        Vehiculo vehiculo = new Vehiculo();
+        vehiculo.setMarca(marca);
+        vehiculo.setModelo(modelo);
+        vehiculo.setAnio(anio);
+        vehiculo.setPlaca(placa);
+        if (vehiculo.getEstado() == null) {
+                Estado estado = new Estado();
+                estado.setIdEstado((long)7); 
+                vehiculo.setEstado(estado);
+            }
         vehiculoService.insertVehiculo(vehiculo);
         return "redirect:/vehiculos/ver";
     }
@@ -46,25 +60,30 @@ public class VehiculoController {
         vehiculo.setIdVehiculo(idVehiculo);
         vehiculo = vehiculoService.getVehiculo(vehiculo);
         
-
         model.addAttribute("vehiculo", vehiculo);
         model.addAttribute("idVehiculo", idVehiculo);
         model.addAttribute("marca", vehiculo.getMarca());
         model.addAttribute("modelo", vehiculo.getModelo());
         model.addAttribute("placa", vehiculo.getPlaca());
         model.addAttribute("anio", vehiculo.getAnio());
+        model.addAttribute("estados", estadoService.getAllEstados());
         
         return "vehiculo/actualizar";
     }
 
     @PostMapping("/update")
-    public String actualizarVehiculo(@RequestParam Long idVehiculo, @RequestParam String placa, @RequestParam String marca, @RequestParam String modelo, @RequestParam Integer anio) {
+    public String actualizarVehiculo(@RequestParam Long idVehiculo, @RequestParam String placa, @RequestParam String marca, @RequestParam String modelo, @RequestParam Integer anio, @RequestParam Long idEstado) {
         Vehiculo vehiculo = new Vehiculo();
         vehiculo.setIdVehiculo(idVehiculo);
         vehiculo.setPlaca(placa);
         vehiculo.setMarca(marca);
         vehiculo.setModelo(modelo);
         vehiculo.setAnio(anio);
+        
+        Estado estado = new Estado();
+        estado.setIdEstado(idEstado);
+        vehiculo.setEstado(estadoService.getEstado(estado));
+        
         vehiculoService.updateVehiculo(idVehiculo, vehiculo);
         return "redirect:/vehiculos/ver";
     }
@@ -76,9 +95,11 @@ public class VehiculoController {
         return "vehiculo/ver";
     }
 
-    @GetMapping("/eliminar/{idVehiculo}")
-    public String eliminarVehiculo(@PathVariable Long idVehiculo) {
-        vehiculoService.deleteVehiculo(idVehiculo);
+    @GetMapping("/inactivar/{idVehiculo}")
+    public String inactivarVehiculo(@PathVariable Long idVehiculo, RedirectAttributes redirectAttributes) {
+        Vehiculo vehiculo = new Vehiculo();
+        vehiculo.setIdVehiculo(idVehiculo);
+        vehiculoService.inactivarVehiculo(idVehiculo);
         return "redirect:/vehiculos/ver";
     }
     

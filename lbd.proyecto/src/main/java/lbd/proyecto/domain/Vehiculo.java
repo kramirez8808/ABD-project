@@ -19,10 +19,14 @@ public class Vehiculo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Autoincremental value
     @Column(name = "id_vehiculo")
     private Long idVehiculo; //Hibernate converts this to => id_vehiculo
-    private String placa; // Column => placa
+    
     private String marca; // Column => marca
     private String modelo; // Column => modelo
     private Integer anio; // Column => anio
+    private String placa; // Column => placa
+ 
+    
+    
 
     //Relationship with table Pedido
     @OneToMany(mappedBy = "vehiculo") // One state can be assigned to many clients
@@ -40,11 +44,12 @@ public class Vehiculo implements Serializable {
     public Vehiculo() {
     }
 
-    public Vehiculo(String placa, String marca, String modelo, Integer anio) {
+    public Vehiculo(String placa, String marca, String modelo, Integer anio, Estado estado) {
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
         this.anio = anio;
+        this.estado = estado;
     }
 
 }

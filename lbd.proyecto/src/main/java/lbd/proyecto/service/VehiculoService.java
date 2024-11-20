@@ -21,6 +21,6 @@ public interface VehiculoService {
     void updateVehiculo(Long idVehiculo, Vehiculo vehiculo);
 
     // Method to delete a vehicle with the Stored Procedure
-    void deleteVehiculo(Long idVehiculo);
+    void inactivarVehiculo(Long idVehiculo);
     
 }

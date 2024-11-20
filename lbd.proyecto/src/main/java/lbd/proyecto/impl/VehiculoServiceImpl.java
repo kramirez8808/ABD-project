@@ -29,8 +29,9 @@ import oracle.jdbc.OracleTypes;
 
 // Internal imports
 import lbd.proyecto.dao.VehiculoDAO;
-import lbd.proyecto.domain.Licencia;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.domain.Vehiculo;
+import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.VehiculoService;
 
 @Service
@@ -41,6 +42,9 @@ public class VehiculoServiceImpl implements VehiculoService {
 
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -48,24 +52,23 @@ public class VehiculoServiceImpl implements VehiculoService {
     @Override
     @Transactional
     public void insertVehiculo(Vehiculo vehiculo) {
-        vehiculoDAO.insertVehiculo(vehiculo.getMarca(), vehiculo.getModelo(), vehiculo.getAnio(), vehiculo.getPlaca());
+        vehiculoDAO.insertVehiculo(vehiculo.getMarca(), vehiculo.getModelo(), vehiculo.getAnio(), vehiculo.getPlaca(), vehiculo.getEstado().getIdEstado());
     }
 
     @Override
     @Transactional
     public void updateVehiculo(Long idVehiculo, Vehiculo vehiculo) {
-        vehiculoDAO.updateVehiculo(idVehiculo, vehiculo.getMarca(), vehiculo.getModelo(), vehiculo.getAnio(), vehiculo.getPlaca());
+        vehiculoDAO.updateVehiculo(idVehiculo, vehiculo.getMarca(), vehiculo.getModelo(), vehiculo.getAnio(), vehiculo.getPlaca(), vehiculo.getEstado().getIdEstado());
     }
 
     @Override
     @Transactional
-    public void deleteVehiculo(Long idVehiculo) {
-        vehiculoDAO.deleteVehiculo(idVehiculo);
+    public void inactivarVehiculo(Long idVehiculo) {
+        vehiculoDAO.inactivarVehiculo(idVehiculo);
     }
 
     @Override
     public Vehiculo getVehiculo(Vehiculo vehiculo) {
-
         return transactionTemplate.execute(new TransactionCallback<Vehiculo>() {
             @Override
             public Vehiculo doInTransaction(TransactionStatus status) {
@@ -78,6 +81,7 @@ public class VehiculoServiceImpl implements VehiculoService {
                 query.registerStoredProcedureParameter("P_MODELO", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("P_ANIO", Integer.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("P_PLACA", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
                 query.setParameter("P_ID_VEHICULO", vehiculo.getIdVehiculo());
@@ -98,18 +102,28 @@ public class VehiculoServiceImpl implements VehiculoService {
                         throw e;
                     }
                 }
+                
+                
 
                 // Print the output parameters
-                System.out.println("Marca: " + query.getOutputParameterValue("p_marca"));
-                System.out.println("Modelo: " + query.getOutputParameterValue("p_modelo"));
+                System.out.println("Marca: " + query.getOutputParameterValue("P_MARCA"));
+                System.out.println("Modelo: " + query.getOutputParameterValue("P_MODELO"));
 
                 // Map the output parameters to a Vehiculo object
                 Vehiculo vehiculoResult = new Vehiculo();
                 vehiculoResult.setIdVehiculo(vehiculo.getIdVehiculo());
-                vehiculoResult.setMarca((String) query.getOutputParameterValue("p_marca"));
-                vehiculoResult.setModelo((String) query.getOutputParameterValue("p_modelo"));
-                vehiculoResult.setAnio((Integer) query.getOutputParameterValue("p_anio"));
-                vehiculoResult.setPlaca((String) query.getOutputParameterValue("p_placa"));
+                vehiculoResult.setMarca((String) query.getOutputParameterValue("P_MARCA"));
+                vehiculoResult.setModelo((String) query.getOutputParameterValue("P_MODELO"));
+                vehiculoResult.setAnio((Integer) query.getOutputParameterValue("P_ANIO"));
+                vehiculoResult.setPlaca((String) query.getOutputParameterValue("P_PLACA"));
+                
+                Long estadoId = (Long) query.getOutputParameterValue("P_ID_ESTADO");
+                if (estadoId != null) {
+                    Estado estado = new Estado();
+                    estado.setIdEstado(estadoId);
+                    Estado newEstado = estadoService.getEstado(estado);
+                    vehiculoResult.setEstado(newEstado);
+                }
 
                 return vehiculoResult;
                 
@@ -152,12 +166,18 @@ public class VehiculoServiceImpl implements VehiculoService {
         try {
             while (resultSet.next()) {
                 Vehiculo vehiculo = new Vehiculo();
-            vehiculo.setIdVehiculo(resultSet.getLong("id_vehiculo"));
-            vehiculo.setMarca(resultSet.getString("marca"));
-            vehiculo.setModelo(resultSet.getString("modelo"));
-            vehiculo.setAnio(resultSet.getInt("anio"));
-            vehiculo.setPlaca(resultSet.getString("placa"));
-            vehiculos.add(vehiculo);
+                vehiculo.setIdVehiculo(resultSet.getLong("id_vehiculo"));
+                vehiculo.setMarca(resultSet.getString("marca"));
+                vehiculo.setModelo(resultSet.getString("modelo"));
+                vehiculo.setAnio(resultSet.getInt("anio"));
+                vehiculo.setPlaca(resultSet.getString("placa"));
+
+                Estado estado = new Estado();
+                estado.setIdEstado(resultSet.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                vehiculo.setEstado(newEstado);
+                
+                vehiculos.add(vehiculo);
             }
         } catch (SQLException e) {
             e.printStackTrace();
