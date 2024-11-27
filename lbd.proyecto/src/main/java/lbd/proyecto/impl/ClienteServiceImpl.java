@@ -29,7 +29,9 @@ import oracle.jdbc.OracleTypes;
 // Internal imports
 import lbd.proyecto.dao.ClienteDAO;
 import lbd.proyecto.domain.Cliente;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.service.ClienteService;
+import lbd.proyecto.service.EstadoService;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -39,17 +41,20 @@ public class ClienteServiceImpl implements ClienteService {
 
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Autowired
+    private EstadoService estadoService;
 
     @Override
     @Transactional
     public void insertCliente(Cliente cliente) {
-        clienteDAO.insertCliente(cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getEmail());
+        clienteDAO.insertCliente(cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getEmail(), cliente.getEstado().getIdEstado());
     }
     
     @Override
     @Transactional
     public void updateCliente(Long idCliente, Cliente cliente) {
-        clienteDAO.updateCliente(idCliente, cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getEmail());
+        clienteDAO.updateCliente(idCliente, cliente.getNombre(), cliente.getApellido(), cliente.getTelefono(), cliente.getEmail(), cliente.getEstado().getIdEstado());
     }
 
     // @Override
@@ -118,7 +123,7 @@ public class ClienteServiceImpl implements ClienteService {
                 query.registerStoredProcedureParameter("P_APELLIDO", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("P_TELEFONO", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("P_EMAIL", String.class, ParameterMode.OUT);
-                query.registerStoredProcedureParameter("P_ID_ESTADO", String.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.OUT);
                 // Set the input parameter
                 query.setParameter("P_ID_CLIENTE", cliente.getIdCliente());
 
@@ -154,6 +159,15 @@ public class ClienteServiceImpl implements ClienteService {
                 newCliente.setApellido((String) query.getOutputParameterValue("P_APELLIDO"));
                 newCliente.setTelefono((String) query.getOutputParameterValue("P_TELEFONO"));
                 newCliente.setEmail((String) query.getOutputParameterValue("P_EMAIL"));
+                
+                Long estadoId = (Long) query.getOutputParameterValue("P_ID_ESTADO");
+                    if (estadoId != null) {
+                        Estado estado = new Estado();
+                        estado.setIdEstado(estadoId);
+                        Estado newEstado = estadoService.getEstado(estado);
+                        newCliente.setEstado(newEstado);
+                    }
+                
                 return newCliente;
             }
         });
@@ -187,6 +201,12 @@ public class ClienteServiceImpl implements ClienteService {
                 cliente.setApellido(rs.getString("apellido"));
                 cliente.setTelefono(rs.getString("telefono"));
                 cliente.setEmail(rs.getString("email"));
+                
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                cliente.setEstado(newEstado);
+                
                 clientes.add(cliente);
             }
         } catch (Exception e) {
@@ -198,8 +218,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void deleteCliente(Long idCliente) {
-        clienteDAO.deleteCliente(idCliente);
+    public void inactivarCliente(Long idCliente) {
+        clienteDAO.inactivarCliente(idCliente);
     }
 
     @Override
@@ -211,7 +231,7 @@ public class ClienteServiceImpl implements ClienteService {
         session.doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call buscar_clientes_nombre(?) }")) {
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_CLIENTES_TB_BUSCAR_CLIENTE_NOMBRE_FN(?) }")) {
                     callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
                     callableStatement.setString(2, nombre);
                     callableStatement.execute();
@@ -224,6 +244,12 @@ public class ClienteServiceImpl implements ClienteService {
                             cliente.setApellido(rs.getString("Apellido"));
                             cliente.setTelefono(rs.getString("Telefono"));
                             cliente.setEmail(rs.getString("Email"));
+                            
+                            Estado estado = new Estado();
+                            estado.setIdEstado(rs.getLong("id_estado"));
+                            Estado newEstado = estadoService.getEstado(estado);
+                            cliente.setEstado(newEstado);
+                            
                             clientes.add(cliente);
                         }
                     }
@@ -245,7 +271,7 @@ public class ClienteServiceImpl implements ClienteService {
         session.doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call buscar_clientes_email(?) }")) {
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_CLIENTES_TB_BUSCAR_CLIENTE_CORREO_FN(?) }")) {
                     callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
                     callableStatement.setString(2, email);
                     callableStatement.execute();
@@ -258,6 +284,12 @@ public class ClienteServiceImpl implements ClienteService {
                             cliente.setApellido(rs.getString("Apellido"));
                             cliente.setTelefono(rs.getString("Telefono"));
                             cliente.setEmail(rs.getString("Email"));
+                            
+                            Estado estado = new Estado();
+                            estado.setIdEstado(rs.getLong("id_estado"));
+                            Estado newEstado = estadoService.getEstado(estado);
+                            cliente.setEstado(newEstado);
+                            
                             clientes.add(cliente);
                         }
                     }

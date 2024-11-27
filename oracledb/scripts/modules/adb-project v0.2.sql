@@ -865,7 +865,7 @@ RETURN SYS_REFCURSOR AS
     V_CURSOR SYS_REFCURSOR;
 BEGIN
     OPEN V_CURSOR FOR
-    SELECT ID_Cliente, Nombre, Apellido, Telefono, Email
+    SELECT ID_Cliente, Nombre, Apellido, Telefono, Email, Id_estado
     FROM FIDE_CLIENTES_TB
     WHERE LOWER(Nombre) LIKE '%' || LOWER(P_NOMBRE) || '%';
     RETURN V_CURSOR;
@@ -878,7 +878,7 @@ RETURN SYS_REFCURSOR AS
     V_CURSOR SYS_REFCURSOR;
 BEGIN
     OPEN V_CURSOR FOR
-    SELECT ID_Cliente, Nombre, Apellido, Telefono, Email
+    SELECT ID_Cliente, Nombre, Apellido, Telefono, Email, Id_estado
     FROM FIDE_CLIENTES_TB
     WHERE LOWER(Email) LIKE '%' || LOWER(P_EMAIL) || '%';
     RETURN V_CURSOR;

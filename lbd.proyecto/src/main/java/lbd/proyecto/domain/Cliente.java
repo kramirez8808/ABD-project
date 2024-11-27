@@ -53,11 +53,12 @@ public class Cliente implements Serializable {
     public Cliente() {
     }
 
-    public Cliente(String nombre, String apellido, String telefono, String email) {
+    public Cliente(String nombre, String apellido, String telefono, String email, Estado estado) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.email = email;
+        this.estado = estado;
     }
     
 }

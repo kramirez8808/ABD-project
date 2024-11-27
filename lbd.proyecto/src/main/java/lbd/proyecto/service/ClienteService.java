@@ -21,7 +21,7 @@ public interface ClienteService {
     List<Cliente> getAllClientes();
 
     // Method to delete a client with the Stored Procedure
-    void deleteCliente(Long idCliente);
+    void inactivarCliente(Long idCliente);
 
     // Method to search clients by string in name with the SQL function
     List<Cliente> searchClientesNombre(String nombre);

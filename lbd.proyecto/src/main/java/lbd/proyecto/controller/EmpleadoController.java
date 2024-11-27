@@ -210,7 +210,6 @@ public class EmpleadoController {
         System.out.println(" *** DEBUG *** ");
         System.out.println(direccionResult);
 
-        // Verifica que no sea nulo antes de acceder a las propiedades
         if (direccionResult != null && direccionResult.getDistrito() != null
             && direccionResult.getDistrito().getCanton() != null
             && direccionResult.getDistrito().getCanton().getProvincia() != null) {
@@ -242,13 +241,7 @@ public class EmpleadoController {
     }
     
     @PostMapping("/dir/update")
-    public String actualizarDireccion(@RequestParam Long idEmpleado, 
-                                      @RequestParam Long idDireccion, 
-                                      @RequestParam String detalles, 
-                                      @RequestParam String idDistrito, 
-                                      @RequestParam Long idEstado, 
-                                      RedirectAttributes redirectAttributes) {
-
+    public String actualizarDireccion(@RequestParam Long idEmpleado, @RequestParam Long idDireccion, @RequestParam String detalles, @RequestParam String idDistrito, @RequestParam Long idEstado, RedirectAttributes redirectAttributes) {
         // Verifica que los parámetros se reciban correctamente
         System.out.println("idEmpleado: " + idEmpleado);
         System.out.println("idDireccion: " + idDireccion);
@@ -287,59 +280,6 @@ public class EmpleadoController {
         // Redirige a la vista correspondiente
         return "redirect:/empleados/{idEmpleado}/dir/ver";
     }
-
-
-
-
-
-    /*
-    @PostMapping("/dir/update")
-    public String actualizarDireccion(@RequestParam Long idEmpleado, 
-                                      @RequestParam Long idDireccion, 
-                                      @RequestParam String detalles, 
-                                      @RequestParam String idDistrito, 
-                                      @RequestParam Long idEstado, 
-                                      RedirectAttributes redirectAttributes) {
-
-        // Verifica que los parámetros se reciban correctamente
-        System.out.println("idEmpleado: " + idEmpleado);
-        System.out.println("idDireccion: " + idDireccion);
-        System.out.println("detalles: " + detalles);
-        System.out.println("idDistrito: " + idDistrito);
-        System.out.println("idEstado recibido: " + idEstado);
-
-        // Crea el objeto Empleado
-        Empleado empleado = new Empleado();
-        empleado.setIdEmpleado(idEmpleado);
-
-        // Crea y configura el objeto DireccionEmpleado
-        DireccionEmpleado direccion = new DireccionEmpleado();
-        direccion.setIdDireccion(idDireccion);
-        direccion.setDetalles(detalles);
-
-        // Configura el Distrito
-        Distrito distrito = new Distrito();
-        distrito.setIdDistrito(Long.parseLong(idDistrito));  // Convierte idDistrito a Long
-        Distrito distritoResult = distritoService.getDistrito(distrito);
-
-        // Configura el Estado
-        Estado estado = new Estado();
-        estado.setIdEstado(idEstado);  // Asigna el idEstado recibido
-        Estado estadoResult = estadoService.getEstado(estado); 
-        // Establece el estado en la dirección
-        direccion.setEstado(estadoResult);
-
-        // Llama al servicio para actualizar la dirección
-        direccionEmpleadoService.updateDireccionEmpleado(direccion, distritoResult);
-        empleado.setEstado(estadoService.getEstado(estado));
-        
-        // Agrega el idEmpleado para redirigir después
-        redirectAttributes.addAttribute("idEmpleado", idEmpleado);
-
-        // Redirige a la vista correspondiente
-        return "redirect:/empleados/{idEmpleado}/dir/ver";
-    }
-    */
 
     @GetMapping("{idEmpleado}/dir/inactivar/{idDireccion}")
     public String inactivarDireccion(@PathVariable Long idEmpleado, @PathVariable Long idDireccion, RedirectAttributes redirectAttributes) {
