@@ -40,6 +40,7 @@
 
                         <!-- ID -->
                         <input type="text" class="form-control" hidden name="idCliente" id="idCliente" th:value="${idCliente}" placeholder="" required="">
+                        
 
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
@@ -178,6 +179,11 @@
                         <!-- ID -->
                         <input type="text" class="form-control" hidden name="idCliente" id="idCliente" th:value="${idCliente}" placeholder="" required="">
                         <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" placeholder="" required="">
+                            
+                        <h5>Datos Anteriores</h5>
+                        <spam>Provincia: <spam>[[${provinciaOld.nombre}]]</spam></spam>
+                        <spam>Cantón: <spam>[[${cantonOld.nombre}]]</spam></spam>
+                        <spam>Distrito: <spam>[[${distritoOld.nombre}]]</spam></spam>
 
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
@@ -217,6 +223,21 @@
                             <input type="text" class="form-control" id="detalles" th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
                             <div class="invalid-feedback">
                                 Por favor, ingrese una dirección válida.
+                            </div>
+                        </div>
+                            
+                        <div class="col-md-12">
+                            <label for="carga" class="form-label">Estado</label>
+                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                                <option value="">Seleccione...</option>
+                                <option th:each="estado : ${estados}" 
+                                        th:value="${estado.idEstado}"
+                                        th:text="${estado.descripcion}" 
+                                        th:selected="${estado.idEstado == direccion.estado.idEstado}"> 
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un estado.
                             </div>
                         </div>
 
@@ -411,38 +432,33 @@
                         <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" required="">
                         <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" required="">
                             
-                        <!-- Provincia -->
                         <div class="col-md-4">
-                            <label for="idProvincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="idProvincia" name="idProvincia" required="">
-                                <option th:value="${provinciaOld.idProvincia}">[[${provinciaOld.nombre}]]</option>
-                                <option th:each="provincia : ${provincias}" th:value="${provincia.idProvincia}">[[${provincia.nombre}]]</option>
+                            <label for="provincia" class="form-label">Provincia</label>
+                            <select class="form-select" id="provincia" required="">
+                                <option value="">Seleccione...</option>
+                                <option value="1">San José</option>
+                                <option value="2">Heredia</option>
+                                <option value="3">Cartago</option>
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, seleccione una provincia.
                             </div>
                         </div>
 
-                        <!-- Cantón -->
                         <div class="col-md-4">
-                            <label for="idCanton" class="form-label">Cantón</label>
-                            <select class="form-select" id="idCanton" name="idCanton" required="">
-                                <option th:value="${cantonOld.idCanton}">[[${cantonOld.nombre}]]</option>
-                                <option th:each="canton : ${cantones}" th:value="${canton.idCanton}">[[${canton.nombre}]]</option>
+                            <label for="canton" class="form-label">Cantón</label>
+                            <select class="form-select" id="canton" th:value="${canton}" required="">
+                                <option value="">Seleccione...</option>
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, seleccione un cantón.
                             </div>
                         </div>
 
-                        <!-- Distrito -->
                         <div class="col-md-4">
-                            <label for="distritolabel" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" name="idDistrito" required="">
-                                <option th:value="${distritoOld != null ? distritoOld.idDistrito : ''}">
-                                    [[${distritoOld != null ? distritoOld.nombre : 'Seleccione un distrito'}]]
-                                </option>
-                                <option th:each="distrito : ${distritos}" th:value="${distrito.idDistrito}">[[${distrito.nombre}]]</option>
+                            <label for="distrito" class="form-label">Distrito</label>
+                            <select class="form-select" id="idDistrito" th:value="${idDistrito}" name="idDistrito" required="">
+                                <option value="">Seleccione...</option>
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, seleccione un distrito.

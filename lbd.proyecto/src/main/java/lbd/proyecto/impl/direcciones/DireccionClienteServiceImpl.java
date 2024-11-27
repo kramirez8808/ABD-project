@@ -37,6 +37,7 @@ import lbd.proyecto.dao.ClienteDAO;
 import lbd.proyecto.domain.direcciones.Distrito;
 import lbd.proyecto.service.direcciones.DistritoService;
 import lbd.proyecto.dao.direcciones.DistritoDAO;
+import lbd.proyecto.domain.Estado;
 import lbd.proyecto.service.EstadoService;
 
 @Service
@@ -76,11 +77,9 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
     @Transactional
     public void updateDireccionCliente(DireccionCliente direccionCliente, Distrito distrito) {
         Distrito distritoResult = distritoService.getDistrito(distrito);
-        direccionClienteDAO.updateDireccionCliente(direccionCliente.getIdDireccion(), direccionCliente.getDetalles(), distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), distritoResult.getIdDistrito(),distritoResult.getEstado().getIdEstado());
-        
-        direccionCliente.setDistrito(distritoResult);
-        System.out.println(direccionCliente.toString());
-        System.out.println(direccionCliente.getDistrito().toString());
+        direccionClienteDAO.updateDireccionCliente(direccionCliente.getIdDireccion(), direccionCliente.getDetalles(),
+                distritoResult.getCanton().getProvincia().getIdProvincia(), distritoResult.getCanton().getIdCanton(), 
+                distritoResult.getIdDistrito(), direccionCliente.getEstado().getIdEstado());
     }
 
     @Override
@@ -91,13 +90,14 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
             @Override
             public DireccionCliente doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "ver_direccion_cliente"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_direccion_cliente");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_DIRECCIONES_CLIENTE_TB_VER_DIRECCION_SP");
 
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("p_id_direccion", Long.class, ParameterMode.IN);
                 query.registerStoredProcedureParameter("p_id_cliente", Long.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_detalles", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("p_id_distrito", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("p_id_estado", Long.class, ParameterMode.OUT);
 
                 // Set the input parameter
                 query.setParameter("p_id_direccion", direccionCliente.getIdDireccion());
@@ -136,6 +136,17 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
                 Distrito distrito = new Distrito();
                 distrito.setIdDistrito((Long) query.getOutputParameterValue("p_id_distrito"));
                 newDireccionCliente.setDistrito(distritoService.getDistrito(distrito));
+                
+                Long estadoId = (Long) query.getOutputParameterValue("p_id_estado");
+                if (estadoId != null) {
+                    Estado estado = new Estado();
+                    estado.setIdEstado(estadoId);
+                    // Asegurarse de que el estado existe
+                    Estado newEstado = estadoService.getEstado(estado);
+                    newDireccionCliente.setEstado(newEstado);
+                } else {
+                    System.out.println("Estado no encontrado para la dirección: " + newDireccionCliente.getIdDireccion());
+                }
 
                 return newDireccionCliente;
             }
@@ -146,7 +157,7 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
     @Transactional(readOnly = true)
     public List<DireccionCliente> getAllDirecciones() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_direcciones_clientes"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_direcciones_clientes");
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_DIRECCIONES_CLIENTE_TB_VER_DIRECCIONES_SP");
 
         // Register the output parameters
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -174,6 +185,11 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(rs.getLong("id_cliente"));
                 direccion.setCliente(clienteService.getCliente(cliente));
+                
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                Estado newEstado = estadoService.getEstado(estado);
+                direccion.setEstado(newEstado);
 
                 direcciones.add(direccion);
             }
@@ -194,7 +210,7 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
         session.doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call buscar_direcciones_por_cliente(?) }")) {
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_DIRECCIONES_CLIENTE_TB_BUSCAR_POR_ID_FN(?) }")) {
                     callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
                     callableStatement.setLong(2, idCliente);
                     callableStatement.execute();
@@ -212,6 +228,14 @@ public class DireccionClienteServiceImpl implements DireccionClienteService {
                             Cliente cliente = new Cliente();
                             cliente.setIdCliente(rs.getLong("id_cliente"));
                             direccion.setCliente(clienteService.getCliente(cliente));
+                            
+                            Long idEstado = rs.getLong("id_estado");
+                            if (!rs.wasNull()) {
+                                Estado estado = new Estado();
+                                estado.setIdEstado(idEstado);
+                                Estado newEstado = estadoService.getEstado(estado);
+                                direccion.setEstado(newEstado);
+                            }
 
                             direcciones.add(direccion);
                         }
