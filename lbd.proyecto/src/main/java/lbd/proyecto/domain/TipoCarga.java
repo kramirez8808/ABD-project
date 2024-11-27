@@ -47,4 +47,10 @@ public class TipoCarga implements Serializable {
     public void setIdTipo(Long idTipo) {
         this.idTipoCarga = idTipo;
     }
+    
+    public TipoCarga(Long idTipoCarga, String description, Estado estado) {
+        this.idTipoCarga = idTipoCarga;
+        this.descripcion = descripcion;
+        this.estado = estado;
+    }
 }

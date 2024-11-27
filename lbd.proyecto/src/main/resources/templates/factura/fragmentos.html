@@ -15,7 +15,6 @@
                     <thead>
                       <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Pedido</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Monto</th>
                         <th scope="col">Fecha</th>
@@ -25,7 +24,6 @@
                     <tbody>
                       <tr th:each="factura : ${facturas}">
                         <th scope="row">[[${factura.idFactura}]]</th>
-                        <td>[[${factura.getPedido.getDescripcion}]]</td>
                         <td>[[${factura.getPedido.getCliente.getNombre + ' ' + factura.getPedido.getCliente.getApellido}]]</td>
                         <td>[[${factura.total}]]</td>                        
                         <td>[[${factura.fecha}]]</td>

@@ -13,11 +13,11 @@ import lbd.proyecto.domain.TipoCarga;
 public interface TipoCargaDAO extends JpaRepository<TipoCarga, Long> {
     
     // Method to call an stored procedure to get a (single) type of load
-    @Procedure(procedureName = "ver_tipo_carga")
+    @Procedure(procedureName = "FIDE_TIPOS_CARGA_TB_VER_TIPO_CARGA_SP")
     TipoCarga getTipoCarga(Long idTipo);
     
     //Method to call an stored procedure to get all types of load
-    @Procedure(procedureName = "ver_tipos_carga")
+    @Procedure(procedureName = "FIDE_TIPOS_CARGA_TB_VER_TIPOS_CARGA_SP")
     List<TipoCarga> getAllTiposCarga();
     
 }

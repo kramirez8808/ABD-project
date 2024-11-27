@@ -111,15 +111,6 @@
                             </div>
                         </div>
 
-                        <!-- Descripcion -->
-                        <div class="col-12">
-                            <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="200KG de Cemento" required=""></textarea>
-                            <div class="invalid-feedback">
-                                Por favor, ingrese una descripción válida.
-                            </div>
-                        </div>
-
                         <hr class="my-4">
 
                         <button class="w-100 btn btn-primary btn-lg" type="submit">Crear pedido</button>
@@ -136,7 +127,6 @@
                     <thead>
                       <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Descripción</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Vehículo</th>
                         <th scope="col">Fecha</th>
@@ -147,13 +137,12 @@
                     <tbody>
                       <tr th:each="pedido : ${pedidos}">
                         <th scope="row">[[${pedido.idPedido}]]</th>
-                        <td>[[${pedido.descripcion}]]</td>
                         <td>[[${pedido.getCliente.getNombre + ' ' + pedido.getCliente.getApellido}]]</td>                        
                         <td>[[${pedido.getVehiculo.getMarca + ' ' + pedido.getVehiculo.getModelo}]]</td>
                         <td>[[${pedido.fechaPedido}]]</td>
                         <td>[[${pedido.getEstado.getDescripcion}]]</td>
                         <td>
-                            <button th:if="${!pedido.hasFactura and !pedido.isCanceled}" type="button" 
+                            <button type="button" 
                                     data-bs-toggle="modal" 
                                     th:data-bs-target="'#modal-' + ${pedido.idPedido}"
                                     class="btn btn-warning px-1 py-0">
@@ -169,7 +158,7 @@
                             </button>
                             <a th:href="@{/pedidos/} + ${pedido.idPedido} + '/dir/ver'" class="btn btn-primary">Direcciones</a>
                             <a th:href="@{/pedidos/editar/} + ${pedido.idPedido}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{/pedidos/eliminar/} + ${pedido.idPedido}" class="btn btn-danger">Eliminar</a>
+                            <a th:href="@{/pedidos/inactivar/} + ${pedido.idPedido}" class="btn btn-danger">Inactivar</a>
                         </td>
                       </tr>
                     </tbody>
@@ -242,7 +231,7 @@
     <section th:fragment="actualizar">
         <div class="d-flex justify-content-center">
             <div style="max-width: 40rem;">
-
+               
                 <!-- Información de Contacto -->
                 <h4 class="mb-3">Información de Contacto</h4>
                 <form th:action="@{/pedidos/update}"
@@ -326,15 +315,6 @@
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, seleccione un tipo de carga.
-                            </div>
-                        </div>
-
-                        <!-- Descripcion -->
-                        <div class="col-12">
-                            <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcion" th:value="${descripcion}" name="descripcion" placeholder="200KG de Cemento" required=""></textarea>
-                            <div class="invalid-feedback">
-                                Por favor, ingrese una descripción válida.
                             </div>
                         </div>
                         

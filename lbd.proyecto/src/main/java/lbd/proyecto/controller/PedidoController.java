@@ -36,13 +36,17 @@ import lbd.proyecto.domain.Vehiculo;
 import lbd.proyecto.service.VehiculoService;
 
 import lbd.proyecto.domain.LicenciaEmpleado;
+import lbd.proyecto.domain.direcciones.Canton;
 import lbd.proyecto.service.LicenciaEmpleadoService;
 
 import lbd.proyecto.domain.direcciones.DireccionPedido;
 import lbd.proyecto.service.direcciones.DireccionPedidoService;
 
 import lbd.proyecto.domain.direcciones.Distrito;
+import lbd.proyecto.domain.direcciones.Provincia;
+import lbd.proyecto.service.direcciones.CantonService;
 import lbd.proyecto.service.direcciones.DistritoService;
+import lbd.proyecto.service.direcciones.ProvinciaService;
 
 @Controller
 @RequestMapping("/pedidos")
@@ -62,6 +66,12 @@ public class PedidoController {
 
     @Autowired
     private VehiculoService vehiculoService;
+    
+    @Autowired
+    ProvinciaService provinciaService;
+    
+    @Autowired
+    CantonService cantonService;
 
     @Autowired
     private LicenciaEmpleadoService licenciaEmpleadoService;
@@ -72,6 +82,33 @@ public class PedidoController {
     @Autowired
     private DistritoService distritoService;
 
+    @GetMapping("/agregar")
+    public String agregarPedido(Model model) {
+        List<TipoCarga> tiposCarga = tipoCargaService.getAllTiposCarga();
+        // Verificar si la lista de tiposCarga está vacía
+        if (tiposCarga.isEmpty()) {
+            System.out.println("No se encontraron tipos de carga");
+        } else {
+            System.out.println("Tipos de carga: " + tiposCarga);
+        }
+
+        List<Estado> estados = estadoService.getAllEstados();
+        List<Cliente> clientes = clienteService.getAllClientes();
+        List<Vehiculo> vehiculos = vehiculoService.getAllVehiculos();
+        List<LicenciaEmpleado> licenciasEmpleado = licenciaEmpleadoService.getAllLicenciasEmpleados();
+
+        // Agregar los atributos al modelo
+        model.addAttribute("tiposCarga", tiposCarga);
+        model.addAttribute("estados", estados);
+        model.addAttribute("clientes", clientes);
+        model.addAttribute("vehiculos", vehiculos);
+        model.addAttribute("licenciasEmpleado", licenciasEmpleado);
+
+        return "pedido/agregar";
+    }
+
+    
+    /*
     @GetMapping("/agregar")
     public String agregarPedido(Model model) {
         List<TipoCarga> tiposCarga = tipoCargaService.getAllTiposCarga();
@@ -86,11 +123,13 @@ public class PedidoController {
         model.addAttribute("licenciasEmpleado", licenciasEmpleado);
         return "pedido/agregar";
     }
+    */
+
 
     @PostMapping("/add")
     public String insertarPedido(@RequestParam String fechaPedido, @RequestParam String idTipo, 
         @RequestParam String idEstado, @RequestParam String idLicenciaEmpleado, @RequestParam String idCliente, @RequestParam String idVehiculo,
-        @RequestParam String descripcion, RedirectAttributes redirectAttributes) {
+        RedirectAttributes redirectAttributes) {
             Pedido pedido = new Pedido();
             pedido.setFechaPedido(pedidoService.convertDate(fechaPedido));
             //pedido.setDescripcion(descripcion);
@@ -140,7 +179,7 @@ public class PedidoController {
 
     @PostMapping("/update")
     public String actualizarPedido(@RequestParam Long idPedido, @RequestParam String fechaPedido, @RequestParam String idTipo, 
-        @RequestParam String idEstado, @RequestParam String descripcion, @RequestParam String idLicenciaEmpleado, @RequestParam String idCliente, @RequestParam String idVehiculo, RedirectAttributes redirectAttributes) {
+        @RequestParam String idEstado, @RequestParam String idLicenciaEmpleado, @RequestParam String idCliente, @RequestParam String idVehiculo, RedirectAttributes redirectAttributes) {
             Pedido pedido = new Pedido();
             pedido.setIdPedido(idPedido);
             //pedido.setDescripcion(descripcion);
@@ -173,11 +212,11 @@ public class PedidoController {
         return "/pedido/ver";
     }
 
-    @GetMapping("/eliminar/{idPedido}")
-    public String eliminarPedido(@PathVariable Long idPedido, RedirectAttributes redirectAttributes) {
+    @GetMapping("/inactivar/{idPedido}")
+    public String inactivarPedido(@PathVariable Long idPedido, RedirectAttributes redirectAttributes) {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(idPedido);
-        pedidoService.deletePedido(pedido);
+        pedidoService.inactivarPedido(pedido);
         return "redirect:/pedidos/ver";
     }
 
@@ -200,19 +239,26 @@ public class PedidoController {
     }
 
     @PostMapping("/dir/add")
-    public String insertarDireccion(@RequestParam Long idPedido, @RequestParam String idDistrito, @RequestParam String detalles, Long idEstado, RedirectAttributes redirectAttributes) {
+    public String insertarDireccion(@RequestParam Long idPedido, @RequestParam String idDistrito, @RequestParam String detalles, RedirectAttributes redirectAttributes) {
+        DireccionPedido direccionPedido = new DireccionPedido();
+        direccionPedido.setDetalles(detalles);
+        
         Pedido pedido = new Pedido();
         pedido.setIdPedido(idPedido);
-        
+        pedido = pedidoService.getPedido(pedido);
+        direccionPedido.setPedido(pedido);
+
         Distrito distrito = new Distrito();
         distrito.setIdDistrito(Long.parseLong(idDistrito));
+        distrito = distritoService.getDistrito(distrito);
+        direccionPedido.setDistrito(distrito);
         
-        Distrito distritoResult = distritoService.getDistrito(distrito);
-        //DireccionPedido direccionPedido = new DireccionPedido(detalles, distritoResult);
-        //direccionPedido.setPedido(pedido);
-
-        //direccionPedidoService.insertDireccionPedido(direccionPedido, pedido, distritoResult);
-
+        Estado estado = new Estado();
+        estado.setIdEstado(7L); // Asignar idEstado siempre como 7
+        direccionPedido.setEstado(estado);
+        
+        direccionPedidoService.insertDireccionPedido(direccionPedido, pedido, distrito);
+        
         redirectAttributes.addAttribute("idPedido", idPedido);
 
         return "redirect:/pedidos/{idPedido}/dir/ver";
@@ -223,37 +269,70 @@ public class PedidoController {
     public String editarDireccion(@PathVariable Long idPedido, @PathVariable Long idDireccion, Model model) {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(idPedido);
+        
         DireccionPedido direccion = new DireccionPedido();
         direccion.setIdDireccion(idDireccion);
         DireccionPedido direccionResult = direccionPedidoService.getDireccionPedido(direccion);
 
+        System.out.println(" *** DEBUG *** ");
+        System.out.println(direccionResult);
+        
+        if (direccionResult != null && direccionResult.getDistrito() != null
+            && direccionResult.getDistrito().getCanton() != null
+            && direccionResult.getDistrito().getCanton().getProvincia() != null) {
+            Provincia provincia = direccionResult.getDistrito().getCanton().getProvincia();
+            System.out.println(provincia.getNombre());
+        } else {
+            System.out.println("Provincia, Cantón o Distrito son nulos.");
+        }
 
         model.addAttribute("direccion", direccionResult);
         model.addAttribute("idPedido", idPedido);
         model.addAttribute("idDireccion", idDireccion);
         model.addAttribute("detalles", direccionResult.getDetalles());
+        
+        Provincia provincia = direccionResult.getDistrito().getCanton().getProvincia();
+        model.addAttribute("provinciaOld", provincia); // Método para obtener provincias
+        Canton canton = direccionResult.getDistrito().getCanton();
+        model.addAttribute("cantonOld", canton);   // Método para obtener cantones
+        Distrito distrito = direccionResult.getDistrito();
+        model.addAttribute("distritoOld", distrito); // Método para obtener distritos
+
+        model.addAttribute("provincias", provinciaService.getAllProvincias());
+        model.addAttribute("cantones", cantonService.getAllCantones());
+        model.addAttribute("distritos", distritoService.getAllDistritos());
+        model.addAttribute("estados", estadoService.getAllEstados());
+        
         return "/direccion/actualizar-pedido";
     }
 
     @PostMapping("/dir/update")
-    public String actualizarDireccion(@RequestParam Long idPedido, @RequestParam Long idDireccion, @RequestParam String detalles, @RequestParam String idDistrito, RedirectAttributes redirectAttributes) {
+    public String actualizarDireccion(@RequestParam Long idPedido, @RequestParam Long idDireccion, @RequestParam String detalles, @RequestParam String idDistrito, @RequestParam Long idEstado, RedirectAttributes redirectAttributes) {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(idPedido);
+        
         DireccionPedido direccion = new DireccionPedido();
         direccion.setIdDireccion(idDireccion);
         direccion.setDetalles(detalles);
+        
         Distrito distrito = new Distrito();
         distrito.setIdDistrito(Long.parseLong(idDistrito));
         Distrito distritoResult = distritoService.getDistrito(distrito);
         
+        // Configura el Estado
+        Estado estado = new Estado();
+        estado.setIdEstado(idEstado);
+        Estado estadoResult = estadoService.getEstado(estado); 
+        direccion.setEstado(estadoResult);
+        
         direccionPedidoService.updateDireccionPedido(direccion, distritoResult);
-
         redirectAttributes.addAttribute("idPedido", idPedido);
+        
         return "redirect:/pedidos/{idPedido}/dir/ver";
     }
 
-    @GetMapping("{idPedido}/dir/eliminar/{idDireccion}")
-    public String eliminarDireccion(@PathVariable Long idPedido, @PathVariable Long idDireccion, RedirectAttributes redirectAttributes) {
+    @GetMapping("{idPedido}/dir/inactivar/{idDireccion}")
+    public String inactivarDireccion(@PathVariable Long idPedido, @PathVariable Long idDireccion, RedirectAttributes redirectAttributes) {
         DireccionPedido direccion = new DireccionPedido();
         direccion.setIdDireccion(idDireccion);
         direccionPedidoService.inactivarDireccionPedido(direccion);

@@ -77,8 +77,8 @@ public class FacturaServiceImpl implements FacturaService {
 
     @Override
     @Transactional
-    public void deleteFactura(Factura factura) {
-        facturaDAO.deleteFactura(factura.getIdFactura());
+    public void inactivarFactura(Factura factura) {
+        facturaDAO.inactivarFactura(factura.getIdFactura());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class FacturaServiceImpl implements FacturaService {
            @Override
               public Factura doInTransaction(TransactionStatus status) {
                 // Create a StoredProcedureQuery instance for the stored procedure "ver_factura"
-                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_factura");
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_FACTURAS_TB_VER_FACTURA_SP");
 
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("p_id_factura", Long.class, ParameterMode.IN);
@@ -142,7 +142,7 @@ public class FacturaServiceImpl implements FacturaService {
     @Transactional(readOnly = true)
     public List<Factura> getAllFacturas() {
         // Create a StoredProcedureQuery instance for the stored procedure "ver_facturas"
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("ver_facturas");
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_FACTURAS_TB_VER_FACTURAS_SP");
 
         // Register the output parameters
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -204,7 +204,7 @@ public class FacturaServiceImpl implements FacturaService {
         session.doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call buscar_factura_por_pedido(?) }")) {
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_FACTURAS_TB_BUSCAR_POR_PEDIDO_FN(?) }")) {
                     callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
                     callableStatement.setString(2, idPedido.toString());
                     callableStatement.execute();

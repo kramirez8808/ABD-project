@@ -859,6 +859,11 @@
                         <input type="text" class="form-control" hidden name="idPedido" id="idPedido" th:value="${idPedido}" placeholder="" required="">
                         <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" placeholder="" required="">
 
+                        <h5>Datos Anteriores</h5>
+                        <spam>Provincia: <spam>[[${provinciaOld.nombre}]]</spam></spam>
+                        <spam>Cantón: <spam>[[${cantonOld.nombre}]]</spam></spam>
+                        <spam>Distrito: <spam>[[${distritoOld.nombre}]]</spam></spam>
+                            
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
                             <select class="form-select" id="provincia" required="">
@@ -897,6 +902,21 @@
                             <input type="text" class="form-control" id="detalles" th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
                             <div class="invalid-feedback">
                                 Por favor, ingrese una dirección válida.
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <label for="carga" class="form-label">Estado</label>
+                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                                <option value="">Seleccione...</option>
+                                <option th:each="estado : ${estados}" 
+                                        th:value="${estado.idEstado}"
+                                        th:text="${estado.descripcion}" 
+                                        th:selected="${estado.idEstado == direccion.estado.idEstado}"> 
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un estado.
                             </div>
                         </div>
 

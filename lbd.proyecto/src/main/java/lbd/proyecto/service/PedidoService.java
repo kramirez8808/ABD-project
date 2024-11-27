@@ -20,7 +20,7 @@ public interface PedidoService {
     void updatePedido(Pedido pedido, Cliente cliente, Vehiculo vehiculo, TipoCarga tipoCarga, Estado estado, LicenciaEmpleado licenciaEmpleado);
 
     // Method to delete an order with the Stored Procedure
-    void deletePedido(Pedido pedido);
+    void inactivarPedido(Pedido pedido);
 
     // Method to get an order with the Stored Procedure
     Pedido getPedido(Pedido pedido);

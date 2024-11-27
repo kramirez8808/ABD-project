@@ -17,7 +17,7 @@ public interface FacturaService {
     void updateFactura(Factura factura, Estado estado);
 
     // Method to delete an invoice with the Stored Procedure
-    void deleteFactura(Factura factura);
+    void inactivarFactura(Factura factura);
 
     // Method to get an invoice with the Stored Procedure
     Factura getFactura(Factura factura);

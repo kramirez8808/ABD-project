@@ -72,11 +72,11 @@ public class FacturaController {
         return "/factura/ver";
     }
 
-    @GetMapping("/eliminar/{idFactura}")
-    public String eliminarFactura(@PathVariable Long idFactura, RedirectAttributes redirectAttributes) {
+    @GetMapping("/inactivar/{idFactura}")
+    public String inactivarFactura(@PathVariable Long idFactura, RedirectAttributes redirectAttributes) {
         Factura factura = new Factura();
         factura.setIdFactura(idFactura);
-        facturaService.deleteFactura(factura);
+        facturaService.inactivarFactura(factura);
         return "redirect:/facturas/ver";
     }
 

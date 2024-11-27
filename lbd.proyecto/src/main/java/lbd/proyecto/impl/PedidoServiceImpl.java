@@ -94,8 +94,7 @@ public class PedidoServiceImpl implements PedidoService {
         TipoCarga tipoCargaResult = tipoCargaService.getTipoCarga(tipoCarga);
         Estado estadoResult = estadoService.getEstado(estado);
         LicenciaEmpleado licenciaEmpleadoResult = licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado);
-
-        //pedidoDAO.insertPedido(pedido.getDescripcion(), clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
+        pedidoDAO.insertPedido(clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
     }
 
     @Override
@@ -107,17 +106,128 @@ public class PedidoServiceImpl implements PedidoService {
         Estado estadoResult = estadoService.getEstado(estado);
         LicenciaEmpleado licenciaEmpleadoResult = licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado);
 
-        //pedidoDAO.updatePedido(pedido.getIdPedido(), pedido.getDescripcion(), clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
+        pedidoDAO.updatePedido(pedido.getIdPedido(), clienteResult.getIdCliente(), vehiculoResult.getIdVehiculo(), tipoCargaResult.getIdTipo(), pedido.getFechaPedido(), estadoResult.getIdEstado(), licenciaEmpleadoResult.getIdLicenciaEmpleado());
     }
 
     @Override
     @Transactional
-    public void deletePedido(Pedido pedido) {
-        pedidoDAO.deletePedido(pedido.getIdPedido());
+    public void inactivarPedido(Pedido pedido) {
+        pedidoDAO.inactivarPedido(pedido.getIdPedido());
+    }
+    
+    @Override
+    public Pedido getPedido(Pedido pedido) {
+        return transactionTemplate.execute(new TransactionCallback<Pedido>() {
+            @Override
+            public Pedido doInTransaction(TransactionStatus status) {
+                // Create a StoredProcedureQuery instance for the stored procedure "ver_pedido"
+                StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PEDIDOS_TB_VER_PEDIDO_SP");
+
+                // Register the input and output parameters
+                query.registerStoredProcedureParameter("P_ID_PEDIDO", Long.class, ParameterMode.IN);
+                query.registerStoredProcedureParameter("P_ID_CLIENTE", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_VEHICULO", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_TIPO_CARGA", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_FECHA", Date.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_ESTADO", Long.class, ParameterMode.OUT);
+                query.registerStoredProcedureParameter("P_ID_LICENCIA_EMPLEADO", Long.class, ParameterMode.OUT);
+
+                // Set the input parameter
+                query.setParameter("P_ID_PEDIDO", pedido.getIdPedido());
+
+                // Execute the stored procedure
+                try {
+                    query.execute();
+                } catch (PersistenceException e) {
+                    if (e.getCause() instanceof SQLException) {
+                        // Handle the SQLException
+                        SQLException sqlException = (SQLException) e.getCause();
+                        System.err.println("Error Code: " + sqlException.getErrorCode());
+                        System.err.println("SQL State: " + sqlException.getSQLState());
+                        System.err.println("Message: " + sqlException.getMessage());
+                        status.setRollbackOnly();
+                        return null;
+                    } else {
+                        throw e;
+                    }
+                }
+
+                // Create the Pedido object to hold the results
+                Pedido pedidoResult = new Pedido();
+                pedidoResult.setIdPedido(pedido.getIdPedido());
+
+                // Map the output parameters to the Pedido object if they are not null
+                if (query.getOutputParameterValue("P_FECHA") != null) {
+                    pedidoResult.setFechaPedido((Date) query.getOutputParameterValue("P_FECHA"));
+                } else {
+                    System.err.println("No se encontró la fecha del pedido para el ID: " + pedido.getIdPedido());
+                    return null;
+                }
+
+                // Map the client
+                Long clienteId = (Long) query.getOutputParameterValue("P_ID_CLIENTE");
+                if (clienteId != null) {
+                    Cliente cliente = new Cliente();
+                    cliente.setIdCliente(clienteId);
+                    pedidoResult.setCliente(clienteService.getCliente(cliente));
+                } else {
+                    System.err.println("No se encontró el cliente para el pedido ID: " + pedido.getIdPedido());
+                    return null;
+                }
+
+                // Map the vehicle
+                Long vehiculoId = (Long) query.getOutputParameterValue("P_ID_VEHICULO");
+                if (vehiculoId != null) {
+                    Vehiculo vehiculo = new Vehiculo();
+                    vehiculo.setIdVehiculo(vehiculoId);
+                    pedidoResult.setVehiculo(vehiculoService.getVehiculo(vehiculo));
+                } else {
+                    System.err.println("No se encontró el vehículo para el pedido ID: " + pedido.getIdPedido());
+                    return null;
+                }
+
+                // Map the type of load
+                Long tipoCargaId = (Long) query.getOutputParameterValue("P_ID_TIPO_CARGA");
+                if (tipoCargaId != null) {
+                    TipoCarga tipoCarga = new TipoCarga();
+                    tipoCarga.setIdTipo(tipoCargaId);
+                    pedidoResult.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
+                } else {
+                    System.err.println("No se encontró el tipo de carga para el pedido ID: " + pedido.getIdPedido());
+                    return null;
+                }
+
+                // Map the state
+                Long estadoId = (Long) query.getOutputParameterValue("P_ID_ESTADO");
+                if (estadoId != null) {
+                    Estado estado = new Estado();
+                    estado.setIdEstado(estadoId);
+                    pedidoResult.setEstado(estadoService.getEstado(estado));
+                } else {
+                    System.err.println("No se encontró el estado para el pedido ID: " + pedido.getIdPedido());
+                    return null;
+                }
+
+                // Map the employee license
+                Long licenciaEmpleadoId = (Long) query.getOutputParameterValue("P_ID_LICENCIA_EMPLEADO");
+                if (licenciaEmpleadoId != null) {
+                    LicenciaEmpleado licenciaEmpleado = new LicenciaEmpleado();
+                    licenciaEmpleado.setIdLicenciaEmpleado(licenciaEmpleadoId);
+                    pedidoResult.setLicenciaEmpleado(licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado));
+                } else {
+                    System.err.println("No se encontró la licencia de empleado para el pedido ID: " + pedido.getIdPedido());
+                    return null;
+                }
+
+
+                return pedidoResult;
+            }
+        });
     }
 
+
+    /*
     @Override
-    
     public Pedido getPedido(Pedido pedido) {
         
         return transactionTemplate.execute(new TransactionCallback<Pedido>() {
@@ -128,7 +238,7 @@ public class PedidoServiceImpl implements PedidoService {
 
                 // Register the input and output parameters
                 query.registerStoredProcedureParameter("P_ID_PEDIDO", Long.class, ParameterMode.IN);
-                query.registerStoredProcedureParameter("P_DESCRIPCION", String.class, ParameterMode.OUT);
+                //query.registerStoredProcedureParameter("P_DESCRIPCION", String.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("P_ID_CLIENTE", Long.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("P_ID_VEHICULO", Long.class, ParameterMode.OUT);
                 query.registerStoredProcedureParameter("P_ID_TIPO_CARGA", Long.class, ParameterMode.OUT);
@@ -193,7 +303,7 @@ public class PedidoServiceImpl implements PedidoService {
                     if (facturaResulFactura.getIdFactura() != null && facturaResulFactura.getIdFactura() != 0) {
                         pedidoResult.(facturaResulFactura);
                     }
-                    */
+                    *
                     return pedidoResult;
 
                 } catch (Exception e) {
@@ -204,8 +314,10 @@ public class PedidoServiceImpl implements PedidoService {
 
             }
         });
+        
     }
-
+    */
+    
     @Override
     @Transactional(readOnly = true)
     public List<Pedido> getAllPedidos() {
@@ -213,7 +325,7 @@ public class PedidoServiceImpl implements PedidoService {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_PEDIDOS_TB_VER_PEDIDOS_SP");
 
         // Register the output parameters
-        query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
+        query.registerStoredProcedureParameter(1, ResultSet.class, ParameterMode.REF_CURSOR);
 
         // Execute the stored procedure
         try {
@@ -241,48 +353,41 @@ public class PedidoServiceImpl implements PedidoService {
         try {
             while (rs.next()) {
                 Pedido pedido = new Pedido();
-                pedido.setIdPedido(rs.getLong("id_pedido"));
-                //pedido.setDescripcion(rs.getString("descripcion"));
-                pedido.setFechaPedido(rs.getDate("fecha"));
+                pedido.setIdPedido(rs.getLong("ID_Pedido"));
+                pedido.setFechaPedido(rs.getDate("Fecha"));
 
                 Cliente cliente = new Cliente();
-                cliente.setIdCliente(rs.getLong("id_cliente"));
+                cliente.setIdCliente(rs.getLong("ID_Cliente"));
                 pedido.setCliente(clienteService.getCliente(cliente));
 
                 Vehiculo vehiculo = new Vehiculo();
-                vehiculo.setIdVehiculo(rs.getLong("id_vehiculo"));
+                vehiculo.setIdVehiculo(rs.getLong("ID_Vehiculo"));
                 pedido.setVehiculo(vehiculoService.getVehiculo(vehiculo));
 
                 TipoCarga tipoCarga = new TipoCarga();
-                tipoCarga.setIdTipo(rs.getLong("id_tipo_carga"));
+                tipoCarga.setIdTipo(rs.getLong("ID_Tipo_Carga"));
                 pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
 
                 Estado estado = new Estado();
-                estado.setIdEstado(rs.getLong("id_estado"));
+                estado.setIdEstado(rs.getLong("ID_Estado"));
                 pedido.setEstado(estadoService.getEstado(estado));
 
                 LicenciaEmpleado licenciaEmpleado = new LicenciaEmpleado();
-                licenciaEmpleado.setIdLicenciaEmpleado(rs.getLong("id_licencia_empleado"));
+                licenciaEmpleado.setIdLicenciaEmpleado(rs.getLong("ID_Licencia_Empleado"));
                 pedido.setLicenciaEmpleado(licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado));
 
                 Factura factura = new Factura();
                 factura.setPedido(pedido);
                 Factura facturaResulFactura = facturaService.searchFacturaByPedido(pedido.getIdPedido());
-/*
-                if (facturaResulFactura.getIdFactura() != null && facturaResulFactura.getIdFactura() != 0) {
-                    pedido.setFactura(facturaResulFactura);
-                }*/
-
                 pedidos.add(pedido);
-                
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return pedidos;
-
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -293,7 +398,7 @@ public class PedidoServiceImpl implements PedidoService {
         session.doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call buscar_pedidos_por_cliente(?) }")) {
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_PEDIDOS_TB_BUSCAR_POR_CLIENTE_FN(?) }")) {
                     callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
                     callableStatement.setLong(2, idCliente);
                     callableStatement.execute();
