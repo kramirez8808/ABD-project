@@ -39,7 +39,7 @@
                         <!-- Cliente asociado -->
                         <div class="col-12">
                             <label for="idCliente" class="form-label">Cliente Asociado</label>
-                            <select class="form-select" id="idCliente" name="idCliente" required="">
+                            <select class="form-select text-light bg-secondary" id="idCliente" name="idCliente" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}">[[${cliente.idCliente + ': ' + cliente.nombre + ' ' + cliente.apellido}]]</option>
                             </select>
@@ -51,7 +51,7 @@
                         <!-- Vehiculo asociado -->
                         <div class="col-12">
                             <label for="idVehiculo" class="form-label">Vehículo Asociado</label>
-                            <select class="form-select" id="idVehiculo" name="idVehiculo" required="">
+                            <select class="form-select text-light bg-secondary" id="idVehiculo" name="idVehiculo" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="vehiculo : ${vehiculos}" th:value="${vehiculo.idVehiculo}">[[${vehiculo.idVehiculo + ': ' + vehiculo.marca + ' ' + vehiculo.modelo}]]</option>
                             </select>
@@ -63,7 +63,7 @@
                         <!-- Licencia Empleado asociado -->
                         <div class="col-12">
                             <label for="idLicenciaEmpleado" class="form-label">Empleado Asociado</label>
-                            <select class="form-select" id="idLicenciaEmpleado" name="idLicenciaEmpleado" required="">
+                            <select class="form-select text-light bg-secondary" id="idLicenciaEmpleado" name="idLicenciaEmpleado" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="licenciaEmpleado : ${licenciasEmpleado}" th:value="${licenciaEmpleado.idLicenciaEmpleado}">[[${licenciaEmpleado.getLicencia.getTipo + ': ' + licenciaEmpleado.getEmpleado.getNombre + ' ' + licenciaEmpleado.getEmpleado.getApellido}]]</option>
                             </select>
@@ -81,7 +81,7 @@
                         <!-- Tipo de Carga -->
                         <div class="col-12">
                             <label for="idVehiculo" class="form-label">Tipo de Carga</label>
-                            <select class="form-select" id="idTipo" name="idTipo" required="">
+                            <select class="form-select text-light bg-secondary" id="idTipo" name="idTipo" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="tipoCarga : ${tiposCarga}" th:value="${tipoCarga.idTipo}">[[${tipoCarga.descripcion}]]</option>
                             </select>
@@ -93,7 +93,7 @@
                         <!-- Fecha del pedido -->
                         <div class="col-sm-6">
                             <label for="fechaPedido" class="form-label">Fecha del pedido</label>
-                            <input type="date" class="form-control" id="fechaPedido" th:value="${fechaPedido}" name="fechaPedido" value="" required="">
+                            <input type="date" class="form-control text-light bg-secondary" id="fechaPedido" th:value="${fechaPedido}" name="fechaPedido" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
@@ -102,12 +102,21 @@
                         <!-- Estado -->
                         <div class="col-sm-6">
                             <label for="idEstado" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                            <select class="form-select text-light bg-secondary" id="idEstado" name="idEstado" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="estado : ${estados}" th:value="${estado.idEstado}">[[${estado.descripcion}]]</option>
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, seleccione un tipo de carga.
+                            </div>
+                        </div>
+
+                        <!-- Descripcion -->
+                        <div class="col-12">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control text-light bg-secondary" id="descripcion" name="descripcion" placeholder="200KG de Cemento" required=""></textarea>
+                            <div class="invalid-feedback">
+                                Por favor, ingrese una descripción válida.
                             </div>
                         </div>
 
@@ -121,12 +130,13 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="d-flex justify-content-center">
-            <div th:if="${pedidos != null and !pedidos.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${pedidos != null and !pedidos.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">Descripción</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Vehículo</th>
                         <th scope="col">Fecha</th>
@@ -134,15 +144,16 @@
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-light">
                       <tr th:each="pedido : ${pedidos}">
                         <th scope="row">[[${pedido.idPedido}]]</th>
+                        <td>[[${pedido.descripcion}]]</td>
                         <td>[[${pedido.getCliente.getNombre + ' ' + pedido.getCliente.getApellido}]]</td>                        
                         <td>[[${pedido.getVehiculo.getMarca + ' ' + pedido.getVehiculo.getModelo}]]</td>
                         <td>[[${pedido.fechaPedido}]]</td>
                         <td>[[${pedido.getEstado.getDescripcion}]]</td>
                         <td>
-                            <button type="button" 
+                            <button th:if="${!pedido.hasFactura and !pedido.isCanceled}" type="button" 
                                     data-bs-toggle="modal" 
                                     th:data-bs-target="'#modal-' + ${pedido.idPedido}"
                                     class="btn btn-warning px-1 py-0">
@@ -158,7 +169,7 @@
                             </button>
                             <a th:href="@{/pedidos/} + ${pedido.idPedido} + '/dir/ver'" class="btn btn-primary">Direcciones</a>
                             <a th:href="@{/pedidos/editar/} + ${pedido.idPedido}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{/pedidos/inactivar/} + ${pedido.idPedido}" class="btn btn-danger">Inactivar</a>
+                            <a th:href="@{/pedidos/eliminar/} + ${pedido.idPedido}" class="btn btn-danger">Eliminar</a>
                         </td>
                       </tr>
                     </tbody>
@@ -209,9 +220,7 @@
             </div>
 
             <div th:if="${pedidos == null or pedidos.empty}">
-                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron pedidos registrados :(
-                </p>
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">No se encontraron pedidos registrados!</p>
             </div>
         </div>
     </section>
@@ -231,7 +240,7 @@
     <section th:fragment="actualizar">
         <div class="d-flex justify-content-center">
             <div style="max-width: 40rem;">
-               
+
                 <!-- Información de Contacto -->
                 <h4 class="mb-3">Información de Contacto</h4>
                 <form th:action="@{/pedidos/update}"
@@ -245,7 +254,7 @@
                         <!-- Cliente asociado -->
                         <div class="col-12">
                             <label for="idCliente" class="form-label">Cliente Asociado</label>
-                            <select class="form-select" id="idCliente" name="idCliente" required="">
+                            <select class="form-select text-light bg-secondary" id="idCliente" name="idCliente" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}">[[${cliente.idCliente + ': ' + cliente.nombre + ' ' + cliente.apellido}]]</option>
                             </select>
@@ -257,7 +266,7 @@
                         <!-- Vehiculo asociado -->
                         <div class="col-12">
                             <label for="idVehiculo" class="form-label">Vehículo Asociado</label>
-                            <select class="form-select" id="idVehiculo" name="idVehiculo" required="">
+                            <select class="form-select text-light bg-secondary" id="idVehiculo" name="idVehiculo" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="vehiculo : ${vehiculos}" th:value="${vehiculo.idVehiculo}">[[${vehiculo.idVehiculo + ': ' + vehiculo.marca + ' ' + vehiculo.modelo}]]</option>
                             </select>
@@ -269,7 +278,7 @@
                         <!-- Licencia Empleado asociado -->
                         <div class="col-12">
                             <label for="idLicenciaEmpleado" class="form-label">Empleado Asociado</label>
-                            <select class="form-select" id="idLicenciaEmpleado" name="idLicenciaEmpleado" required="">
+                            <select class="form-select text-light bg-secondary" id="idLicenciaEmpleado" name="idLicenciaEmpleado" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="licenciaEmpleado : ${licenciasEmpleado}" th:value="${licenciaEmpleado.idLicenciaEmpleado}">[[${licenciaEmpleado.getLicencia.getTipo + ': ' + licenciaEmpleado.getEmpleado.getNombre + ' ' + licenciaEmpleado.getEmpleado.getApellido}]]</option>
 
@@ -288,7 +297,7 @@
                         <!-- Tipo de Carga -->
                         <div class="col-12">
                             <label for="idVehiculo" class="form-label">Tipo de Carga</label>
-                            <select class="form-select" id="idTipo" name="idTipo" required="">
+                            <select class="form-select text-light bg-secondary" id="idTipo" name="idTipo" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="tipoCarga : ${tiposCarga}" th:value="${tipoCarga.idTipo}">[[${tipoCarga.descripcion}]]</option>
                             </select>
@@ -300,7 +309,7 @@
                         <!-- Fecha del pedido -->
                         <div class="col-sm-6">
                             <label for="fechaPedido" class="form-label">Fecha del pedido</label>
-                            <input type="date" class="form-control" id="fechaPedido" th:value="${fechaPedido}" name="fechaPedido" value="" required="">
+                            <input type="date" class="form-control text-light bg-secondary" id="fechaPedido" th:value="${fechaPedido}" name="fechaPedido" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
@@ -309,12 +318,21 @@
                         <!-- Estado -->
                         <div class="col-sm-6">
                             <label for="idEstado" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                            <select class="form-select text-light bg-secondary" id="idEstado" name="idEstado" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="estado : ${estados}" th:value="${estado.idEstado}">[[${estado.descripcion}]]</option>
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, seleccione un tipo de carga.
+                            </div>
+                        </div>
+
+                        <!-- Descripcion -->
+                        <div class="col-12">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control text-light bg-secondary" id="descripcion" th:value="${descripcion}" name="descripcion" placeholder="200KG de Cemento" required=""></textarea>
+                            <div class="invalid-feedback">
+                                Por favor, ingrese una descripción válida.
                             </div>
                         </div>
                         

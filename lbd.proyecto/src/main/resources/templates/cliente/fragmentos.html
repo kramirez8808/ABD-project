@@ -1,25 +1,31 @@
 <!DOCTYPE html>
-<html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html  data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
 <head th:replace="~{layout/template-new :: head}">
-    <title>COMAVI</title>
+    <title>Clientes</title>
 </head>
 
 <body>
     <!-- Seccion titulo Agregar -->
     <section th:fragment="titulo-agregar">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
-                    <path d="M9.56443 8.73049L10.0789 10.5926C10.5639 12.3481 10.8064 13.2259 11.5194 13.6252C12.2323 14.0244 13.1374 13.7892 14.9474 13.3188L16.8673 12.8199C18.6774 12.3495 19.5824 12.1143 19.9941 11.4227C20.4057 10.7312 20.1632 9.85344 19.6782 8.09788L19.1638 6.2358C18.6788 4.48023 18.4363 3.60244 17.7233 3.20319C17.0103 2.80394 16.1052 3.03915 14.2952 3.50955L12.3753 4.00849C10.5652 4.47889 9.66021 4.71409 9.24856 5.40562C8.83692 6.09714 9.07943 6.97493 9.56443 8.73049Z" fill="#ffffff"></path>
-                    <path d="M2.27749 5.24694C2.38823 4.84781 2.80157 4.61402 3.2007 4.72476L4.9044 5.19744C5.82129 5.45183 6.5469 6.15866 6.80003 7.07489L8.95106 14.8609L9.10935 15.4075C9.74249 15.6438 10.2863 16.0866 10.6314 16.6747L10.9414 16.579L19.8115 14.2739C20.2124 14.1697 20.6219 14.4102 20.7261 14.8111C20.8303 15.212 20.5897 15.6214 20.1888 15.7256L11.3515 18.0223L11.0228 18.1238C11.0161 19.3947 10.1392 20.5555 8.81236 20.9003C7.22189 21.3136 5.58709 20.3982 5.16092 18.8556C4.73476 17.313 5.67861 15.7274 7.26908 15.3141C7.3479 15.2936 7.42682 15.2764 7.5057 15.2623L5.35419 7.47433C5.24592 7.08242 4.92897 6.76092 4.50338 6.64284L2.79968 6.17016C2.40054 6.05942 2.16675 5.64608 2.27749 5.24694Z" fill="#ffffff"></path>
+                    <path
+                        d="M9.56443 8.73049L10.0789 10.5926C10.5639 12.3481 10.8064 13.2259 11.5194 13.6252C12.2323 14.0244 13.1374 13.7892 14.9474 13.3188L16.8673 12.8199C18.6774 12.3495 19.5824 12.1143 19.9941 11.4227C20.4057 10.7312 20.1632 9.85344 19.6782 8.09788L19.1638 6.2358C18.6788 4.48023 18.4363 3.60244 17.7233 3.20319C17.0103 2.80394 16.1052 3.03915 14.2952 3.50955L12.3753 4.00849C10.5652 4.47889 9.66021 4.71409 9.24856 5.40562C8.83692 6.09714 9.07943 6.97493 9.56443 8.73049Z"
+                        fill="#ffffff"></path>
+                    <path
+                        d="M2.27749 5.24694C2.38823 4.84781 2.80157 4.61402 3.2007 4.72476L4.9044 5.19744C5.82129 5.45183 6.5469 6.15866 6.80003 7.07489L8.95106 14.8609L9.10935 15.4075C9.74249 15.6438 10.2863 16.0866 10.6314 16.6747L10.9414 16.579L19.8115 14.2739C20.2124 14.1697 20.6219 14.4102 20.7261 14.8111C20.8303 15.212 20.5897 15.6214 20.1888 15.7256L11.3515 18.0223L11.0228 18.1238C11.0161 19.3947 10.1392 20.5555 8.81236 20.9003C7.22189 21.3136 5.58709 20.3982 5.16092 18.8556C4.73476 17.313 5.67861 15.7274 7.26908 15.3141C7.3479 15.2936 7.42682 15.2764 7.5057 15.2623L5.35419 7.47433C5.24592 7.08242 4.92897 6.76092 4.50338 6.64284L2.79968 6.17016C2.40054 6.05942 2.16675 5.64608 2.27749 5.24694Z"
+                        fill="#ffffff"></path>
                 </g>
             </svg>
             <h2>Agregar Cliente</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, proceda a completar el siguiente formulario con los detalles del cliente viaje que desea agregar. Podrá modificar sus datos una vez se haya creado con éxito.
+                Por favor, proceda a completar el siguiente formulario con los detalles del cliente viaje que desea
+                agregar. Podrá modificar sus datos una vez se haya creado con éxito.
             </p>
         </div>
     </section>
@@ -31,27 +37,23 @@
 
                 <!-- Información de Contacto -->
                 <h4 class="mb-3">Información de Contacto</h4>
-                <form th:action="@{/clientes/add}"
-                    method="POST"
-                    class="needs-validation" novalidate="">
+                <form th:action="@{/clientes/add}" method="POST" class="needs-validation" novalidate="">
                     <div class="row g-3">
 
                         <!-- Nombre -->
                         <div class="col-sm-6">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="John" value="" required="">
-                            <div class="invalid-feedback">
-                                Un nombre válido es requerido.
-                            </div>
+                            <input type="text" class="form-control text-light bg-secondary" name="nombre" id="nombre" placeholder="John"
+                                value="" required="">
+                            <div class="invalid-feedback">Un nombre válido es requerido.</div>
                         </div>
 
                         <!-- Apellido -->
                         <div class="col-sm-6">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Doe" value="" required="">
-                            <div class="invalid-feedback">
-                                Un apellido válido es requerido.
-                            </div>
+                            <input type="text" class="form-control text-light bg-secondary" name="apellido" id="apellido" placeholder="Doe"
+                                value="" required="">
+                            <div class="invalid-feedback">Un apellido válido es requerido.</div>
                         </div>
 
                         <!-- Correo -->
@@ -59,10 +61,9 @@
                             <label for="email" class="form-label">Correo</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">@</span>
-                                <input type="text" class="form-control" name="email" id="email" placeholder="you@example.com" required="">
-                                <div class="invalid-feedback">
-                                    Un correo válido es requerido.
-                                </div>
+                                <input type="text" class="form-control text-light bg-secondary" name="email" id="email"
+                                    placeholder="you@example.com" required="">
+                                <div class="invalid-feedback">Un correo válido es requerido.</div>
                             </div>
                         </div>
 
@@ -71,10 +72,9 @@
                             <label for="telefono" class="form-label">Teléfono</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">#</span>
-                                <input type="text" class="form-control" name="telefono" id="telefono" placeholder="1234-5678" required="">
-                                <div class="invalid-feedback">
-                                    Un número de teléfono válido es requerido.
-                                </div>
+                                <input type="text" class="form-control text-light bg-secondary" name="telefono" id="telefono"
+                                    placeholder="1234-5678" required="">
+                                <div class="invalid-feedback">Un número de teléfono válido es requerido.</div>
                             </div>
                         </div>
 
@@ -88,42 +88,41 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="d-flex justify-content-center">
-            <div th:if="${clientes != null and !clientes.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${clientes != null and !clientes.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
-                      <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellido</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Telefono</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
+                        <tr class="table-active">
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Telefono</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
                     </thead>
-                    <tbody>
-                      <tr th:each="cliente : ${clientes}">
-                        <th scope="row">[[${cliente.idCliente}]]</th>
-                        <td>[[${cliente.nombre}]]</td>
-                        <td>[[${cliente.apellido}]]</td>                        
-                        <td>[[${cliente.email}]]</td>
-                        <td>[[${cliente.telefono}]]</td>
-                        <td>[[${cliente.estado != null ? cliente.estado.descripcion : 'Sin estado'}]]</td>
-                        <td>
-                            <!-- Boton para ver las licencias -->
-                            <a th:href="@{/clientes/} + ${cliente.idCliente} + '/dir/ver'" class="btn btn-primary">Direcciones</a>
-                            <a th:href="@{/clientes/editar/} + ${cliente.idCliente}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{/clientes/inactivar/} + ${cliente.idCliente}" class="btn btn-danger">Inactivar</a>
-                        </td>
-                      </tr>
+                    <tbody class="table-light">
+                        <tr th:each="cliente : ${clientes}">
+                            <th scope="row">[[${cliente.idCliente}]]</th>
+                            <td>[[${cliente.nombre}]]</td>
+                            <td>[[${cliente.apellido}]]</td>
+                            <td>[[${cliente.email}]]</td>
+                            <td>[[${cliente.telefono}]]</td>
+                            <td>
+                                <!-- Boton para ver las licencias -->
+                                <a th:href="@{/clientes/} + ${cliente.idCliente} + '/dir/ver'"
+                                    class="btn btn-primary">Direcciones</a>
+                                <a th:href="@{/clientes/editar/} + ${cliente.idCliente}"
+                                    class="btn btn-secondary">Editar</a>
+                                <a th:href="@{/clientes/eliminar/} + ${cliente.idCliente}"
+                                    class="btn btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
                     </tbody>
-                  </table>
+                </table>
             </div>
             <div th:if="${clientes == null or clientes.empty}">
-                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron clientes registrados :(
-                </p>
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">No se encontraron clientes registrados!</p>
             </div>
         </div>
     </section>
@@ -132,42 +131,45 @@
     <section th:fragment="filtros-busqueda">
         <div class="d-flex justify-content-center mb-4">
             <!-- ID -->
-            <div class="card mx-3" style="width: 18rem;">
+            <div class="card mx-3 bg-light text-dark" style="width: 18rem;">
+                <h5 class="card-header">Búsqueda</h5>
                 <div class="card-body">
-                  <h5 class="card-title">Búsqueda</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">Por ID</h6>
-                  <form th:action="@{/clientes/busqueda-id}" method="POST">
-                    <div class="mb-3">
-                      <input type="text" class="form-control" th:value="${idBusqueda}" name="idBusqueda" id="idBusqueda" placeholder="1..." required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                  </form>
+                    <h6 class="card-subtitle mb-2 text-dark">Por ID</h6>
+                    <form th:action="@{/clientes/busqueda-id}" method="POST">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" th:value="${idBusqueda}" name="idBusqueda"
+                                id="idBusqueda" placeholder="1..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
                 </div>
             </div>
             <!-- Nombre -->
-            <div class="card mx-3" style="width: 18rem;">
+            <div class="card mx-3 bg-light text-dark" style="width: 18rem;">
+                <h5 class="card-header">Búsqueda</h5>
                 <div class="card-body">
-                  <h5 class="card-title">Búsqueda</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">Por Nombre</h6>
-                  <form th:action="@{/clientes/busqueda-nombre}" method="POST">
-                    <div class="mb-3">
-                      <input type="text" class="form-control" th:value="${nombreBusqueda}" name="nombreBusqueda" id="nombreBusqueda" placeholder="John...">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                  </form>
+                    <h6 class="card-subtitle mb-2 text-dark">Por Nombre</h6>
+                    <form th:action="@{/clientes/busqueda-nombre}" method="POST">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" th:value="${nombreBusqueda}" name="nombreBusqueda"
+                                id="nombreBusqueda" placeholder="John..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
                 </div>
             </div>
             <!-- Email -->
-            <div class="card mx-3" style="width: 18rem;">
+            <div class="card mx-3 bg-light text-dark" style="width: 18rem;">
+                <h5 class="card-header">Búsqueda</h5>
                 <div class="card-body">
-                  <h5 class="card-title">Búsqueda</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">Por Email</h6>
-                  <form th:action="@{/clientes/busqueda-email}" method="POST">
-                    <div class="mb-3">
-                      <input type="text" class="form-control" th:value="${emailBusqueda}" name="emailBusqueda" id="emailBusqueda" placeholder="@gmail...">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                  </form>
+                    <h6 class="card-subtitle mb-2 text-dark">Por Email</h6>
+                    <form th:action="@{/clientes/busqueda-email}" method="POST">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" th:value="${emailBusqueda}" name="emailBusqueda"
+                                id="emailBusqueda" placeholder="@gmail..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -176,17 +178,23 @@
     <!-- Seccion titulo Actualizar -->
     <section th:fragment="titulo-actualizar">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
-                    <path d="M9.56443 8.73049L10.0789 10.5926C10.5639 12.3481 10.8064 13.2259 11.5194 13.6252C12.2323 14.0244 13.1374 13.7892 14.9474 13.3188L16.8673 12.8199C18.6774 12.3495 19.5824 12.1143 19.9941 11.4227C20.4057 10.7312 20.1632 9.85344 19.6782 8.09788L19.1638 6.2358C18.6788 4.48023 18.4363 3.60244 17.7233 3.20319C17.0103 2.80394 16.1052 3.03915 14.2952 3.50955L12.3753 4.00849C10.5652 4.47889 9.66021 4.71409 9.24856 5.40562C8.83692 6.09714 9.07943 6.97493 9.56443 8.73049Z" fill="#ffffff"></path>
-                    <path d="M2.27749 5.24694C2.38823 4.84781 2.80157 4.61402 3.2007 4.72476L4.9044 5.19744C5.82129 5.45183 6.5469 6.15866 6.80003 7.07489L8.95106 14.8609L9.10935 15.4075C9.74249 15.6438 10.2863 16.0866 10.6314 16.6747L10.9414 16.579L19.8115 14.2739C20.2124 14.1697 20.6219 14.4102 20.7261 14.8111C20.8303 15.212 20.5897 15.6214 20.1888 15.7256L11.3515 18.0223L11.0228 18.1238C11.0161 19.3947 10.1392 20.5555 8.81236 20.9003C7.22189 21.3136 5.58709 20.3982 5.16092 18.8556C4.73476 17.313 5.67861 15.7274 7.26908 15.3141C7.3479 15.2936 7.42682 15.2764 7.5057 15.2623L5.35419 7.47433C5.24592 7.08242 4.92897 6.76092 4.50338 6.64284L2.79968 6.17016C2.40054 6.05942 2.16675 5.64608 2.27749 5.24694Z" fill="#ffffff"></path>
+                    <path
+                        d="M9.56443 8.73049L10.0789 10.5926C10.5639 12.3481 10.8064 13.2259 11.5194 13.6252C12.2323 14.0244 13.1374 13.7892 14.9474 13.3188L16.8673 12.8199C18.6774 12.3495 19.5824 12.1143 19.9941 11.4227C20.4057 10.7312 20.1632 9.85344 19.6782 8.09788L19.1638 6.2358C18.6788 4.48023 18.4363 3.60244 17.7233 3.20319C17.0103 2.80394 16.1052 3.03915 14.2952 3.50955L12.3753 4.00849C10.5652 4.47889 9.66021 4.71409 9.24856 5.40562C8.83692 6.09714 9.07943 6.97493 9.56443 8.73049Z"
+                        fill="#ffffff"></path>
+                    <path
+                        d="M2.27749 5.24694C2.38823 4.84781 2.80157 4.61402 3.2007 4.72476L4.9044 5.19744C5.82129 5.45183 6.5469 6.15866 6.80003 7.07489L8.95106 14.8609L9.10935 15.4075C9.74249 15.6438 10.2863 16.0866 10.6314 16.6747L10.9414 16.579L19.8115 14.2739C20.2124 14.1697 20.6219 14.4102 20.7261 14.8111C20.8303 15.212 20.5897 15.6214 20.1888 15.7256L11.3515 18.0223L11.0228 18.1238C11.0161 19.3947 10.1392 20.5555 8.81236 20.9003C7.22189 21.3136 5.58709 20.3982 5.16092 18.8556C4.73476 17.313 5.67861 15.7274 7.26908 15.3141C7.3479 15.2936 7.42682 15.2764 7.5057 15.2623L5.35419 7.47433C5.24592 7.08242 4.92897 6.76092 4.50338 6.64284L2.79968 6.17016C2.40054 6.05942 2.16675 5.64608 2.27749 5.24694Z"
+                        fill="#ffffff"></path>
                 </g>
             </svg>
             <h2>Editar Cliente</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, ingrese los nuevos datos del cliente. Una vez que haya completado el formulario, haga clic en el botón "Editar" para actualizar la información.
+                Por favor, ingrese los nuevos datos del cliente. Una vez que haya completado el formulario, haga clic en
+                el botón "Confirmar" para actualizar la información.
             </p>
         </div>
     </section>
@@ -198,29 +206,26 @@
 
                 <!-- Información de Contacto -->
                 <h4 class="mb-3">Información de Contacto</h4>
-                <form th:action="@{/clientes/update}"
-                    method="POST"
-                    class="needs-validation" novalidate="">
+                <form th:action="@{/clientes/update}" method="POST" class="needs-validation" novalidate="">
                     <div class="row g-3">
                         <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idCliente" id="idCliente" th:value="${idCliente}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idCliente" id="idCliente"
+                            th:value="${idCliente}" placeholder="" required="">
 
                         <!-- Nombre -->
                         <div class="col-sm-6">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="" th:value="${nombre}" required="">
-                            <div class="invalid-feedback">
-                                Un nombre válido es requerido.
-                            </div>
+                            <input type="text" class="form-control text-dark bg-light" name="nombre" id="nombre" placeholder=""
+                                th:value="${nombre}" required="">
+                            <div class="invalid-feedback">Un nombre válido es requerido.</div>
                         </div>
 
                         <!-- Apellido -->
                         <div class="col-sm-6">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" name="apellido" id="apellido" placeholder="" th:value="${apellido}" required="">
-                            <div class="invalid-feedback">
-                                Un apellido válido es requerido.
-                            </div>
+                            <input type="text" class="form-control text-dark bg-light" name="apellido" id="apellido" placeholder=""
+                                th:value="${apellido}" required="">
+                            <div class="invalid-feedback">Un apellido válido es requerido.</div>
                         </div>
 
                         <!-- Correo -->
@@ -228,10 +233,9 @@
                             <label for="email" class="form-label">Correo</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">@</span>
-                                <input type="text" class="form-control" name="email" id="email" placeholder="you@example.com" th:value="${email}" required="">
-                                <div class="invalid-feedback">
-                                    Un correo válido es requerido.
-                                </div>
+                                <input type="text" class="form-control text-dark bg-light" name="email" id="email"
+                                    placeholder="you@example.com" th:value="${email}" required="">
+                                <div class="invalid-feedback">Un correo válido es requerido.</div>
                             </div>
                         </div>
 
@@ -240,31 +244,15 @@
                             <label for="telefono" class="form-label">Teléfono</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">#</span>
-                                <input type="text" class="form-control" name="telefono" id="telefono" placeholder="1234-5678" th:value="${telefono}" required="">
-                                <div class="invalid-feedback">
-                                    Un número de teléfono válido es requerido.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-12">
-                            <label for="carga" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="estado : ${estados}" 
-                                        th:value="${estado.idEstado}"
-                                        th:text="${estado.descripcion}" 
-                                        th:selected="${estado.idEstado == cliente.estado.idEstado}"> 
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un estado.
+                                <input type="text" class="form-control text-dark bg-light" name="telefono" id="telefono"
+                                    placeholder="1234-5678" th:value="${telefono}" required="">
+                                <div class="invalid-feedback">Un número de teléfono válido es requerido.</div>
                             </div>
                         </div>
 
                         <hr class="my-4">
 
-                        <button class="w-100 btn btn-primary btn-lg" type="submit">Editar</button>
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Confirmar</button>
                 </form>
             </div>
         </div>

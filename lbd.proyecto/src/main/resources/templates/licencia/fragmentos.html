@@ -44,7 +44,7 @@
                         <!-- Tipo de Licencia -->
                         <div class="col-md-4">
                             <label for="licencia" class="form-label">Licencia</label>
-                            <select class="form-select" id="idLicencia" name="idLicencia" required="">
+                            <select class="form-select text-light bg-secondary" id="idLicencia" name="idLicencia" required="">
                                 <option th:each="licencia : ${licencias}" th:value="${licencia.idLicencia}">[[${licencia.tipo}]]</option>
                             </select>
                             <div class="invalid-feedback">
@@ -55,7 +55,7 @@
                         <!-- Fecha de Expedicion -->
                         <div class="col-md-4">
                             <label for="fechaExpedicion" class="form-label">Fecha de expedición</label>
-                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" value="">
+                            <input type="date" class="form-control text-light bg-secondary" id="fechaExpedicion" name="fechaExpedicion" value="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
@@ -64,7 +64,7 @@
                         <!-- Fecha de Vencimiento -->
                         <div class="col-md-4">
                             <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
-                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" value="">
+                            <input type="date" class="form-control text-light bg-secondary" id="fechaVencimiento" name="fechaVencimiento" value="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
@@ -83,38 +83,36 @@
 
     <!-- Seccion de ver listado direcciones licencias -->
     <section th:fragment="ver-licencias">
-        <div class="d-flex justify-content-center">
-            <div th:if="${licenciasEmpleado != null and !licenciasEmpleado.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${licenciasEmpleado != null and !licenciasEmpleado.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Tipo</th>
                         <th scope="col">Expedición</th>
                         <th scope="col">Vencimiento</th>
-                        <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-light">
                       <tr th:each="licenciaEmpleado : ${licenciasEmpleado}">
                         <th scope="row">[[${licenciaEmpleado.idLicenciaEmpleado}]]</th>
                         <td>[[${licenciaEmpleado.getLicencia.getTipo}]]</td>
                         <td>[[${licenciaEmpleado.fechaExpedicion}]]</td>                        
                         <td>[[${licenciaEmpleado.fechaVencimiento}]]</td>
-                        <td>[[${licenciaEmpleado.estado != null ? licenciaEmpleado.estado.descripcion : 'Sin estado'}]]</td>
                         <td>
                             <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/editar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/inactivar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-danger">Inactivar</a>
+                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/eliminar/' + ${licenciaEmpleado.idLicenciaEmpleado}}" class="btn btn-danger">Eliminar</a>
+                            <!-- <a th:href="@{/clientes/editar/} + ${cliente.idCliente}" class="btn btn-secondary">Editar</a>
+                            <a th:href="@{/clientes/eliminar/} + ${cliente.idCliente}" class="btn btn-danger">Eliminar</a> -->
                         </td>
                       </tr>
                     </tbody>
                   </table>
             </div>
             <div th:if="${licenciasEmpleado == null or licenciasEmpleado.empty}">
-                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron licencias registradas :(
-                </p>
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">No se encontraron licencias registradas!</p>
             </div>
 
         </div>
@@ -171,38 +169,21 @@
                             </div>
                         </div>
   
+                        <!-- Fecha de Expedicion -->
                         <div class="col-md-4">
                             <label for="fechaExpedicion" class="form-label">Fecha de expedición</label>
-                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" 
-                                   th:value="${licenciaEmpleado.fechaExpedicion}">
+                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" value="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
                         </div>
-
+  
                         <!-- Fecha de Vencimiento -->
                         <div class="col-md-4">
                             <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
-                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" 
-                                   th:value="${licenciaEmpleado.fechaVencimiento}">
+                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" value="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
-                            </div>
-                        </div>
-                        
-                        <!-- Estado -->
-                        <div class="col-md-12">
-                            <label for="carga" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="estado : ${estados}" 
-                                        th:value="${estado.idEstado}"
-                                        th:text="${estado.descripcion}" 
-                                        th:selected="${estado.idEstado == licenciaEmpleado.estado.idEstado}"> 
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un estado.
                             </div>
                         </div>
                         
