@@ -13,11 +13,11 @@ import lbd.proyecto.domain.Estado;
 public interface EstadoDAO extends JpaRepository<Estado, Long> {
     
     // Method to call an stored procedure to get a (single) license
-    @Procedure(procedureName = "ver_estado")
+    @Procedure(procedureName = "FIDE_ESTADOS_TB_VER_ESTADO_SP")
     Estado getEstado(Long idEstado);
 
     //Method to call an stored procedure to get all licenses
-    @Procedure(procedureName = "ver_estados")
+    @Procedure(procedureName = "FIDE_ESTADOS_TB_VER_ESTADOS_SP")
     List<Estado> getAllEstados();
     
 }
