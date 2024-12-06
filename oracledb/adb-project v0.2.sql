@@ -190,7 +190,6 @@ INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VAL
 INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Cámaras de Seguridad', 'Cámaras de seguridad y sistemas de vigilancia', 1, 7);
 INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Medicamentos', 'Productos farmacéuticos que deben mantenerse a temperatura controlada durante el transporte', 3, 7);
 
-
 CREATE TABLE fide_vehiculos_tb (
     id_vehiculo NUMBER NOT NULL,
     marca VARCHAR2(50),
@@ -237,7 +236,6 @@ CREATE TABLE fide_licencias_tb (
     id_estado NUMBER
 );
 ALTER TABLE fide_licencias_tb MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
-
 
 --LLAVES
 ALTER TABLE FIDE_LICENCIAS_TB ADD CONSTRAINT FIDE_LICENCIAS_TB_ID_LICENCIA_PK PRIMARY KEY (ID_LICENCIA);
@@ -729,17 +727,6 @@ INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (1, TO_
 INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (2, TO_DATE('2022-07-09', 'YYYY-MM-DD'), 200000, 5);
 INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (3, TO_DATE('2024-10-10', 'YYYY-MM-DD'), 300000, 4);
 
-SELECT index_name
-FROM user_indexes
-WHERE table_name = 'FIDE_FACTURAS_TB';
-
-SELECT index_name, partition_name, status
-FROM user_ind_partitions
-WHERE index_name = 'FIDE_FACTURAS_TB_ID_FACTURA_PK';
-
-
-
-
 
 CREATE TABLE fide_direcciones_empleado_tb (
     id_direccion NUMBER NOT NULL,
@@ -859,69 +846,6 @@ INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id
 INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (3, 3, 5, 1, 'Frente a la entrada principal del Parque Central, edificio azul con balcones', 7);
 INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 1, 3, 4, 'Contiguo a la soda El Buen Gusto, apartamento en el segundo piso', 7);
 INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 3, 2, 5, 'De la escuela central, 300 metros al oeste', 7);
-
-
-CREATE TABLE FIDE_AUDITORIA_VEHICULO_TB (
-    id_auditoria NUMBER NOT NULL,
-    tipo_evento VARCHAR2(10),
-    usuario_bd VARCHAR2(30),
-    fecha_evento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    usuario_sistema VARCHAR2(30),
-    ip_maquina VARCHAR2(45),
-    nombre_maquina VARCHAR2(100),
-    datos_antes CLOB
-);
-ALTER TABLE FIDE_AUDITORIA_VEHICULO_TB MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
-
---LLAVES
-ALTER TABLE FIDE_AUDITORIA_VEHICULO_TB ADD CONSTRAINT FIDE_AUDITORIA_VEHICULO_TB_ID_AUDITORIA_PK PRIMARY KEY (id_auditoria);
-
---SEQUENCIA AUTOINCREMENTAL
-CREATE SEQUENCE FIDE_AUDITORIA_VEHICULO_SEQ
-START WITH 1
-INCREMENT BY 1;
-
---TRIGGER PARA ID AUTOINCREMENTAL
-CREATE OR REPLACE TRIGGER FIDE_AUDITORIA_VEHICULO__TB_ID_AUTOINCREMENTAL_TRG
-BEFORE INSERT ON FIDE_AUDITORIA_VEHICULO_TB
-FOR EACH ROW
-BEGIN
-    IF :NEW.ID_AUDITORIA IS NULL THEN
-        :NEW.ID_AUDITORIA := FIDE_AUDITORIA_VEHICULO_SEQ.NEXTVAL;
-    END IF;
-END;
-
-
-CREATE TABLE FIDE_AUDITORIA_PEDIDO_TB (
-audit_id NUMBER NOT NULL,
-tipo_evento VARCHAR2(10),
-pedido_id NUMBER,
-usuario_bd VARCHAR2(30),
-fecha_hora DATE,
-usuario_so VARCHAR2(100),
-ip_maquina VARCHAR2(45),
-nombre_maquina VARCHAR2(100)
-);
-ALTER TABLE FIDE_AUDITORIA_PEDIDO_TB MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
-
-
---LLAVES
-ALTER TABLE FIDE_AUDITORIA_PEDIDO_TB ADD CONSTRAINT FIDE_AUDITORIA_PEDIDO_TB_AUDIT_ID_PK PRIMARY KEY (audit_id);
-
---SEQUENCIA AUTOINCREMENTAL
-CREATE SEQUENCE FIDE_AUDITORIA_PEDIDO_SEQ
-START WITH 1
-INCREMENT BY 1;
-
---TRIGGER PARA ID AUTOINCREMENTAL
-CREATE OR REPLACE TRIGGER FIDE_AUDITORIA_PEDIDO_TB_ID_AUTOINCREMENTAL_TRG
-BEFORE INSERT ON FIDE_AUDITORIA_PEDIDO_TB
-FOR EACH ROW
-BEGIN
-    IF :NEW.AUDIT_ID IS NULL THEN
-        :NEW.AUDIT_ID := FIDE_AUDITORIA_PEDIDO_SEQ.NEXTVAL;
-    END IF;
-END;
 
 -- COMPROBAR QUE LAS TABLAS HAYAN SIDO AGREGADAS AL TABLESPACE CREADO
 SELECT TABLE_NAME, TABLESPACE_NAME
