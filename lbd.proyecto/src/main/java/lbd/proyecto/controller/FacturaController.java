@@ -61,7 +61,7 @@ public class FacturaController {
 
         facturaService.insertFactura(factura, pedidoResult, estadoResult);
         
-        return "redirect:/facturas/ver";
+        return "redirect:/factura/ver";
 
     }
 
@@ -77,7 +77,7 @@ public class FacturaController {
         Factura factura = new Factura();
         factura.setIdFactura(idFactura);
         facturaService.inactivarFactura(factura);
-        return "redirect:/facturas/ver";
+        return "redirect:/factura/ver";
     }
 
 }
