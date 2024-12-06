@@ -13,11 +13,11 @@ import lbd.proyecto.domain.Puesto;
 public interface PuestoDAO extends JpaRepository<Puesto, Long> {
     
     // Method to call an stored procedure to get a (single) license
-    @Procedure(procedureName = "ver_puesto")
+    @Procedure(procedureName = "FIDE_PUESTOS_TB_VER_PUESTO_SP")
     Puesto getPuesto(Long idPuesto);
 
     //Method to call an stored procedure to get all licenses
-    @Procedure(procedureName = "ver_puestos")
+    @Procedure(procedureName = "FIDE_PUESTOS_TB_VER_PUESTOS_SP")
     List<Puesto> getAllPuestos();
     
 }
