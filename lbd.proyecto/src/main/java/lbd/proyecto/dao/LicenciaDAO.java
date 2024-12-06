@@ -13,10 +13,10 @@ import lbd.proyecto.domain.Licencia;
 public interface LicenciaDAO extends JpaRepository<Licencia, Long> {
     
     // Method to call an stored procedure to get a (single) license
-    @Procedure(procedureName = "ver_licencia")
+    @Procedure(procedureName = "FIDE_LICENCIAS_TB_VER_LICENCIA_SP")
     Licencia getLicencia(Long idLicencia);
 
     //Method to call an stored procedure to get all licenses
-    @Procedure(procedureName = "ver_licencias")
+    @Procedure(procedureName = "FIDE_LICENCIAS_TB_VER_LICENCIAS_SP")
     List<Licencia> getAllLicencias();
 }
