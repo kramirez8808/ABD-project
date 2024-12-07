@@ -2,6 +2,8 @@ package lbd.proyecto.controller;
 
 // External imports
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,88 +21,107 @@ import jakarta.persistence.NoResultException;
 import lbd.proyecto.domain.Estado;
 
 // Internal imports
-import lbd.proyecto.domain.Vehiculo;
+import lbd.proyecto.domain.Producto;
+import lbd.proyecto.domain.Estado;
+import lbd.proyecto.domain.Categoria;
 import lbd.proyecto.service.EstadoService;
-import lbd.proyecto.service.VehiculoService;
+import lbd.proyecto.service.ProductoService;
+import lbd.proyecto.service.CategoriaService;
 
 @Controller
-@RequestMapping("/vehiculos")
+@RequestMapping("/productos")
 public class ProductoController {
 
     @Autowired
-    VehiculoService vehiculoService;
+    ProductoService productoService;
+
+    @Autowired
+    CategoriaService categoriaService;
     
     @Autowired
     EstadoService estadoService;
-    
+
     @GetMapping("/agregar")
-    public String agregarVehiculo(Model model) { 
-        return "vehiculo/agregar";
+    public String agregarProducto(Model model) {
+        model.addAttribute("categorias", categoriaService.getAllCategorias());
+        model.addAttribute("estados", estadoService.getAllEstados());
+        return "producto/agregar";
     }
 
     @PostMapping("/add")
-    public String insertarVehiculo(@RequestParam String placa, @RequestParam String marca, @RequestParam String modelo, @RequestParam Integer anio) {
-        Vehiculo vehiculo = new Vehiculo();
-        vehiculo.setMarca(marca);
-        vehiculo.setModelo(modelo);
-        vehiculo.setAnio(anio);
-        vehiculo.setPlaca(placa);
-        if (vehiculo.getEstado() == null) {
-                Estado estado = new Estado();
-                estado.setIdEstado((long)7); 
-                vehiculo.setEstado(estado);
-            }
-        vehiculoService.insertVehiculo(vehiculo);
-        return "redirect:/vehiculos/ver";
-    }
+    public String insertarProducto(@RequestParam String nombre, @RequestParam String descripcion, @RequestParam Long idCategoria, @RequestParam Optional<Long> idEstado) {
+        Producto producto = new Producto();
+        producto.setNombre(nombre);
+        producto.setDescripcion(descripcion);
 
-    @GetMapping("/editar/{idVehiculo}")
-    public String editarVehiculo(@PathVariable Long idVehiculo, Model model) {
-        Vehiculo vehiculo = new Vehiculo();
-        vehiculo.setIdVehiculo(idVehiculo);
-        vehiculo = vehiculoService.getVehiculo(vehiculo);
+        Categoria categoria = new Categoria();
+        categoria.setIdCategoria(idCategoria);
+        producto.setCategoria(categoriaService.getCategoria(categoria));
         
-        model.addAttribute("vehiculo", vehiculo);
-        model.addAttribute("idVehiculo", idVehiculo);
-        model.addAttribute("marca", vehiculo.getMarca());
-        model.addAttribute("modelo", vehiculo.getModelo());
-        model.addAttribute("placa", vehiculo.getPlaca());
-        model.addAttribute("anio", vehiculo.getAnio());
+        if (producto.getEstado() == null && !idEstado.isPresent()) {
+            Estado estado = new Estado();
+            estado.setIdEstado((long)7); 
+            producto.setEstado(estado);
+        } else {
+            Estado estado = new Estado();
+            idEstado.ifPresent(estado::setIdEstado);
+            // estado.setIdEstado(idEstado);
+            producto.setEstado(estadoService.getEstado(estado));
+        }
+
+        productoService.insertProducto(producto);
+
+        return "redirect:/productos/ver";
+    }
+    
+    @GetMapping("/editar/{idProducto}")
+    public String editarProducto(@PathVariable Long idProducto, Model model) {
+        Producto producto = new Producto();
+        producto.setIdProducto(idProducto);
+        producto = productoService.getProducto(producto);
+        
+        model.addAttribute("producto", producto);
+        model.addAttribute("idProducto", idProducto);
+        model.addAttribute("nombre", producto.getNombre());
+        model.addAttribute("descripcion", producto.getDescripcion());
+        model.addAttribute("categorias", categoriaService.getAllCategorias());
         model.addAttribute("estados", estadoService.getAllEstados());
         
-        return "vehiculo/actualizar";
+        return "producto/actualizar";
     }
 
     @PostMapping("/update")
-    public String actualizarVehiculo(@RequestParam Long idVehiculo, @RequestParam String placa, @RequestParam String marca, @RequestParam String modelo, @RequestParam Integer anio, @RequestParam Long idEstado) {
-        Vehiculo vehiculo = new Vehiculo();
-        vehiculo.setIdVehiculo(idVehiculo);
-        vehiculo.setPlaca(placa);
-        vehiculo.setMarca(marca);
-        vehiculo.setModelo(modelo);
-        vehiculo.setAnio(anio);
+    public String actualizarProducto(@RequestParam Long idProducto, @RequestParam String nombre, @RequestParam String descripcion, @RequestParam Long idCategoria, @RequestParam Long idEstado) {
+        Producto producto = new Producto();
+        producto.setIdProducto(idProducto);
+        producto.setNombre(nombre);
+        producto.setDescripcion(descripcion);
+        
+        Categoria categoria = new Categoria();
+        categoria.setIdCategoria(idCategoria);
+        producto.setCategoria(categoriaService.getCategoria(categoria));
         
         Estado estado = new Estado();
         estado.setIdEstado(idEstado);
-        vehiculo.setEstado(estadoService.getEstado(estado));
+        producto.setEstado(estadoService.getEstado(estado));
         
-        vehiculoService.updateVehiculo(idVehiculo, vehiculo);
-        return "redirect:/vehiculos/ver";
+        productoService.updateProducto(idProducto, producto);
+        return "redirect:/productos/ver";
     }
 
     @GetMapping("/ver")
-    public String verVehiculos(Model model) {
-        List<Vehiculo> vehiculos = vehiculoService.getAllVehiculos();
-        model.addAttribute("vehiculos", vehiculos);
-        return "vehiculo/ver";
+    public String verProductos(Model model) {
+        List<Producto> productos = productoService.getAllProductos();
+        model.addAttribute("productos", productos);
+        return "producto/ver";
     }
 
-    @GetMapping("/inactivar/{idVehiculo}")
-    public String inactivarVehiculo(@PathVariable Long idVehiculo, RedirectAttributes redirectAttributes) {
-        Vehiculo vehiculo = new Vehiculo();
-        vehiculo.setIdVehiculo(idVehiculo);
-        vehiculoService.inactivarVehiculo(idVehiculo);
-        return "redirect:/vehiculos/ver";
+    @GetMapping("/inactivar/{idProducto}")
+    public String inactivarProducto(@PathVariable Long idProducto, RedirectAttributes redirectAttributes) {
+        Producto producto = new Producto();
+        producto.setIdProducto(idProducto);
+        productoService.inactivarProducto(idProducto);
+        return "redirect:/productos/ver";
     }
     
 }
