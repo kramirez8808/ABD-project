@@ -106,8 +106,8 @@ public class VehiculoServiceImpl implements VehiculoService {
                 
 
                 // Print the output parameters
-                System.out.println("Marca: " + query.getOutputParameterValue("P_MARCA"));
-                System.out.println("Modelo: " + query.getOutputParameterValue("P_MODELO"));
+                // System.out.println("Marca: " + query.getOutputParameterValue("P_MARCA"));
+                // System.out.println("Modelo: " + query.getOutputParameterValue("P_MODELO"));
 
                 // Map the output parameters to a Vehiculo object
                 Vehiculo vehiculoResult = new Vehiculo();

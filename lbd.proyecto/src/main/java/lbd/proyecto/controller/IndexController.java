@@ -29,6 +29,7 @@ import lbd.proyecto.domain.Licencia;
 import lbd.proyecto.domain.LicenciaEmpleado;
 import lbd.proyecto.domain.Pedido;
 import lbd.proyecto.service.PedidoService;
+import lbd.proyecto.service.ProductoService;
 import lbd.proyecto.service.LicenciaEmpleadoService;
 import lbd.proyecto.domain.Puesto;
 import lbd.proyecto.service.PuestoService;
@@ -39,6 +40,9 @@ import lbd.proyecto.service.VehiculoService;
 import lbd.proyecto.service.TipoCargaService;
 import lbd.proyecto.domain.direcciones.DireccionPedido;
 import lbd.proyecto.service.direcciones.DireccionPedidoService;
+
+import lbd.proyecto.domain.Producto;
+import lbd.proyecto.domain.Categoria;
 
 @Controller
 public class IndexController {
@@ -87,6 +91,9 @@ public class IndexController {
 
     @Autowired
     FacturaService facturaService;
+
+    @Autowired
+    ProductoService productoService;
 
     // Muestra la página principal
     @RequestMapping("/")
@@ -667,10 +674,17 @@ public class IndexController {
         // System.out.println(empleadoResult.isDriver());
 
         //Test Pedido.isCanceled
-//        Pedido pedido = new Pedido();
-//        pedido.setIdPedido(63L);
-//        Pedido pedidoResult = pedidoService.getPedido(pedido);
-//        System.out.println(pedidoResult.isCanceled());
+        //Pedido pedido = new Pedido();
+        //pedido.setIdPedido(63L);
+        //Pedido pedidoResult = pedidoService.getPedido(pedido);
+        //System.out.println(pedidoResult.isCanceled());
+
+        //Test getAllProductos
+        // List<Producto> productos = productoService.getAllProductos();
+        // for (Producto p : productos) {
+        //     System.out.println(p.toString());
+        //     System.out.println(p.getCategoria().toString());
+        // }
 
         return "index-new";
     }
