@@ -4,6 +4,10 @@ import lombok.Data;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
+// Imports locales
+import lbd.proyecto.domain.Categoria;
+import lbd.proyecto.domain.Estado;
+
 @Data
 @Entity
 @Table(name = "FIDE_PRODUCTOS_TB")
@@ -16,12 +20,9 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Campo Auto-Incremental
     @Column(name = "id_producto")
     private Long idProducto; //Hibernate lo transforma/MySQL => id_producto PK
+    private String nombre; //MySQL => nombre
     private String descripcion; //MySQL => descripcion
-    private String detalle; //MySQL => detalle
-    private double precio; //MySQL => precio
-    private int existencias; //MySQL => existencias
-    private String rutaImagen; //MySQL => ruta_imagen
-    private boolean activo; //MySQL => activo
+    
     //private Long idCategoria; //MySQL => id_categoria FK
     
     //Relación con la tabla Categoria
@@ -29,6 +30,11 @@ public class Producto implements Serializable {
     // @JoinColumn(name = "id_categoria")
     // Categoria categoria; 
     //MySQL => id_categoria FK
+    
+    // Relación con la tabla Categoria
+    @ManyToOne // Un producto puede tener una categoría
+    @JoinColumn(name = "id_categoria") // Clave foránea de categoría
+    private Categoria categoria;
     
     // Relación con la tabla Estado
     @ManyToOne // Un producto puede tener un estado
@@ -39,12 +45,10 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
-    public Producto(String descripcion, String detalle, double precio, int existencias, String rutaImagen, boolean activo) {
+    public Producto(String nombre, String descripcion, Categoria categoria, Estado estado) {
+        this.nombre = nombre;
         this.descripcion = descripcion;
-        this.detalle = detalle;
-        this.precio = precio;
-        this.existencias = existencias;
-        this.rutaImagen = rutaImagen;
-        this.activo = activo;
+        this.categoria = categoria;
+        this.estado = estado;
     }
 }

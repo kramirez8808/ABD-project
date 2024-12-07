@@ -20,9 +20,13 @@
                 <div class="collapse navbar-collapse d-lg-flex" id="navbarSupportedContent">
                     <a class="navbar-brand col-lg-3 me-0" th:href="@{/}">COMAVI</a>
                     <ul class="navbar-nav col-lg-6 justify-content-lg-center">
+
+                        <!-- Facturas -->
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" th:href="@{/facturas/ver}">Facturas</a>
                         </li>
+
+                        <!-- Pedidos -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Pedidos</a>
                             <ul class="dropdown-menu">
@@ -30,6 +34,8 @@
                                 <li><a class="dropdown-item" th:href="@{/pedidos/agregar}">Agregar</a></li>
                             </ul>
                         </li>
+
+                        <!-- Clientes -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Clientes</a>
                             <ul class="dropdown-menu">
@@ -37,6 +43,8 @@
                                 <li><a class="dropdown-item" th:href="@{/clientes/agregar}">Agregar</a></li>
                             </ul>
                         </li>
+
+                        <!-- Vehiculos -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Vehículos</a>
                             <ul class="dropdown-menu">
@@ -44,6 +52,8 @@
                                 <li><a class="dropdown-item" th:href="@{/vehiculos/agregar}">Agregar</a></li>
                             </ul>
                         </li>
+
+                        <!-- Empleados -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Empleados</a>
                             <ul class="dropdown-menu">
@@ -51,6 +61,16 @@
                                 <li><a class="dropdown-item" th:href="@{/empleados/agregar}">Agregar</a></li>
                             </ul>
                         </li>
+
+                        <!-- Categorias -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Categorías</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/categorias/ver}">Ver</a></li>
+                                <li><a class="dropdown-item" th:href="@{/categorias/agregar}">Agregar</a></li>
+                            </ul>
+                        </li>
+
                         <!-- <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Sobre nosotros</a>
                         </li>
