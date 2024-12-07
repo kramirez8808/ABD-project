@@ -2,7 +2,7 @@
 <html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
 <head th:replace="~{layout/template-new :: head}">
-    <title>COMAVI</title>
+    <title>Vehiculos</title>
 </head>
 
 <body>
@@ -38,7 +38,7 @@
                         <!-- Marca -->
                         <div class="col-sm-6">
                             <label for="marca" class="form-label">Marca</label>
-                            <input type="text" class="form-control" id="marca" name="marca" placeholder="Toyota" value="" required="">
+                            <input type="text" class="form-control text-light bg-secondary" id="marca" name="marca" placeholder="Toyota" value="" required="">
                             <div class="invalid-feedback">
                                 Una marca válido es requerido.
                             </div>
@@ -47,7 +47,7 @@
                         <!-- Modelo -->
                         <div class="col-sm-6">
                             <label for="modelo" class="form-label">Modelo</label>
-                            <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Hilux" value="" required="">
+                            <input type="text" class="form-control text-light bg-secondary" id="modelo" name="modelo" placeholder="Hilux" value="" required="">
                             <div class="invalid-feedback">
                                 Un modelo válido es requerido.
                             </div>
@@ -58,7 +58,7 @@
                             <label for="placa" class="form-label">Placa</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">ID</span>
-                                <input type="text" class="form-control" id="placa" name="placa" placeholder="XXX-000" required="">
+                                <input type="text" class="form-control text-light bg-secondary" id="placa" name="placa" placeholder="XXX-000" required="">
                                 <div class="invalid-feedback">
                                     Una placa válida es requerido.
                                 </div>
@@ -68,7 +68,7 @@
                         <!-- Anio -->
                         <div class="col-sm-6">
                             <label for="anio" class="form-label">Año</label>
-                            <input type="number" min="1900" max="2099" class="form-control" id="anio" name="anio" placeholder="2020" value="" required="">
+                            <input type="number" min="1900" max="2099" class="form-control text-light bg-secondary" id="anio" name="anio" placeholder="2020" value="" required="">
                             <div class="invalid-feedback">
                                 Una año válido es requerida.
                             </div>
@@ -84,11 +84,11 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="d-flex justify-content-center">
-            <div th:if="${vehiculos != null and !vehiculos.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${vehiculos != null and !vehiculos.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
-                      <tr>
+                      <tr table-active>
                         <th scope="col">ID</th>
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
@@ -98,7 +98,7 @@
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-light">
                       <tr th:each="vehiculo : ${vehiculos}">
                         <th scope="row">[[${vehiculo.idVehiculo}]]</th>
                         <td>[[${vehiculo.marca}]]</td>
@@ -116,7 +116,7 @@
             </div>
             <div th:if="${vehiculos == null or vehiculos.empty}">
                 <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron vehículos registrados :(
+                    No se encontraron vehículos registrados!
                 </p>
             </div>
         </div>
