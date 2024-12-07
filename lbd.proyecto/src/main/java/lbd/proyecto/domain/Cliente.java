@@ -13,7 +13,7 @@ import lombok.ToString;
 
 @Data
 @Entity
-@ToString(exclude = "pedidos")
+@ToString(exclude = "pedidos")  
 @Table(name = "FIDE_CLIENTES_TB")
 public class Cliente implements Serializable {
     
