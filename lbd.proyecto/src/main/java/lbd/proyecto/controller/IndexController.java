@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.google.j2objc.annotations.AutoreleasePool;
+
 import lbd.proyecto.domain.Cliente;
 import lbd.proyecto.domain.Empleado;
 import lbd.proyecto.service.EmpleadoService;
@@ -43,6 +45,9 @@ import lbd.proyecto.service.direcciones.DireccionPedidoService;
 
 import lbd.proyecto.domain.Producto;
 import lbd.proyecto.domain.Categoria;
+
+import lbd.proyecto.domain.DetallePedido;
+import lbd.proyecto.service.DetallePedidoService;
 
 @Controller
 public class IndexController {
@@ -94,6 +99,9 @@ public class IndexController {
 
     @Autowired
     ProductoService productoService;
+
+    @Autowired
+    DetallePedidoService detallePedidoService;
 
     // Muestra la página principal
     @RequestMapping("/")
@@ -685,6 +693,17 @@ public class IndexController {
         //     System.out.println(p.toString());
         //     System.out.println(p.getCategoria().toString());
         // }
+
+        // Test searchDetallesByPedido
+        List<DetallePedido> detalles = detallePedidoService.searchDetallesByPedido(1L);
+        for (DetallePedido d : detalles) {
+            System.out.println("----- DETALLE -----");
+            System.out.println("ID Detalle: " + d.getIdDetalle());
+            System.out.println("Cantidad: " + d.getCantidad());
+            System.out.println("Nombre Producto: " + d.getProducto().getNombre());
+            System.out.println("Unidad: " + d.getUnidadMasa());
+
+        }
 
         return "index-new";
     }

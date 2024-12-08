@@ -4,6 +4,7 @@ import lombok.Data;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -56,6 +57,10 @@ public class Pedido implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
     private Estado estado; // Foreign key to FIDE_ESTADOS_TB
+
+    // Relationships with table DetallePedido
+    @OneToMany(mappedBy = "pedido")
+    private List<DetallePedido> detallesPedido;
 
 
     // Constructors

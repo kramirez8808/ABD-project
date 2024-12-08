@@ -19,6 +19,7 @@ import jakarta.persistence.NoResultException;
 
 // Internal imports
 import lbd.proyecto.domain.Pedido;
+import lbd.proyecto.domain.Producto;
 import lbd.proyecto.domain.Puesto;
 import lbd.proyecto.service.PedidoService;
 
@@ -29,6 +30,7 @@ import lbd.proyecto.domain.Estado;
 import lbd.proyecto.service.EstadoService;
 
 import lbd.proyecto.domain.Cliente;
+import lbd.proyecto.domain.DetallePedido;
 import lbd.proyecto.domain.Empleado;
 import lbd.proyecto.service.ClienteService;
 
@@ -47,6 +49,12 @@ import lbd.proyecto.domain.direcciones.Provincia;
 import lbd.proyecto.service.direcciones.CantonService;
 import lbd.proyecto.service.direcciones.DistritoService;
 import lbd.proyecto.service.direcciones.ProvinciaService;
+
+import lbd.proyecto.service.DetallePedidoService;
+import lbd.proyecto.domain.DetallePedido;
+
+import lbd.proyecto.domain.Producto;
+import lbd.proyecto.service.ProductoService;
 
 @Controller
 @RequestMapping("/pedidos")
@@ -81,6 +89,12 @@ public class PedidoController {
 
     @Autowired
     private DistritoService distritoService;
+
+    @Autowired
+    private DetallePedidoService detallePedidoService;
+
+    @Autowired
+    private ProductoService productoService;
 
     @GetMapping("/agregar")
     public String agregarPedido(Model model) {
@@ -341,6 +355,79 @@ public class PedidoController {
         return "redirect:/pedidos/{idPedido}/dir/ver";
     }
 
+    // Detalles
+    @GetMapping("{idPedido}/detalles/ver")
+    public String verDetalles(@PathVariable Long idPedido, Model model) {
+        Pedido pedido = new Pedido();
+        pedido.setIdPedido(idPedido);
+        List<DetallePedido> detalles = detallePedidoService.searchDetallesByPedido(pedido.getIdPedido());
+        List<Producto> productos = productoService.getAllProductos();
+        List<Estado> estados = estadoService.getAllEstados();
+      
+        model.addAttribute("estados", estados);
+        model.addAttribute("productos", productos);
+        model.addAttribute("detallesPedido", detalles);
 
+        model.addAttribute("idPedido", idPedido);
+
+        return "/detalle/ver";
+    }
+
+    @PostMapping("detalles/add")
+    public String insertarDetalle(@RequestParam Long idPedidoAdd, @RequestParam String idProductoAdd, @RequestParam String cantidadAdd, @RequestParam String unidadMasaAdd, RedirectAttributes redirectAttributes) {
+        DetallePedido detallePedido = new DetallePedido();
+        detallePedido.setCantidad(Integer.parseInt(cantidadAdd));
+        detallePedido.setUnidadMasa(unidadMasaAdd);
+        
+        Pedido pedido = new Pedido();
+        pedido.setIdPedido(idPedidoAdd);
+        pedido = pedidoService.getPedido(pedido);
+        detallePedido.setPedido(pedido);
+
+        Producto producto = new Producto();
+        producto.setIdProducto(Long.parseLong(idProductoAdd));
+        producto = productoService.getProducto(producto);
+        detallePedido.setProducto(producto);
+        
+        if (detallePedido.getEstado() == null) {
+            Estado estado = new Estado();
+            estado.setIdEstado((long)7); 
+            detallePedido.setEstado(estado);
+        }
+        
+        detallePedidoService.insertDetallePedido(detallePedido, pedido, producto);
+        
+        redirectAttributes.addAttribute("idPedido", idPedidoAdd);
+
+        return "redirect:/pedidos/{idPedido}/detalles/ver";
+    }
+
+    @PostMapping("detalles/update")
+    public String actualizarDetalle(@RequestParam Long idPedidoUpdate, @RequestParam Long idDetalleUpdate, @RequestParam String cantidadUpdate, @RequestParam String idProductoUpdate, RedirectAttributes redirectAttributes) {
+        Pedido pedido = new Pedido();
+        pedido.setIdPedido(idPedidoUpdate);
+        
+        DetallePedido detalle = new DetallePedido();
+        detalle.setIdDetalle(idDetalleUpdate);
+        detalle.setCantidad(Integer.parseInt(cantidadUpdate));
+        
+        Producto producto = new Producto();
+        producto.setIdProducto(Long.parseLong(idProductoUpdate));
+        Producto productoResult = productoService.getProducto(producto);
+
+        detalle.setProducto(productoResult);
+        
+        if (producto.getEstado() == null) {
+            Estado estado = new Estado();
+            estado.setIdEstado((long)7); 
+            producto.setEstado(estado);
+        }
+        
+        detallePedidoService.updateDetallePedido(idDetalleUpdate, detalle);
+        redirectAttributes.addAttribute("idPedido", idPedidoUpdate);
+        
+        return "redirect:/pedidos/{idPedido}/detalles/ver";
+    }
+    
 
 }

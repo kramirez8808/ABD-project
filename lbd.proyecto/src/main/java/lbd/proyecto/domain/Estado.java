@@ -89,6 +89,10 @@ public class Estado implements Serializable {
     @OneToMany(mappedBy = "estado") // One state can be associated with many direcciones pedido
     private List<DireccionPedido> direccionPedido; // List of direcciones pedido associated with the state
     
+    // Relationship with the DetallePedido table
+    @OneToMany(mappedBy = "estado") // One state can be associated with many details of orders
+    private List<DetallePedido> detallesPedido; // List of details of orders associated with the state
+
     //Constructors
     public Estado() {
     }
