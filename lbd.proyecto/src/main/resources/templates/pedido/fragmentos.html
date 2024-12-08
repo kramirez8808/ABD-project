@@ -142,7 +142,8 @@
                         <td>[[${pedido.fechaPedido}]]</td>
                         <td>[[${pedido.getEstado.getDescripcion}]]</td>
                         <td>
-                            <button type="button" 
+                            <div th:if="${pedido.factura == null and pedido.detallesPedido != null and !pedido.detallesPedido.empty}">
+                                <button type="button" 
                                     data-bs-toggle="modal" 
                                     th:data-bs-target="'#modal-' + ${pedido.idPedido}"
                                     class="btn btn-warning px-1 py-0">
@@ -156,6 +157,9 @@
                                         </g>
                                     </svg>
                             </button>
+                            </div>
+
+                            
                             <a th:href="@{/pedidos/} + ${pedido.idPedido} + '/detalles/ver'" class="btn btn-success">Productos</a>
                             <a th:href="@{/pedidos/} + ${pedido.idPedido} + '/dir/ver'" class="btn btn-primary">Direcciones</a>
                             <a th:href="@{/pedidos/editar/} + ${pedido.idPedido}" class="btn btn-secondary">Editar</a>

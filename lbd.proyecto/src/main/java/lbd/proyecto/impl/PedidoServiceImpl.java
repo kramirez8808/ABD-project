@@ -38,12 +38,10 @@ import lbd.proyecto.domain.Estado;
 import lbd.proyecto.domain.Factura;
 import lbd.proyecto.domain.LicenciaEmpleado;
 
+import lbd.proyecto.domain.DetallePedido;
+
 import lbd.proyecto.dao.PedidoDAO;
-import lbd.proyecto.dao.ClienteDAO;
-import lbd.proyecto.dao.VehiculoDAO;
-import lbd.proyecto.dao.TipoCargaDAO;
-import lbd.proyecto.dao.EstadoDAO;
-import lbd.proyecto.dao.LicenciaEmpleadoDAO;
+
 
 import lbd.proyecto.service.PedidoService;
 import lbd.proyecto.service.ClienteService;
@@ -52,6 +50,7 @@ import lbd.proyecto.service.TipoCargaService;
 import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.LicenciaEmpleadoService;
 import lbd.proyecto.service.FacturaService;
+import lbd.proyecto.service.DetallePedidoService;
 
 
 
@@ -79,6 +78,10 @@ public class PedidoServiceImpl implements PedidoService {
     @Autowired
     @Lazy
     private FacturaService facturaService;
+
+    @Autowired
+    @Lazy
+    private DetallePedidoService detallePedidoService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -378,7 +381,16 @@ public class PedidoServiceImpl implements PedidoService {
 
                 Factura factura = new Factura();
                 factura.setPedido(pedido);
-                Factura facturaResulFactura = facturaService.searchFacturaByPedido(pedido.getIdPedido());
+                Factura facturaResult = facturaService.searchFacturaByPedido(pedido.getIdPedido());
+                if (facturaResult.getIdFactura() != null && facturaResult.getIdFactura() != 0) {
+                    pedido.setFactura(facturaResult);
+                }
+
+                List<DetallePedido> detallesPedido = detallePedidoService.searchDetallesByPedido(pedido.getIdPedido());
+                if (detallesPedido.size() > 0) {
+                    pedido.setDetallesPedido(detallesPedido);
+                }
+                
                 pedidos.add(pedido);
             }
         } catch (SQLException e) {

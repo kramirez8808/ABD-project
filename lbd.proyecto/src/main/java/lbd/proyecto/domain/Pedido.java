@@ -62,6 +62,10 @@ public class Pedido implements Serializable {
     @OneToMany(mappedBy = "pedido")
     private List<DetallePedido> detallesPedido;
 
+    // Relationships with table Factura
+    @OneToOne(mappedBy = "pedido")
+    private Factura factura;
+
 
     // Constructors
     public Pedido() {
