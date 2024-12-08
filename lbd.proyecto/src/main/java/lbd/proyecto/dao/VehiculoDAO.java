@@ -9,7 +9,6 @@ import java.util.List;
 
 // Internal imports
 import lbd.proyecto.domain.Vehiculo;
-import oracle.net.aso.v;
 
 public interface VehiculoDAO extends JpaRepository<Vehiculo, Long> {
     
