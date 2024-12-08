@@ -110,7 +110,7 @@
                                     class="btn btn-secondary">
                                     Editar
                             </button>
-                            <a th:href="@{'/pedidos/' + ${idPedido} + '/detalle/inactivar/' + ${detallePedido.idDetalle}}" class="btn btn-danger">Inactivar</a>
+                            <a th:href="@{'/pedidos/' + ${idPedido} + '/detalles/inactivar/' + ${detallePedido.idDetalle}}" class="btn btn-danger">Inactivar</a>
                         </td>
                       </tr>
                     </tbody>
@@ -196,7 +196,7 @@
                             </div>
 
                     </div>
-                    <div class="modal-footer mt-4">
+                    <div class="modal-footer mt-3">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
@@ -262,7 +262,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer mt-4">
+                        <div class="modal-footer mt-3">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary">Editar</button>
                         </div>

@@ -432,6 +432,15 @@ public class PedidoController {
         
         return "redirect:/pedidos/{idPedido}/detalles/ver";
     }
-    
+
+    @GetMapping("{idPedido}/detalles/inactivar/{idDetalle}")
+    public String inactivarDetalle(@PathVariable Long idPedido, @PathVariable Long idDetalle, RedirectAttributes redirectAttributes) {
+        DetallePedido detalle = new DetallePedido();
+        detalle.setIdDetalle(idDetalle);
+        detallePedidoService.inactivarDetallePedido(detalle.getIdDetalle());
+        redirectAttributes.addAttribute("idPedido", idPedido);
+        
+        return "redirect:/pedidos/{idPedido}/detalles/ver";
+    }
 
 }
