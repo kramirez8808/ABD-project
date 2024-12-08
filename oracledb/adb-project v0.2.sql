@@ -19,10 +19,30 @@ drop table puestos cascade constraints;
 drop table tipos_carga cascade constraints;
 drop table vehiculos cascade constraints;
 */
+/
+create user test1 identified by 123;
+grant create session to test1;
+grant dba to test1;
+GRANT RESOURCE TO test1;
+/
+--DESDE SQL PLUS
+ALTER SYSTEM SET AUDIT_TRAIL=DB,EXTENDED SCOPE=SPFILE;
+SHUTDOWN IMMEDIATE;
+STARTUP;
+/
+--Aumentar limite de cursores
+ALTER SYSTEM SET open_cursors = 1700 SCOPE=BOTH;
+/
+--CREACION DEL PERFIL
+CREATE PROFILE FIDE_PROYECTO_FINAL_PROF LIMIT SESSIONS_PER_USER 2 FAILED_LOGIN_ATTEMPTS 5;
+/
+--Asignacion del perfil
+ALTER USER test1 PROFILE FIDE_PROYECTO_FINAL_PROF;
+/
 --CREACION TABLESPACE
 CREATE TABLESPACE FIDE_PROYECTO_FINAL_TBS
 DATAFILE 'C:\ORACLE\ORADATA\ORCL\FIDE_PROYECTO_FINAL_TBS' SIZE 200M;
-
+/
 -- TABLES
 CREATE TABLE fide_estados_tb (
     id_estado NUMBER NOT NULL,
@@ -48,7 +68,7 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS ESTADOS
 INSERT INTO fide_estados_tb (descripcion) VALUES ('Cancelado');
 INSERT INTO fide_estados_tb (descripcion) VALUES ('No aceptado');
 INSERT INTO fide_estados_tb (descripcion) VALUES ('Aceptado');
@@ -57,6 +77,7 @@ INSERT INTO fide_estados_tb (Descripcion) VALUES ('Entregado');
 INSERT INTO fide_estados_tb (Descripcion) VALUES ('Completado');
 INSERT INTO fide_estados_tb (Descripcion) VALUES ('Activo');
 INSERT INTO fide_estados_tb (Descripcion) VALUES ('Inactivo');
+COMMIT;
 
 CREATE TABLE fide_roles_tb (
     id_rol NUMBER NOT NULL,
@@ -84,10 +105,11 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS ROLES
 INSERT INTO fide_roles_tb (DESCRIPCION, ID_ESTADO) VALUES ('Administrador', 7);
 INSERT INTO fide_roles_tb (DESCRIPCION, ID_ESTADO) VALUES ('Usuario', 7);
 INSERT INTO fide_roles_tb (DESCRIPCION, ID_ESTADO) VALUES ('Invitado', 7);
+COMMIT;
 
 CREATE TABLE fide_usuarios_tb (
     id_usuario NUMBER NOT NULL,
@@ -102,11 +124,15 @@ ALTER TABLE fide_usuarios_tb MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
 ALTER TABLE FIDE_USUARIOS_TB ADD CONSTRAINT FIDE_USUARIOS_TB_ID_USUARIO_PK PRIMARY KEY (ID_USUARIO);
 ALTER TABLE FIDE_USUARIOS_TB ADD CONSTRAINT FIDE_USUARIOS_TB_ID_ROL_FK FOREIGN KEY (ID_ROL) REFERENCES FIDE_ROLES_TB (ID_ROL);
 ALTER TABLE FIDE_USUARIOS_TB ADD CONSTRAINT FIDE_USUARIOS_TB_ID_ESTADO_FK FOREIGN KEY (ID_ESTADO) REFERENCES FIDE_ESTADOS_TB (ID_ESTADO);
+COMMIT;
 
 --SEQUENCIA AUTOINCREMENTAL
 CREATE SEQUENCE FIDE_USUARIOS_SEQ
 START WITH 1
 INCREMENT BY 1;
+
+--Resetear secuencia
+--DROP SEQUENCE FIDE_USUARIOS_SEQ;
 
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_USUARIOS_TB_ID_AUTOINCREMENTAL_TRG
@@ -118,10 +144,31 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS USUARIOS
 INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Juan', '123', 1, 7); --ADMINISTRADOR
 INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Maria', '456', 2, 7); --USUARIO
 INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Carlos', 'carlos123', 3, 7); --INVITADO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Luis', '789', 1, 7); --ADMINISTRADOR
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Ana', '101', 2, 7); --USUARIO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Miguel', 'miguel123', 3, 7); --INVITADO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Rosa', 'rosa123', 1, 7); --ADMINISTRADOR
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Pablo', 'pablo456', 2, 7); --USUARIO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Sofia', 'sofia789', 3, 7); --INVITADO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Jorge', 'jorge101', 1, 7); --ADMINISTRADOR
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Clara', 'clara123', 2, 7); --USUARIO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Hector', 'hector456', 3, 7); --INVITADO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Laura', 'laura789', 1, 7); --ADMINISTRADOR
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Fernando', 'fernando101', 2, 7); --USUARIO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Elena', 'elena123', 3, 7); --INVITADO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Raul', 'raul456', 1, 7); --ADMINISTRADOR
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Patricia', 'patricia789', 2, 7); --USUARIO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Diego', 'diego101', 3, 7); --INVITADO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Natalia', 'natalia123', 1, 7); --ADMINISTRADOR
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Andres', 'andres456', 2, 7); --USUARIO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Paula', 'paula789', 3, 7); --INVITADO
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Esteban', 'esteban101', 1, 7); --ADMINISTRADOR
+INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Irene', 'irene123', 2, 7); --USUARIO
+COMMIT;
 
 CREATE TABLE fide_categorias_tb (
     id_categoria NUMBER NOT NULL,
@@ -139,6 +186,9 @@ CREATE SEQUENCE FIDE_CATEGORIAS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_CATEGORIAS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_CATEGORIAS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_CATEGORIAS_TB
@@ -149,11 +199,30 @@ BEGIN
     END IF;
 END;
 
---INSERTS
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electr�nica', 7);
+--INSERTS CATEGORIAS
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electronica', 7);
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Alimentos', 7);
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Salud', 7);
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electrodomesticos', 7);
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Arroz Integral', 'Grano entero y sin procesar, alto en fibra', 17, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Agricultura', 1, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Cosecha', 2, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Comida' 3, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum' 4, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 5, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 6, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 7, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 8, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 9, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 10, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 11, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 12, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 13, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 14, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 15, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 16, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 16, 7);
+COMMIT;
 
 CREATE TABLE fide_productos_tb (
     id_producto NUMBER NOT NULL,
@@ -174,6 +243,9 @@ CREATE SEQUENCE FIDE_PRODUCTOS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_PRODUCTOS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_PRODUCTOS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_PRODUCTOS_TB
@@ -184,11 +256,30 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS PRODUCTOS
 INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Granos', 'Materiales a granel como arroz, ma�z, trigo, etc.', 2, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Electrodom�sticos', 'Productos como neveras, lavadoras, microondas, etc.', 4, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('C�maras de Seguridad', 'C�maras de seguridad y sistemas de vigilancia', 1, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Medicamentos', 'Productos farmac�uticos que deben mantenerse a temperatura controlada durante el transporte', 3, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Electrodomesticos', 'Productos como neveras, lavadoras, microondas, etc.', 4, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Camaras de Seguridad', 'Camaras de seguridad y sistemas de vigilancia', 1, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Medicamentos', 'Productos farmaceuticos que deben mantenerse a temperatura controlada durante el transporte', 3, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arroz Integral', 'Grano entero y sin procesar, alto en fibra', 2, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maíz Amarillo', 'Grano seco utilizado en diversas preparaciones', 3, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Trigo', 'Grano básico para la elaboración de harinas', 4, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Avena', 'Grano usado en cereales y repostería', 5, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Lentejas', 'Legumbre nutritiva rica en proteínas', 6, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Cebada', 'Grano usado en la elaboración de bebidas y cereales', 7, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Sorgo', 'Grano utilizado para alimentación animal y humana', 8, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Quinoa', 'Grano andino alto en proteínas y aminoácidos', 9, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Chía', 'Semilla rica en omega-3 y antioxidantes', 10, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Frejol Negro', 'Legumbre común en la cocina latinoamericana', 11, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arveja', 'Legumbre usada en sopas y guisos', 12, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Mijo', 'Grano pequeño utilizado en panes y cereales', 13, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Centeno', 'Grano integral usado en panes y cervezas', 14, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Soja', 'Grano usado para hacer leche y otros productos vegetales', 15, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Trigo Sarraceno', 'Grano sin gluten usado en varias cocinas del mundo', 16, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arroz Jazmín', 'Variedad de arroz aromático usado en la cocina asiática', 17, 7);
+
+
+COMMIT;
 
 CREATE TABLE fide_vehiculos_tb (
     id_vehiculo NUMBER NOT NULL,
@@ -210,6 +301,9 @@ CREATE SEQUENCE FIDE_VEHICULOS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_VEHICULOS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_VEHICULOS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_VEHICULOS_TB
@@ -220,7 +314,15 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS VEHICULOS
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Toyota', 'Hilux', 2018, 'CMV-000', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Nissan', 'Navara', 2019, 'CMV-002', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Mitsubishi', 'L200', 2020, 'CMV-004', 8);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Scania', 'R450', 2017, '678901', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Mercedes-Benz', 'Actros', 2018, '789012', 8);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('MAN', 'TGX', 2019, '890123', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Chevrolet', 'Colorado', 2021, 'CMV-004', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Mazda', 'BT-50', 2022, 'CMV-005', 7);
 INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Toyota', 'Hilux', 2018, 'CMV-000', 7);
 INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Nissan', 'Navara', 2019, 'CMV-002', 7);
 INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Mitsubishi', 'L200', 2020, 'CMV-004', 8);
@@ -229,6 +331,19 @@ INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('V
 INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Scania', 'R450', 2017, '678901', 7);
 INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Mercedes-Benz', 'Actros', 2018, '789012', 8);
 INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('MAN', 'TGX', 2019, '890123', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Toyota', 'Hilux', 2018, 'CMV-001', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Nissan', 'Frontier', 2019, 'CMV-002', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Ford', 'Ranger', 2020, 'CMV-003', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Chevrolet', 'Colorado', 2021, 'CMV-004', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Mazda', 'BT-50', 2022, 'CMV-005', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Honda', 'Ridgeline', 2023, 'CMV-006', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Mitsubishi', 'Triton', 2024, 'CMV-007', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Isuzu', 'D-Max', 2018, 'CMV-008', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Volkswagen', 'Amarok', 2019, 'CMV-009', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Fiat', 'Toro', 2020, 'CMV-010', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Hyundai', 'Santa Cruz', 2021, 'CMV-011', 7);
+INSERT INTO fide_vehiculos_tb (Marca, Modelo, Anio, Placa, id_estado) VALUES ('Jeep', 'Gladiator', 2022, 'CMV-012', 7);
+COMMIT;
 
 CREATE TABLE fide_licencias_tb (
     id_licencia NUMBER NOT NULL,
@@ -246,6 +361,9 @@ CREATE SEQUENCE FIDE_LICENCIAS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_LICENCIAS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_LICENCIAS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_LICENCIAS_TB
@@ -256,7 +374,7 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS TIPOS DE LICENCIAS
 INSERT INTO fide_licencias_tb (Tipo, id_estado) VALUES ('Tipo A1', 7);
 INSERT INTO fide_licencias_tb (Tipo, id_estado) VALUES ('Tipo A2', 7);
 INSERT INTO fide_licencias_tb (Tipo, id_estado) VALUES ('Tipo A3', 7);
@@ -271,6 +389,7 @@ INSERT INTO fide_licencias_tb (Tipo, id_estado) VALUES ('Tipo D2', 7);
 INSERT INTO fide_licencias_tb (Tipo, id_estado) VALUES ('Tipo D3', 7);
 INSERT INTO fide_licencias_tb (Tipo, id_estado) VALUES ('Tipo E1', 7);
 INSERT INTO fide_licencias_tb (Tipo, id_estado) VALUES ('Tipo E2', 7);
+COMMIT;
 
 CREATE TABLE fide_puestos_tb (
     id_puesto VARCHAR2(10) NOT NULL,
@@ -289,6 +408,9 @@ CREATE SEQUENCE FIDE_PUESTOS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_PUESTOS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_PUESTOS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_PUESTOS_TB
@@ -299,7 +421,7 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS PUESTOS
 INSERT INTO fide_puestos_tb (ID_Puesto, Salario, Descripcion, id_estado) VALUES ('DRV-01', 750000, 'Conductor Nivel 1', 7);
 INSERT INTO fide_puestos_tb (ID_Puesto, Salario, Descripcion, id_estado) VALUES ('DRV-02', 900000, 'Conductor Nivel 2', 7);
 INSERT INTO fide_puestos_tb (ID_Puesto, Salario, Descripcion, id_estado) VALUES ('DRV-03', 1100000, 'Conductor Nivel 3', 7);
@@ -308,6 +430,7 @@ INSERT INTO fide_puestos_tb (ID_Puesto, Salario, Descripcion, id_estado) VALUES 
 INSERT INTO fide_puestos_tb (ID_Puesto, Salario, Descripcion, id_estado) VALUES ('DRV-MGR', 1000000, 'Administrador de Conductores', 7);
 INSERT INTO fide_puestos_tb (ID_Puesto, Salario, Descripcion, id_estado) VALUES ('MTN-TEC', 850000, 'Tecnico de Mantenimiento', 7);
 INSERT INTO fide_puestos_tb (ID_Puesto, Salario, Descripcion, id_estado) VALUES ('MTN-ENG', 1300000, 'Ingeniero de Mantenimiento', 7);
+COMMIT;
 
 CREATE TABLE fide_tipos_carga_tb (
     id_tipo_carga NUMBER NOT NULL,
@@ -325,6 +448,9 @@ CREATE SEQUENCE FIDE_TIPOS_CARGA_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_TIPOS_CARGA_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_TIPOS_CARGA_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_TIPOS_CARGA_TB
@@ -335,7 +461,7 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS TIPOS DE CARGAS
 -- Carga a granel: Este tipo de carga incluye materiales como granos, minerales, petróleo, gas, entre otros. Son transportados en grandes cantidades y no requieren embalaje.
 -- Carga general: Este tipo de carga incluye mercancías empaquetadas individualmente, como electrodomésticos, muebles, y productos electrónicos.
 -- Carga fraccionada: Este tipo de carga incluye mercancías que son demasiado grandes para ser enviadas como carga general, pero demasiado pequeñas para requerir un camión completo.
@@ -350,6 +476,7 @@ INSERT INTO fide_tipos_carga_tb (Descripcion, id_estado) VALUES ('Carga de conte
 INSERT INTO fide_tipos_carga_tb (Descripcion, id_estado) VALUES ('Carga pesada o sobredimensionada', 7);
 INSERT INTO fide_tipos_carga_tb (Descripcion, id_estado) VALUES ('Carga peligrosa', 7);
 INSERT INTO fide_tipos_carga_tb (Descripcion, id_estado) VALUES ('Carga refrigerada', 7);
+COMMIT;
 
 CREATE TABLE fide_empleados_tb (
     id_empleado NUMBER NOT NULL,
@@ -372,6 +499,9 @@ CREATE SEQUENCE FIDE_EMPLEADOS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_EMPLEADOS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_EMPLEADOS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_EMPLEADOS_TB
@@ -382,12 +512,34 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS EMPLEADOS
 INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Juan', 'Perez', TO_DATE('2003-03-03', 'YYYY-MM-DD'), TO_DATE('2020-01-01', 'YYYY-MM-DD'), 'DRV-01', 7);
 INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Maria', 'Gonzalez', TO_DATE('1998-08-08', 'YYYY-MM-DD'), TO_DATE('2021-11-11', 'YYYY-MM-DD'), 'DRV-02', 7);
 INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Pedro', 'Rodriguez', TO_DATE('1994-04-04', 'YYYY-MM-DD'), TO_DATE('2022-02-02', 'YYYY-MM-DD'), 'DRV-03', 7);
 INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Ana', 'Jimenez', TO_DATE('1995-05-05', 'YYYY-MM-DD'), TO_DATE('2024-12-22', 'YYYY-MM-DD'), 'MTN-TEC', 7);
 INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Luis', 'Hernandez', TO_DATE('1990-10-10', 'YYYY-MM-DD'), TO_DATE('2023-03-03', 'YYYY-MM-DD'), 'MTN-ENG', 7);
+
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Jorge', 'Perez', TO_DATE('2003-03-03', 'YYYY-MM-DD'), TO_DATE('2020-01-01', 'YYYY-MM-DD'), 'DRV-01', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Emmanuel', 'Gonzalez', TO_DATE('1998-08-08', 'YYYY-MM-DD'), TO_DATE('2021-11-11', 'YYYY-MM-DD'), 'DRV-02', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Alberto', 'Rodriguez', TO_DATE('1994-04-04', 'YYYY-MM-DD'), TO_DATE('2022-02-02', 'YYYY-MM-DD'), 'DRV-03', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Morelio', 'Jimenez', TO_DATE('1995-05-05', 'YYYY-MM-DD'), TO_DATE('2024-12-22', 'YYYY-MM-DD'), 'MTN-TEC', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Jose', 'Hernandez', TO_DATE('1990-10-10', 'YYYY-MM-DD'), TO_DATE('2023-03-03', 'YYYY-MM-DD'), 'MTN-ENG', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('David', 'Perez', TO_DATE('2003-03-03', 'YYYY-MM-DD'), TO_DATE('2020-01-01', 'YYYY-MM-DD'), 'DRV-01', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Gabriel', 'Gonzalez', TO_DATE('1998-08-08', 'YYYY-MM-DD'), TO_DATE('2021-11-11', 'YYYY-MM-DD'), 'DRV-02', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Allan', 'Rodriguez', TO_DATE('1994-04-04', 'YYYY-MM-DD'), TO_DATE('2022-02-02', 'YYYY-MM-DD'), 'DRV-03', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Roberto', 'Jimenez', TO_DATE('1995-05-05', 'YYYY-MM-DD'), TO_DATE('2024-12-22', 'YYYY-MM-DD'), 'MTN-TEC', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Angela', 'Hernandez', TO_DATE('1990-10-10', 'YYYY-MM-DD'), TO_DATE('2023-03-03', 'YYYY-MM-DD'), 'MTN-ENG', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Nicole', 'Perez', TO_DATE('2003-03-03', 'YYYY-MM-DD'), TO_DATE('2020-01-01', 'YYYY-MM-DD'), 'DRV-01', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Valeria', 'Gonzalez', TO_DATE('1998-08-08', 'YYYY-MM-DD'), TO_DATE('2021-11-11', 'YYYY-MM-DD'), 'DRV-02', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Bryan', 'Rodriguez', TO_DATE('1994-04-04', 'YYYY-MM-DD'), TO_DATE('2022-02-02', 'YYYY-MM-DD'), 'DRV-03', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Gustavo', 'Jimenez', TO_DATE('1995-05-05', 'YYYY-MM-DD'), TO_DATE('2024-12-22', 'YYYY-MM-DD'), 'MTN-TEC', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Esteban', 'Hernandez', TO_DATE('1990-10-10', 'YYYY-MM-DD'), TO_DATE('2023-03-03', 'YYYY-MM-DD'), 'MTN-ENG', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Ruth', 'Perez', TO_DATE('2003-03-03', 'YYYY-MM-DD'), TO_DATE('2020-01-01', 'YYYY-MM-DD'), 'DRV-01', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Mary', 'Gonzalez', TO_DATE('1998-08-08', 'YYYY-MM-DD'), TO_DATE('2021-11-11', 'YYYY-MM-DD'), 'DRV-02', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Frank', 'Rodriguez', TO_DATE('1994-04-04', 'YYYY-MM-DD'), TO_DATE('2022-02-02', 'YYYY-MM-DD'), 'DRV-03', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Cristian', 'Jimenez', TO_DATE('1995-05-05', 'YYYY-MM-DD'), TO_DATE('2024-12-22', 'YYYY-MM-DD'), 'MTN-TEC', 7);
+INSERT INTO fide_empleados_tb (Nombre, Apellido, Fecha_Nacimiento, Fecha_Contratacion, ID_Puesto, id_estado) VALUES ('Gonzalo', 'Hernandez', TO_DATE('1990-10-10', 'YYYY-MM-DD'), TO_DATE('2023-03-03', 'YYYY-MM-DD'), 'MTN-ENG', 7);
+COMMIT;
 
 CREATE TABLE fide_licencias_empleado_tb (
     id_licencia_empleado NUMBER NOT NULL,
@@ -410,6 +562,9 @@ CREATE SEQUENCE FIDE_LICENCIAS_EMPLEADO_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_LICENCIAS_EMPLEADO_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_LICENCIAS_EMPLEADO_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_LICENCIAS_EMPLEADO_TB
@@ -427,8 +582,8 @@ INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedici
 INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedicion, Fecha_Vencimiento, id_estado) VALUES (4, 4, TO_DATE('2024-12-22', 'YYYY-MM-DD'), TO_DATE('2029-12-22', 'YYYY-MM-DD'), 7);
 INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedicion, Fecha_Vencimiento, id_estado) VALUES (5, 5, TO_DATE('2023-03-03', 'YYYY-MM-DD'), TO_DATE('2028-03-03', 'YYYY-MM-DD'), 7);
 INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedicion, Fecha_Vencimiento, id_estado) VALUES (2, 13, TO_DATE('2030-03-03', 'YYYY-MM-DD'), TO_DATE('2035-03-03', 'YYYY-MM-DD'), 7);
+COMMIT;
 
-CREATE TABLE fide_clientes_tb (
     id_cliente NUMBER NOT NULL,
     nombre VARCHAR2(50),
     apellido VARCHAR2(50),
@@ -447,6 +602,9 @@ CREATE SEQUENCE FIDE_CLIENTES_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_CLIENTES_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_CLIENTES_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_CLIENTES_TB
@@ -458,9 +616,28 @@ BEGIN
 END;
 
 --INSERTS
-INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Karla', 'Gomez', '1111-1111', 'karla@gomez.com', 7);
-INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Carlos', 'Hernandez', '2222-2222', 'carlos@hdz.com', 7);
-INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Luis', 'Martinez', '3333-3333', 'lusm@cosevi.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Karla', 'Gomez', '1111-1111', 'karla@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Carlos', 'Hernandez', '2222-2222', 'carlos@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Luis', 'Martinez', '3333-3333', 'lusm@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Maria', 'Gonzalez', '4444-4444', 'mariag@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Carlos', 'Rodriguez', '5555-5555', 'carlor@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Anny', 'Lopez', '6666-6666', 'anylop@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Jorge', 'Hernandez', '7777-7777', 'jorgeh@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Sofia', 'Martinez', '8888-8888', 'sofiam@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Alvaro', 'Perez', '9999-9999', 'alvarop@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Valeria', 'Garcia', '1212-1212', 'valeriag@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Fernando', 'Ramirez', '1313-1313', 'fernandor@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Laura', 'Morales', '1414-1414', 'lauram@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('David', 'Jimenez', '1515-1515', 'davidj@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Camila', 'Ortiz', '1616-1616', 'camila@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Ricardo', 'Vargas', '1717-1717', 'ricardov@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Lucia', 'Navarro', '1818-1818', 'lucian@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Antonio', 'Mendoza', '1919-1919', 'antoniom@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Daniela', 'Reyes', '2020-2020', 'danielar@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Francisco', 'Castro', '2121-2121', 'franciscoc@gmail.com', 7);
+INSERT INTO fide_clientes_tb (Nombre, Apellido, Telefono, Email, id_estado) VALUES ('Juan', 'Gomez', '1111-1111', 'juan@gmail.com', 7);
+COMMIT;
+
 
 CREATE TABLE fide_provincias_tb (
     id_provincia NUMBER NOT NULL,
@@ -478,6 +655,9 @@ CREATE SEQUENCE FIDE_PROVINCIAS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_PROVINCIAS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_PROVINCIAS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_PROVINCIAS_TB
@@ -488,10 +668,15 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS PROVINCIAS
 INSERT INTO fide_provincias_tb (Nombre, id_estado) VALUES ('San Jose', 7);
 INSERT INTO fide_provincias_tb (Nombre, id_estado) VALUES ('Heredia', 7);
 INSERT INTO fide_provincias_tb (Nombre, id_estado) VALUES ('Cartago', 7);
+INSERT INTO fide_provincias_tb (Nombre, id_estado) VALUES ('Alajuela', 7);
+INSERT INTO fide_provincias_tb (Nombre, id_estado) VALUES ('Limon', 7);
+INSERT INTO fide_provincias_tb (Nombre, id_estado) VALUES ('Puntarenas', 7);
+INSERT INTO fide_provincias_tb (Nombre, id_estado) VALUES ('Guanacaste', 7);
+COMMIT;
 
 CREATE TABLE fide_cantones_tb (
     id_canton NUMBER NOT NULL,
@@ -521,7 +706,7 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS CANTONES
 INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'San Jose', 7);
 INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'Escazu', 7);
 INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'Desamparados', 7);
@@ -531,6 +716,19 @@ INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (2, 'Santo
 INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'Cartago', 7);
 INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'Paraiso', 7);
 INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'La Union', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Orotina', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'San Carlos', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Zarcero', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Talamanca', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Siquirres', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Matina', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Osa', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Quepos', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Golfito', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Liberia', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Nicoya', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'La Cruz', 7);
+COMMIT;
 
 CREATE TABLE fide_distritos_tb (
     id_distrito NUMBER NOT NULL,
@@ -562,7 +760,7 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS DISTRITOS
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Carmen', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Merced', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Catedral', 7);
@@ -590,6 +788,7 @@ INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUE
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (3, 9, 'Tres Rios', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (3, 9, 'San Diego', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (3, 9, 'Concepcion', 7);
+COMMIT;
 
 CREATE TABLE fide_pedidos_tb (
     id_pedido NUMBER NOT NULL,
@@ -625,10 +824,208 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS PEDIDOS
 INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
 INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
-INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-03-03', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 1, 1, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 2, 2, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 3, 3, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 4, 4, 4, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 5, 5, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 6, 6, 6, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 7, 7, 7, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 8, 8, 1, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 9, 9, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 10, 10, 3, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 11, 11, 4, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 12, 12, 5, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 13, 13, 6, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 14, 14, 7, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 15, 15, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 16, 16, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 17, 17, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 18, 18, 3, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 19, 19, 1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), 3, 1);
+INSERT INTO fide_pedidos_tb (ID_Cliente, ID_Vehiculo, ID_Tipo_Carga, Fecha, ID_Estado, ID_Licencia_Empleado) VALUES ( 20, 20, 2, TO_DATE('2022-02-02', 'YYYY-MM-DD'), 3, 2);
+COMMIT;
 
 CREATE TABLE fide_detalles_pedido_tb (
     id_detalle NUMBER NOT NULL,
@@ -661,13 +1058,14 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS DETALLES PEDIDO
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (1, 1, 100, 'kg', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (1, 2, 50, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (2, 3, 200, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (2, 4, 25, 'kg', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 1, 150, 'kg', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 4, 30, 'kg', 7);
+COMMIT;
 
 CREATE TABLE fide_facturas_tb (
     id_factura NUMBER NOT NULL,
@@ -712,6 +1110,9 @@ CREATE SEQUENCE FIDE_FACTURAS_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+--Resetear secuencia
+--DROP SEQUENCE FIDE_FACTURAS_SEQ;
+
 --TRIGGER PARA ID AUTOINCREMENTAL
 CREATE OR REPLACE TRIGGER FIDE_FACTURAS_TB_ID_AUTOINCREMENTAL_TRG
 BEFORE INSERT ON FIDE_FACTURAS_TB
@@ -722,11 +1123,218 @@ BEGIN
     END IF;
 END;
 
---INSERTS
+--INSERTS FACTURAS
 INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (1, TO_DATE('2022-08-10', 'YYYY-MM-DD'), 100000, 6);
 INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (2, TO_DATE('2022-07-09', 'YYYY-MM-DD'), 200000, 5);
 INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (3, TO_DATE('2024-10-10', 'YYYY-MM-DD'), 300000, 4);
 
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (4, TO_DATE('2023-01-15', 'YYYY-MM-DD'), 400000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (5, TO_DATE('2023-03-20', 'YYYY-MM-DD'), 500000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (6, TO_DATE('2023-05-25', 'YYYY-MM-DD'), 600000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (7, TO_DATE('2023-07-30', 'YYYY-MM-DD'), 700000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (8, TO_DATE('2023-09-05', 'YYYY-MM-DD'), 800000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (9, TO_DATE('2023-11-10', 'YYYY-MM-DD'), 900000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (10, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 1000000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (11, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 1100000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (12, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 1200000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (13, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 1300000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (14, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 1400000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (15, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 1500000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (16, TO_DATE('2025-01-15', 'YYYY-MM-DD'), 1600000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (17, TO_DATE('2025-03-20', 'YYYY-MM-DD'), 1700000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (18, TO_DATE('2025-05-25', 'YYYY-MM-DD'), 1800000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (19, TO_DATE('2025-07-30', 'YYYY-MM-DD'), 1900000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (20, TO_DATE('2025-09-05', 'YYYY-MM-DD'), 2000000, 5);
+--20 inserts
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (21, TO_DATE('2025-11-10', 'YYYY-MM-DD'), 2100000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (22, TO_DATE('2026-01-15', 'YYYY-MM-DD'), 2200000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (23, TO_DATE('2026-03-20', 'YYYY-MM-DD'), 2300000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (24, TO_DATE('2026-05-25', 'YYYY-MM-DD'), 2400000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (25, TO_DATE('2026-07-30', 'YYYY-MM-DD'), 2500000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (26, TO_DATE('2026-09-05', 'YYYY-MM-DD'), 2600000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (27, TO_DATE('2026-11-10', 'YYYY-MM-DD'), 2700000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (28, TO_DATE('2027-01-15', 'YYYY-MM-DD'), 2800000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (29, TO_DATE('2027-03-20', 'YYYY-MM-DD'), 2900000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (30, TO_DATE('2027-05-25', 'YYYY-MM-DD'), 3000000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (31, TO_DATE('2027-07-30', 'YYYY-MM-DD'), 3100000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (32, TO_DATE('2027-09-05', 'YYYY-MM-DD'), 3200000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (33, TO_DATE('2027-11-10', 'YYYY-MM-DD'), 3300000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (34, TO_DATE('2028-01-15', 'YYYY-MM-DD'), 3400000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (35, TO_DATE('2028-03-20', 'YYYY-MM-DD'), 3500000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (36, TO_DATE('2028-05-25', 'YYYY-MM-DD'), 3600000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (37, TO_DATE('2028-07-30', 'YYYY-MM-DD'), 3700000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (38, TO_DATE('2028-09-05', 'YYYY-MM-DD'), 3800000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (39, TO_DATE('2028-11-10', 'YYYY-MM-DD'), 3900000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (40, TO_DATE('2029-01-15', 'YYYY-MM-DD'), 4000000, 3);
+--40 inserts
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (41, TO_DATE('2029-03-20', 'YYYY-MM-DD'), 4100000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (42, TO_DATE('2029-05-25', 'YYYY-MM-DD'), 4200000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (43, TO_DATE('2029-07-30', 'YYYY-MM-DD'), 4300000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (44, TO_DATE('2029-09-05', 'YYYY-MM-DD'), 4400000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (45, TO_DATE('2029-11-10', 'YYYY-MM-DD'), 4500000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (46, TO_DATE('2030-01-15', 'YYYY-MM-DD'), 4600000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (47, TO_DATE('2030-03-20', 'YYYY-MM-DD'), 4700000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (48, TO_DATE('2030-05-25', 'YYYY-MM-DD'), 4800000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (49, TO_DATE('2030-07-30', 'YYYY-MM-DD'), 4900000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (50, TO_DATE('2030-09-05', 'YYYY-MM-DD'), 5000000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (51, TO_DATE('2030-11-10', 'YYYY-MM-DD'), 5100000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (52, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 5200000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (53, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 5300000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (54, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 5400000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (55, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 5500000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (56, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 5600000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (57, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 5700000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (58, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 5800000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (59, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 5900000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (60, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 6000000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (61, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 6100000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (62, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 6200000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (63, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 6300000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (64, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 6400000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (65, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 6500000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (66, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 6600000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (67, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 6700000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (68, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 6800000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (69, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 6900000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (70, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 7000000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (71, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 7100000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (72, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 7200000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (73, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 7300000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (74, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 7400000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (75, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 7500000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (76, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 7600000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (77, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 7700000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (78, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 7800000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (79, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 7900000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (80, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 8000000, 5);
+--80 insers
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (81, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 8100000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (82, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 8200000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (83, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 8300000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (84, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 8400000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (85, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 8500000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (86, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 8600000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (87, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 8700000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (88, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 8800000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (89, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 8900000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (90, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 9000000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (91, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 9100000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (92, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 9200000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (93, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 9300000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (94, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 9400000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (95, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 9500000, 3);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (96, TO_DATE('2024-03-20', 'YYYY-MM-DD'), 9600000, 2);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (97, TO_DATE('2024-05-25', 'YYYY-MM-DD'), 9700000, 1);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (98, TO_DATE('2024-07-30', 'YYYY-MM-DD'), 9800000, 6);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (99, TO_DATE('2024-09-05', 'YYYY-MM-DD'), 9900000, 5);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (100, TO_DATE('2024-11-10', 'YYYY-MM-DD'), 10000000, 4);
+
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (101, TO_DATE('2024-11-11', 'YYYY-MM-DD'), 12500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (102, TO_DATE('2024-11-12', 'YYYY-MM-DD'), 48990, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (103, TO_DATE('2024-11-13', 'YYYY-MM-DD'), 35000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (104, TO_DATE('2024-11-14', 'YYYY-MM-DD'), 22500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (105, TO_DATE('2024-11-15', 'YYYY-MM-DD'), 19999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (106, TO_DATE('2024-11-16', 'YYYY-MM-DD'), 55000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (107, TO_DATE('2024-11-17', 'YYYY-MM-DD'), 7500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (108, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 80000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (109, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 22000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (110, TO_DATE('2024-11-20', 'YYYY-MM-DD'), 44050, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (111, TO_DATE('2024-11-21', 'YYYY-MM-DD'), 59999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (112, TO_DATE('2024-11-22', 'YYYY-MM-DD'), 47000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (113, TO_DATE('2024-11-23', 'YYYY-MM-DD'), 36000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (114, TO_DATE('2024-11-24', 'YYYY-MM-DD'), 48900, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (115, TO_DATE('2024-11-25', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (116, TO_DATE('2024-11-26', 'YYYY-MM-DD'), 34999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (117, TO_DATE('2024-11-27', 'YYYY-MM-DD'), 52000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (118, TO_DATE('2024-11-28', 'YYYY-MM-DD'), 19950, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (119, TO_DATE('2024-11-29', 'YYYY-MM-DD'), 30000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (120, TO_DATE('2024-11-30', 'YYYY-MM-DD'), 15999, 4);
+
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (121, TO_DATE('2024-11-11', 'YYYY-MM-DD'), 12500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (123, TO_DATE('2024-11-12', 'YYYY-MM-DD'), 48990, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (123, TO_DATE('2024-11-13', 'YYYY-MM-DD'), 35000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (124, TO_DATE('2024-11-14', 'YYYY-MM-DD'), 22500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (125, TO_DATE('2024-11-15', 'YYYY-MM-DD'), 19999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (126, TO_DATE('2024-11-16', 'YYYY-MM-DD'), 55000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (127, TO_DATE('2024-11-17', 'YYYY-MM-DD'), 7500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (128, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 80000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (129, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 22000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (130, TO_DATE('2024-11-20', 'YYYY-MM-DD'), 44050, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (131, TO_DATE('2024-11-21', 'YYYY-MM-DD'), 59999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (132, TO_DATE('2024-11-22', 'YYYY-MM-DD'), 47000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (133, TO_DATE('2024-11-23', 'YYYY-MM-DD'), 36000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (134, TO_DATE('2024-11-24', 'YYYY-MM-DD'), 48900, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (135, TO_DATE('2024-11-25', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (136, TO_DATE('2024-11-26', 'YYYY-MM-DD'), 34999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (137, TO_DATE('2024-11-27', 'YYYY-MM-DD'), 52000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (138, TO_DATE('2024-11-28', 'YYYY-MM-DD'), 19950, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (139, TO_DATE('2024-11-29', 'YYYY-MM-DD'), 30000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (140, TO_DATE('2024-11-30', 'YYYY-MM-DD'), 15999, 4);
+
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (141, TO_DATE('2024-11-11', 'YYYY-MM-DD'), 12500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (142, TO_DATE('2024-11-12', 'YYYY-MM-DD'), 48990, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (143, TO_DATE('2024-11-13', 'YYYY-MM-DD'), 35000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (144, TO_DATE('2024-11-14', 'YYYY-MM-DD'), 22500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (145, TO_DATE('2024-11-15', 'YYYY-MM-DD'), 19999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (146, TO_DATE('2024-11-16', 'YYYY-MM-DD'), 55000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (147, TO_DATE('2024-11-17', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (148, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 80000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (149, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 22000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (140, TO_DATE('2024-11-20', 'YYYY-MM-DD'), 44050, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (151, TO_DATE('2024-11-21', 'YYYY-MM-DD'), 59999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (152, TO_DATE('2024-11-22', 'YYYY-MM-DD'), 47000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (153, TO_DATE('2024-11-23', 'YYYY-MM-DD'), 36000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (154, TO_DATE('2024-11-24', 'YYYY-MM-DD'), 48900, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (155, TO_DATE('2024-11-25', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (156, TO_DATE('2024-11-26', 'YYYY-MM-DD'), 34999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (157, TO_DATE('2024-11-27', 'YYYY-MM-DD'), 52000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (158, TO_DATE('2024-11-28', 'YYYY-MM-DD'), 19950, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (159, TO_DATE('2024-11-29', 'YYYY-MM-DD'), 30000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (160, TO_DATE('2024-11-30', 'YYYY-MM-DD'), 15999, 4);
+
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (161, TO_DATE('2024-11-11', 'YYYY-MM-DD'), 12500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (162, TO_DATE('2024-11-12', 'YYYY-MM-DD'), 48990, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (163, TO_DATE('2024-11-13', 'YYYY-MM-DD'), 35000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (164, TO_DATE('2024-11-14', 'YYYY-MM-DD'), 22500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (165, TO_DATE('2024-11-15', 'YYYY-MM-DD'), 19999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (166, TO_DATE('2024-11-16', 'YYYY-MM-DD'), 55000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (167, TO_DATE('2024-11-17', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (168, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 80000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (169, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 22000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (170, TO_DATE('2024-11-20', 'YYYY-MM-DD'), 44050, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (171, TO_DATE('2024-11-21', 'YYYY-MM-DD'), 59999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (172, TO_DATE('2024-11-22', 'YYYY-MM-DD'), 47000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (173, TO_DATE('2024-11-23', 'YYYY-MM-DD'), 36000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (174, TO_DATE('2024-11-24', 'YYYY-MM-DD'), 48900, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (175, TO_DATE('2024-11-25', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (176, TO_DATE('2024-11-26', 'YYYY-MM-DD'), 34999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (177, TO_DATE('2024-11-27', 'YYYY-MM-DD'), 52000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (178, TO_DATE('2024-11-28', 'YYYY-MM-DD'), 19950, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (179, TO_DATE('2024-11-29', 'YYYY-MM-DD'), 30000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (180, TO_DATE('2024-11-30', 'YYYY-MM-DD'), 15999, 4);
+
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (181, TO_DATE('2024-11-11', 'YYYY-MM-DD'), 12500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (182, TO_DATE('2024-11-12', 'YYYY-MM-DD'), 48990, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (183, TO_DATE('2024-11-13', 'YYYY-MM-DD'), 35000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (184, TO_DATE('2024-11-14', 'YYYY-MM-DD'), 22500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (185, TO_DATE('2024-11-15', 'YYYY-MM-DD'), 19999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (186, TO_DATE('2024-11-16', 'YYYY-MM-DD'), 55000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (187, TO_DATE('2024-11-17', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (188, TO_DATE('2024-11-18', 'YYYY-MM-DD'), 80000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (189, TO_DATE('2024-11-19', 'YYYY-MM-DD'), 22000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (190, TO_DATE('2024-11-20', 'YYYY-MM-DD'), 44050, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (191, TO_DATE('2024-11-21', 'YYYY-MM-DD'), 59999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (192, TO_DATE('2024-11-22', 'YYYY-MM-DD'), 47000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (193, TO_DATE('2024-11-23', 'YYYY-MM-DD'), 36000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (194, TO_DATE('2024-11-24', 'YYYY-MM-DD'), 48900, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (195, TO_DATE('2024-11-25', 'YYYY-MM-DD'), 75000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (196, TO_DATE('2024-11-26', 'YYYY-MM-DD'), 34999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (197, TO_DATE('2024-11-27', 'YYYY-MM-DD'), 52000, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (198, TO_DATE('2024-12-06', 'YYYY-MM-DD'), 30500, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (199, TO_DATE('2024-12-07', 'YYYY-MM-DD'), 12999, 4);
+INSERT INTO fide_facturas_tb (id_pedido, Fecha, Total, ID_Estado) VALUES (200, TO_DATE('2024-12-08', 'YYYY-MM-DD'), 59000, 4);
+
+COMMIT;
 
 CREATE TABLE fide_direcciones_empleado_tb (
     id_direccion NUMBER NOT NULL,
@@ -766,6 +1374,24 @@ END;
 INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (1, 1, 1, 1, 'Calle 1, Casa 2', 7);
 INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Calle 2, Casa 3', 7);
 INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Calle 3, Casa 4', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (1, 1, 1, 1, 'Calle 1, Casa 2', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Calle 2, Casa 3', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Calle 3, Casa 4', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (1, 1, 1, 1, 'Calle 1, Casa 2', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Calle 2, Casa 3', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Calle 3, Casa 4', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (1, 1, 1, 1, 'Calle 1, Casa 2', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Calle 2, Casa 3', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Calle 3, Casa 4', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (1, 1, 1, 1, 'Calle 1, Casa 2', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Calle 2, Casa 3', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Calle 3, Casa 4', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (1, 1, 1, 1, 'Calle 1, Casa 2', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Calle 2, Casa 3', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Calle 3, Casa 4', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Calle 2, Casa 3', 7);
+INSERT INTO fide_direcciones_empleado_tb (ID_Empleado, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Calle 3, Casa 4', 7);
+COMMIT;
 
 CREATE TABLE fide_direcciones_pedido_tb (
     id_direccion NUMBER NOT NULL,
@@ -805,6 +1431,24 @@ END;
 INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (1, 1, 1, 1, 'Direccion pedido 1', 7);
 INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (2, 2, 4, 10, 'Direccion pedido 2', 7);
 INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (3, 3, 7, 19, 'Direccion pedido 3', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (4, 1, 1, 1, 'Direccion pedido 4', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (5, 2, 4, 10, 'Direccion pedido 5', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (6, 3, 7, 19, 'Direccion pedido 6', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (7, 1, 1, 1, 'Direccion pedido 7', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (8, 2, 4, 10, 'Direccion pedido 8', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (9, 3, 7, 19, 'Direccion pedido 9', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (10, 1, 1, 1, 'Direccion pedido 10', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (11, 2, 4, 10, 'Direccion pedido 11', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (12, 3, 7, 19, 'Direccion pedido 12', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (13, 1, 1, 1, 'Direccion pedido 13', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (14, 2, 4, 10, 'Direccion pedido 14', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (15, 3, 7, 19, 'Direccion pedido 15', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (16, 1, 1, 1, 'Direccion pedido 16', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (17, 2, 4, 10, 'Direccion pedido 17', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (18, 3, 7, 19, 'Direccion pedido 18', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (19, 3, 7, 19, 'Direccion pedido 19', 7);
+INSERT INTO fide_direcciones_pedido_tb (ID_Pedido, ID_Provincia, ID_Canton, ID_Distrito, Detalles, id_estado) VALUES (20, 3, 7, 19, 'Direccion pedido 20', 7);
+COMMIT;
 
 CREATE TABLE fide_direcciones_cliente_tb (
     id_direccion NUMBER NOT NULL,
@@ -846,6 +1490,23 @@ INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id
 INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (3, 3, 5, 1, 'Frente a la entrada principal del Parque Central, edificio azul con balcones', 7);
 INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 1, 3, 4, 'Contiguo a la soda El Buen Gusto, apartamento en el segundo piso', 7);
 INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 3, 2, 5, 'De la escuela central, 300 metros al oeste', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 1, 1, 3, '100 metros al este de la iglesia principal, casa color amarillo con port�n negro', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 2, 4, 2, '200 metros norte y 50 metros oeste del supermercado La Canasta, casa de dos pisos color blanco', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (3, 3, 5, 1, 'Frente a la entrada principal del Parque Central, edificio azul con balcones', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 1, 3, 4, 'Contiguo a la soda El Buen Gusto, apartamento en el segundo piso', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 3, 2, 5, 'De la escuela central, 300 metros al oeste', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 1, 1, 3, '100 metros al este de la iglesia principal, casa color amarillo con port�n negro', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 2, 4, 2, '200 metros norte y 50 metros oeste del supermercado La Canasta, casa de dos pisos color blanco', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (3, 3, 5, 1, 'Frente a la entrada principal del Parque Central, edificio azul con balcones', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 1, 3, 4, 'Contiguo a la soda El Buen Gusto, apartamento en el segundo piso', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 3, 2, 5, 'De la escuela central, 300 metros al oeste', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 1, 1, 3, '100 metros al este de la iglesia principal, casa color amarillo con port�n negro', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 2, 4, 2, '200 metros norte y 50 metros oeste del supermercado La Canasta, casa de dos pisos color blanco', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (3, 3, 5, 1, 'Frente a la entrada principal del Parque Central, edificio azul con balcones', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (2, 1, 3, 4, 'Contiguo a la soda El Buen Gusto, apartamento en el segundo piso', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 3, 2, 5, 'De la escuela central, 300 metros al oeste', 7);
+INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id_distrito, detalles, id_estado) VALUES (1, 1, 1, 3, '100 metros al este de la iglesia principal, casa color amarillo con port�n negro', 7);
+COMMIT;
 
 -- COMPROBAR QUE LAS TABLAS HAYAN SIDO AGREGADAS AL TABLESPACE CREADO
 SELECT TABLE_NAME, TABLESPACE_NAME
@@ -2271,15 +2932,30 @@ BEGIN
     VALUES ('UPDATE',:NEW.id_pedido, USER, SYSDATE, V_USUARIO_SO, V_IP_MAQUINA, V_NOMBRE_MAQUINA);
 END;
 
-/*
-CREATE OR REPLACE TRIGGER trg_prevent_delete_factura
-BEFORE DELETE ON facturas
-FOR EACH ROW
-BEGIN
-    RAISE_APPLICATION_ERROR(-20002, 'No se permite la eliminaci�n de facturas.');
-END;
-*/
+--AUDITORIA TABLAS
 
+AUDIT ALL BY test1 BY ACCESS;
+AUDIT SELECT TABLE, UPDATE TABLE, INSERT TABLE, DELETE TABLE BY test1 BY ACCESS;
+AUDIT EXECUTE,PROCEDURE BY test1 BY ACCESS;
+/
+create audit policy auditoria actions all on FIDE_CLIENTES_TB;
+/
+audit policy auditoria;
+/
+select 'alter audit policy auditoria actions all on '||owner||'.'||table_name||';'
+  from dba_tables
+ where owner in ('TEST1');
+ /
+ --Para ver INSERTS, DELETES, TRUNCATE, SELECT
+ SELECT username, extended_timestamp, owner, obj_name, action, action_name
+FROM dba_audit_trail
+WHERE owner = 'TEST1'
+ORDER by timestamp;
+/
+--UNIFIED VIEW, logon y logoff
+SELECT EVENT_TIMESTAMP, CURRENT_USER, DBUSERNAME, ACTION_NAME, OBJECT_NAME, SQL_TEXT FROM UNIFIED_AUDIT_TRAIL 
+WHERE DBUSERNAME = 'TEST1';
+ 
 -- PACKAGES
 /
 CREATE OR REPLACE PACKAGE FIDE_PROYECTO_PUESTOS_PKG AS
@@ -2936,3 +3612,4 @@ CREATE OR REPLACE PACKAGE FIDE_PROYECTO_PUESTOS_PKG AS
     FUNCTION FIDE_PUESTOS_TB_VER_PUESTOS_DESCRIPCION_FN(P_DESCRIPCION IN VARCHAR2) RETURN SYS_REFCURSOR;
 END FIDE_PROYECTO_PUESTOS_PKG;
 /
+

@@ -223,84 +223,127 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Cliente> searchClientesNombre(String nombre) {        
-        Session session = entityManager.unwrap(Session.class);
-        List<Cliente> clientes = new ArrayList<>();
-    
-        session.doWork(new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_CLIENTES_TB_BUSCAR_CLIENTE_NOMBRE_FN(?) }")) {
-                    callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
-                    callableStatement.setString(2, nombre);
-                    callableStatement.execute();
-    
-                    try (ResultSet rs = (ResultSet) callableStatement.getObject(1)) {
-                        while (rs.next()) {
-                            Cliente cliente = new Cliente();
-                            cliente.setIdCliente(rs.getLong("ID_Cliente"));
-                            cliente.setNombre(rs.getString("Nombre"));
-                            cliente.setApellido(rs.getString("Apellido"));
-                            cliente.setTelefono(rs.getString("Telefono"));
-                            cliente.setEmail(rs.getString("Email"));
-                            
-                            Estado estado = new Estado();
-                            estado.setIdEstado(rs.getLong("id_estado"));
-                            Estado newEstado = estadoService.getEstado(estado);
-                            cliente.setEstado(newEstado);
-                            
-                            clientes.add(cliente);
-                        }
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-    
-        return clientes;
-    }
+@Transactional(readOnly = true)
+public List<Cliente> searchClientesNombre(String nombre) {        
+    Session session = entityManager.unwrap(Session.class);
+    List<Cliente> clientes = new ArrayList<>();
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Cliente> searchClientesEmail(String email) {
-        Session session = entityManager.unwrap(Session.class);
-        List<Cliente> clientes = new ArrayList<>();
-    
-        session.doWork(new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_CLIENTES_TB_BUSCAR_CLIENTE_CORREO_FN(?) }")) {
-                    callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
-                    callableStatement.setString(2, email);
-                    callableStatement.execute();
-    
-                    try (ResultSet rs = (ResultSet) callableStatement.getObject(1)) {
-                        while (rs.next()) {
-                            Cliente cliente = new Cliente();
-                            cliente.setIdCliente(rs.getLong("ID_Cliente"));
-                            cliente.setNombre(rs.getString("Nombre"));
-                            cliente.setApellido(rs.getString("Apellido"));
-                            cliente.setTelefono(rs.getString("Telefono"));
-                            cliente.setEmail(rs.getString("Email"));
-                            
-                            Estado estado = new Estado();
-                            estado.setIdEstado(rs.getLong("id_estado"));
-                            Estado newEstado = estadoService.getEstado(estado);
-                            cliente.setEstado(newEstado);
-                            
-                            clientes.add(cliente);
-                        }
+    session.doWork(new Work() {
+        @Override
+        public void execute(Connection connection) throws SQLException {
+            CallableStatement callableStatement = null;
+            ResultSet rs = null;
+
+            try {
+                callableStatement = connection.prepareCall("{ ? = call FIDE_CLIENTES_TB_BUSCAR_CLIENTE_NOMBRE_FN(?) }");
+                callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
+                callableStatement.setString(2, nombre);
+                callableStatement.execute();
+
+                rs = (ResultSet) callableStatement.getObject(1);
+
+                while (rs.next()) {
+                    Cliente cliente = new Cliente();
+                    cliente.setIdCliente(rs.getLong("ID_Cliente"));
+                    cliente.setNombre(rs.getString("Nombre"));
+                    cliente.setApellido(rs.getString("Apellido"));
+                    cliente.setTelefono(rs.getString("Telefono"));
+                    cliente.setEmail(rs.getString("Email"));
+                    
+                    Estado estado = new Estado();
+                    estado.setIdEstado(rs.getLong("id_estado"));
+                    Estado newEstado = estadoService.getEstado(estado);
+                    cliente.setEstado(newEstado);
+                    
+                    clientes.add(cliente);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                // Closing the ResultSet
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException e) {
+                        System.err.println("Failed to close ResultSet: " + e.getMessage());
                     }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                }
+                // Closing the CallableStatement
+                if (callableStatement != null) {
+                    try {
+                        callableStatement.close();
+                    } catch (SQLException e) {
+                        System.err.println("Failed to close CallableStatement: " + e.getMessage());
+                    }
                 }
             }
-        });
-    
-        return clientes;
-    }
+        }
+    });
+
+    return clientes;
+}
+
+@Override
+@Transactional(readOnly = true)
+public List<Cliente> searchClientesEmail(String email) {
+    Session session = entityManager.unwrap(Session.class);
+    List<Cliente> clientes = new ArrayList<>();
+
+    session.doWork(new Work() {
+        @Override
+        public void execute(Connection connection) throws SQLException {
+            CallableStatement callableStatement = null;
+            ResultSet rs = null;
+
+            try {
+                callableStatement = connection.prepareCall("{ ? = call FIDE_CLIENTES_TB_BUSCAR_CLIENTE_CORREO_FN(?) }");
+                callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
+                callableStatement.setString(2, email);
+                callableStatement.execute();
+
+                rs = (ResultSet) callableStatement.getObject(1);
+
+                while (rs.next()) {
+                    Cliente cliente = new Cliente();
+                    cliente.setIdCliente(rs.getLong("ID_Cliente"));
+                    cliente.setNombre(rs.getString("Nombre"));
+                    cliente.setApellido(rs.getString("Apellido"));
+                    cliente.setTelefono(rs.getString("Telefono"));
+                    cliente.setEmail(rs.getString("Email"));
+                    
+                    Estado estado = new Estado();
+                    estado.setIdEstado(rs.getLong("id_estado"));
+                    Estado newEstado = estadoService.getEstado(estado);
+                    cliente.setEstado(newEstado);
+                    
+                    clientes.add(cliente);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                // Closing the ResultSet
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException e) {
+                        System.err.println("Failed to close ResultSet: " + e.getMessage());
+                    }
+                }
+                // Closing the CallableStatement
+                if (callableStatement != null) {
+                    try {
+                        callableStatement.close();
+                    } catch (SQLException e) {
+                        System.err.println("Failed to close CallableStatement: " + e.getMessage());
+                    }
+                }
+            }
+        }
+    });
+
+    return clientes;
+}
+
     
     
 }
