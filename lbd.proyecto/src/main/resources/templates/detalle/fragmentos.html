@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="~{layout/template-new :: head}">
+    <title>COMAVI</title>
+</head>
+
+<body>
+    <!-- Seccion del Titulo Detalle -->
+    <!-- <section th:fragment="titulo-agregar">
+        <div class="py-2 text-center">
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+            <h2>Nuevo Detalle</h2>
+            <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva licencia que desea agregar. Podrá modificar sus datos una vez se haya creado con éxito.
+            </p>
+        </div>
+    </section> -->
+
+    <!-- Seccion de formulario -->
+    <section th:fragment="agregar-licencia">
+        <div class="d-flex justify-content-center">
+            <div style="max-width: 40rem;">
+
+                <!-- Información de licencia -->
+                <h4 class="mb-3">Información de la licencia</h4>
+
+                    <form th:action="@{/empleados/lic/add}"
+                        method="POST"
+                        class="needs-validation" novalidate="">
+
+                        <div class="row g-3">
+
+                        <!-- ID -->
+                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" placeholder="" required="">
+
+                        <!-- Tipo de Licencia -->
+                        <div class="col-md-4">
+                            <label for="licencia" class="form-label">Licencia</label>
+                            <select class="form-select" id="idLicencia" name="idLicencia" required="">
+                                <option th:each="licencia : ${licencias}" th:value="${licencia.idLicencia}">[[${licencia.tipo}]]</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione una licencia.
+                            </div>
+                        </div>
+  
+                        <!-- Fecha de Expedicion -->
+                        <div class="col-md-4">
+                            <label for="fechaExpedicion" class="form-label">Fecha de expedición</label>
+                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" value="">
+                            <div class="invalid-feedback">
+                                Una fecha válida es requerida.
+                            </div>
+                        </div>
+  
+                        <!-- Fecha de Vencimiento -->
+                        <div class="col-md-4">
+                            <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
+                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" value="">
+                            <div class="invalid-feedback">
+                                Una fecha válida es requerida.
+                            </div>
+                        </div>
+
+                        <!-- Divisor -->
+                        <hr class="my-4">
+
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">Crear licencia</button>
+
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seccion de ver listado de detalles -->
+    <section th:fragment="ver-detalles">
+        <div class="d-flex justify-content-center">
+            <div th:if="${detallesPedido != null and !detallesPedido.empty}" style="width: 80rem;">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Unidad</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="detallePedido : ${detallesPedido}">
+                        <th scope="row">[[${detallePedido.idDetalle}]]</th>
+                        <td>[[${detallePedido.producto.nombre}]]</td>
+                        <td>[[${detallePedido.cantidad}]]</td>                        
+                        <td>[[${detallePedido.unidadMasa}]]</td>
+                        <td>[[${detallePedido.estado != null ? detallePedido.estado.descripcion : 'Sin estado'}]]</td>
+                        <td>
+                            <button type="button" 
+                                    data-bs-toggle="modal" 
+                                    th:data-bs-target="'#modalEditarDetalle' + ${detallePedido.idDetalle}"
+                                    class="btn btn-secondary">
+                                    Editar
+                            </button>
+                            <a th:href="@{'/pedidos/' + ${idPedido} + '/detalles/inactivar/' + ${detallePedido.idDetalle}}" class="btn btn-danger">Inactivar</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+            <div th:if="${detallesPedido == null or detallesPedido.empty}">
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+                    No se encontraron productos registrados para este pedido :(
+                </p>
+            </div>
+
+            <!-- Fragmento del Modal Editar -->
+            <section th:replace="~{detalle/fragmentos :: editar-detalle}"/>
+
+        </div>
+        <!-- Boton de agregar -->
+        <div class="d-flex justify-content-center">
+            <button type="button" 
+                    data-bs-toggle="modal" 
+                    th:data-bs-target="'#modalAgregarDetalle'"
+                    class="btn btn-success">
+                    Agregar Producto
+            </button>
+        </div>
+
+        <!-- Fragmento del Modal Agregar -->
+        <section th:replace="~{detalle/fragmentos :: agregar-detalle}"/>
+        
+    </section>
+
+
+    <!-- Fragmento para agregar detalle pedido, es la ventana modal -->
+    <section th:fragment="agregar-detalle">
+        <div class="modal fade" id="modalAgregarDetalle" tabindex="-1" aria-labelledby="modalAgregarDetalle" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Agregar Producto</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/pedidos/detalles/add}"
+                method="POST"
+                class="needs-validation" novalidate="">
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- Pedido -->
+                            <input type="text" class="form-control" hidden name="idPedidoAdd" id="idPedidoAdd" th:value="${idPedido}" placeholder="" required="">
+
+                            <!-- Producto -->
+                            <div class="col-md-4">
+                                <label for="idProductoAdd" class="form-label">Producto</label>
+                                <select class="form-select" id="idProductoAdd" name="idProductoAdd" required>
+                                    <option value="">Seleccione...</option>
+                                    <option th:each="producto : ${productos}" 
+                                            th:value="${producto.idProducto}"
+                                            th:text="${producto.nombre}"> 
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Cantidad -->
+                            <div class="col-md-4">
+                                <label for="cantidadAdd" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" name="cantidadAdd" id="cantidadAdd" placeholder="500" value="">
+                                <div class="invalid-feedback">
+                                    Una cantidad válida es requerida.
+                                </div>
+                            </div>
+
+                            <!-- Unidad de Masa -->
+                            <div class="col-md-4">
+                                <label for="unidadMasaAdd" class="form-label">Unidad de Masa</label>
+                                <select class="form-select" id="unidadMasaAdd" name="unidadMasaAdd" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="g">Gramos (g)</option>
+                                    <option value="kg">Kilogramos (kg)</option>
+                                    <option value="mg">Miligramos (mg)</option>
+                                    <option value="l">Litros (l)</option>
+                                    <option value="ml">Mililitros (ml)</option>
+                                    <option value="m3">Metros cúbicos (m3)</option>
+                                    <option value="cm3">Centímetros cúbicos (cm3)</option>
+                                </select>
+                            </div>
+
+                    </div>
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>    
+    </section>
+
+    <!-- Modal Editar Detalle -->
+    <section th:fragment="editar-detalle">
+        <div th:each="detallePedido : ${detallesPedido}" class="modal fade" th:id="'modalEditarDetalle' + ${detallePedido.idDetalle}" tabindex="-1" aria-labelledby="'modalEditarDetalleLabel' + ${detallePedido.idDetalle}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form th:action="@{/pedidos/detalles/update}" method="POST" class="needs-validation" novalidate="">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <!-- Pedido -->
+                                <input type="text" class="form-control" hidden name="idPedidoUpdate" id="idPedidoUpdate" th:value="${detallePedido.getPedido.idPedido}" placeholder="" required="">
+
+                                <!-- ID Detalle -->
+                                <input type="text" class="form-control" hidden name="idDetalleUpdate" id="idDetalleUpdate" th:value="${detallePedido.idDetalle}" placeholder="" required="">
+
+                                <!-- Producto -->
+                                <div class="col-md-4">
+                                    <label for="idProductoUpdate" class="form-label">Producto</label>
+                                    <select class="form-select" id="idProductoUpdate" name="idProductoUpdate" required>
+                                        <option value="">Seleccione...</option>
+                                        <option th:each="producto : ${productos}" 
+                                                th:value="${producto.idProducto}"
+                                                th:text="${producto.nombre}" 
+                                                th:selected="${producto.idProducto == detallePedido.producto.idProducto}"> 
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Cantidad -->
+                                <div class="col-md-4">
+                                    <label for="cantidadUpdate" class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control" name="cantidadUpdate" id="cantidadUpdate" placeholder="500" th:value="${detallePedido.getCantidad}">
+                                    <div class="invalid-feedback">
+                                        Una cantidad válida es requerida.
+                                    </div>
+                                </div>
+
+                                <!-- Unidad de Masa -->
+                                <div class="col-md-4">
+                                    <label for="unidadMasaUpdate" class="form-label">Unidad de Masa</label>
+                                    <select class="form-select" id="unidadMasaUpdate" name="unidadMasaUpdate" required>
+                                        <!-- Selected value from the object -->
+                                        <option th:selected="${detallePedido.unidadMasa == 'g'}" value="g">Gramos (g)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'kg'}" value="kg">Kilogramos (kg)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'mg'}" value="mg">Miligramos (mg)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'l'}" value="l">Litros (l)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'ml'}" value="ml">Mililitros (ml)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'm3'}" value="m3">Metros cúbicos (m3)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'cm3'}" value="cm3">Centímetros cúbicos (cm3)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer mt-3">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Editar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>    
+    </section>
+
+
+</body>
+
+</html>

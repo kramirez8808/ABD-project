@@ -3,6 +3,7 @@ package lbd.proyecto.domain;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 // Imports locales
 import lbd.proyecto.domain.Categoria;
@@ -41,6 +42,10 @@ public class Producto implements Serializable {
     @JoinColumn(name = "id_estado") // Clave foránea de estado
     private Estado estado;
 
+    //Relación con la tabla DetallePedido
+    @OneToMany(mappedBy = "producto")
+    private List<DetallePedido> detallesPedido;
+    
     //Constructores
     public Producto() {
     }

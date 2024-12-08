@@ -156,6 +156,7 @@
                                         </g>
                                     </svg>
                             </button>
+                            <a th:href="@{/pedidos/} + ${pedido.idPedido} + '/detalles/ver'" class="btn btn-success">Productos</a>
                             <a th:href="@{/pedidos/} + ${pedido.idPedido} + '/dir/ver'" class="btn btn-primary">Direcciones</a>
                             <a th:href="@{/pedidos/editar/} + ${pedido.idPedido}" class="btn btn-secondary">Editar</a>
                             <a th:href="@{/pedidos/inactivar/} + ${pedido.idPedido}" class="btn btn-danger">Inactivar</a>
@@ -169,8 +170,8 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <form th:action="@{/facturas/add}"
-                    method="POST"
-                    class="needs-validation" novalidate="">
+                        method="POST"
+                        class="needs-validation" novalidate="">
                         <div class="modal-header">
                         <h5 class="modal-title">Crear factura</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -344,7 +345,7 @@
     
     
 
-    <!-- 2 Fragmento para agregar producto, es la ventana modal -->
+    <!-- Fragmento para agregar factura, es la ventana modal -->
     <section th:fragment="agregar-factura">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -360,6 +361,79 @@
                         <div class="row g-3">
                             <!-- Pedido -->
                             <input type="text" class="form-control" hidden name="idPedido" id="idPedido" th:value="${idPedido}" placeholder="" required="">
+
+                            <!-- Total -->
+                            <div class="col-sm-6">
+                                <label for="total" class="form-label">Total</label>
+                                <input type="number" class="form-control" name="total" id="total" placeholder="250.000" value="" required="">
+                                <div class="invalid-feedback">
+                                    Un monto válido es requerido.
+                                </div>
+                            </div>
+
+                            <!-- Fecha -->
+                            <div class="col-sm-12">
+                                <label for="fecha" class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="fecha" th:value="${fecha}" name="fecha" value="" required="">
+                                <div class="invalid-feedback">
+                                    Una fecha válida es requerida.
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>    
+    </section>
+
+    <!-- Fragmento para agregar productos (detalles pedido) al pedido, es la ventana modal -->
+    <section th:fragment="detalles-pedido">
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Añadir productos</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                
+                <form th:action="@{/facturas/add}"
+                    method="POST"
+                    class="needs-validation" novalidate="">
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- Pedido -->
+                            <input type="text" class="form-control" hidden name="idPedido" id="idPedido" th:value="${idPedido}" placeholder="" required="">
+                            
+                            <div th:each="pedido : ${pedidos}">
+
+                            </div>
+
+                            <!-- Detalle Pedido si existe -->
+                            <input type="text" class="form-control" hidden name="idDetalle" id="idDetalle" th:value="${idDetalle}" placeholder="">
+
+                            <!-- Producto -->
+                            <div class="col-md-6">
+                                <label for="idEstado" class="form-label">Producto</label>
+                                <select class="form-select" id="idProducto1" name="idProducto1">
+                                    <option value="">Seleccione...</option>
+                                    <option th:each="producto : ${productos}" 
+                                            th:value="${producto.idProducto}"
+                                            th:text="${producto.nombre}" 
+                                            th:selected="${producto.idProducto == detallePedido.producto.idProducto}"> 
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Cantidad -->
+                            <div class="col-md-6">
+                                <label for="cantidad" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="500" value="">
+                            </div>
 
                             <!-- Total -->
                             <div class="col-sm-6">
