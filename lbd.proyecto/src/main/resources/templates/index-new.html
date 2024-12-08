@@ -67,7 +67,7 @@ background-size: cover;  ">
 
   <!-- Cards -->
   <div class="row">
-    <div class="col-sm">
+    <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
       <div class="card bg-light text-dark text-center">
         <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/4288/4288270.png" alt="Card image cap">
         <div class="card-body">
@@ -77,7 +77,7 @@ background-size: cover;  ">
       </div>
     </div>
 
-    <div class="col-sm">
+    <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
       <div class="card bg-light text-dark text-center">
         <img class="card-img-top"
           src="https://icons.veryicon.com/png/o/miscellaneous/cloud-his-icon/29-customer-information.png"
@@ -89,7 +89,7 @@ background-size: cover;  ">
       </div>
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-4" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
       <div class="card bg-light text-dark text-center">
         <img class="card-img-top" src="https://i.iplsc.com/-/000IJ11KFGYGGW64-C461-F4.jpg" alt="Card image cap">
         <div class="card-body">
@@ -99,7 +99,7 @@ background-size: cover;  ">
       </div>
     </div>
 
-    <div class="col-sm">
+    <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Usuario'}">
       <div class="card bg-light text-dark text-center">
         <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/3481/3481069.png" alt="Card image cap">
         <div class="card-body">
@@ -109,7 +109,7 @@ background-size: cover;  ">
       </div>
     </div>
 
-    <div class="col-sm">
+    <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
       <div class="card bg-light text-dark text-center">
         <img class="card-img-top"
           src="https://png.pngtree.com/png-clipart/20191121/original/pngtree-invoice-icon-png-image_5105603.jpg"

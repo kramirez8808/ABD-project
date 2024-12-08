@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://wwww.thymeleaf.org">
-    <head th:replace="~{login :: head}">
-        <title>TechShop</title>
-        <meta charset="UTF-8"/>
+<html data-bs-theme="dark" 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="~{layout/template-new :: head}">
+        <title>COMAVI</title>        
     </head>
-    <body>
-        <header th:replace="~{login :: header}"/>
+    <body class="container py-2">
+        <header th:replace="~{layout/template-new :: header}"/>
         <div class="container my-5">
             <div class="row align-items-center"> 
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-6">
                     <div class="card">
-<!--                        <div class="card-header bg-success">
-                            <h2>[[#{login.login}]]</h2>
-                        </div>-->
+                        <div class="card-header bg-success">
+                            <h2>Iniciar Sesión</h2>
+                        </div>
                         <div class="card-body">
-                            <form method="POST" th:action="@{/login}">
-<!--                                <div class="form-group row my-3">
+                            <form method="POST" th:action="@{/usuarios/validar}">
+                                <div class="form-group row my-3">
                                     <label class="col-md-5 my-auto" for="username">
                                         <i class="fas fa-user-lock"></i>
-                                        [[#{login.username}]]:
+                                        Usuario
                                     </label>
                                     <div class="col-md-7 my-auto">
                                         <input class="form-control" type="text" name="username" id="username"/>
@@ -30,41 +30,37 @@
                                 <div class="form-group row my-3">
                                     <label class="col-md-5 my-auto" for="password">
                                         <i class="fas fa-key"></i>
-                                        [[#{login.password}]]
+                                        Contraseña
                                     </label>
                                     <div class="col-md-7 my-auto">
                                         <input class="form-control" type="password" name="password" id="password"/>
                                     </div>
-                                </div>-->
+                                </div>
                                 <div class="card-footer col text-center">
-<!--                                    <button class="btn btn-primary" >
+                                    <button class="btn btn-primary" >
                                         <a th:href="@{/registro/nuevo}" class="btn">
                                             <i class="fas fa-user-plus"></i>
-                                            [[#{accion.registrar}]]
+                                            Registrar
                                         </a>
                                     </button>
-                                    <button class="btn btn-info" >                                        
-                                        <a th:href="@{/registro/recordar}" class="btn">
-                                            <i class="fas fa-envelope"></i>
-                                            [[#{accion.recordar}]]
-                                        </a>
-                                    </button>-->
                                     <button class="btn btn-success" type="submit">
-<!--                                        <span class="btn">
+                                        <span class="btn">
                                             <i class="fas fa-sign-in-alt"></i>
-                                            [[#{login.login}]]
-                                        </span>-->
+                                            Iniciar Sesión
+                                        </span>
                                     </button>
                                 </div>
                             </form>                            
                         </div>
                     </div>
-<!--                    <div th:if="${param.error != null}">
+                    <div th:if="${param.error != null}">
                         <h3>[[#{error.login}]]</h3>
-                    </div>-->
+                    </div>
                 </div>
             </div>           
         </div>
-        <footer th:replace="~{layout/template :: footer}"/>
+
+        <footer th:replace="~{layout/template-new :: footer}"/>          
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>
