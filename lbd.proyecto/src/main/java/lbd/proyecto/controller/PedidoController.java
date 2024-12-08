@@ -100,11 +100,11 @@ public class PedidoController {
     public String agregarPedido(Model model) {
         List<TipoCarga> tiposCarga = tipoCargaService.getAllTiposCarga();
         // Verificar si la lista de tiposCarga está vacía
-        if (tiposCarga.isEmpty()) {
-            System.out.println("No se encontraron tipos de carga");
-        } else {
-            System.out.println("Tipos de carga: " + tiposCarga);
-        }
+//        if (tiposCarga.isEmpty()) {
+//            System.out.println("No se encontraron tipos de carga");
+//        } else {
+//            System.out.println("Tipos de carga: " + tiposCarga);
+//        }
 
         List<Estado> estados = estadoService.getAllEstados();
         List<Cliente> clientes = clienteService.getAllClientes();
@@ -288,8 +288,8 @@ public class PedidoController {
         direccion.setIdDireccion(idDireccion);
         DireccionPedido direccionResult = direccionPedidoService.getDireccionPedido(direccion);
 
-        System.out.println(" *** DEBUG *** ");
-        System.out.println(direccionResult);
+//        System.out.println(" *** DEBUG *** ");
+//        System.out.println(direccionResult);
         
         if (direccionResult != null && direccionResult.getDistrito() != null
             && direccionResult.getDistrito().getCanton() != null
@@ -403,24 +403,28 @@ public class PedidoController {
     }
 
     @PostMapping("detalles/update")
-    public String actualizarDetalle(@RequestParam Long idPedidoUpdate, @RequestParam Long idDetalleUpdate, @RequestParam String cantidadUpdate, @RequestParam String idProductoUpdate, RedirectAttributes redirectAttributes) {
+    public String actualizarDetalle(@RequestParam Long idPedidoUpdate, @RequestParam Long idDetalleUpdate, @RequestParam String cantidadUpdate, @RequestParam String idProductoUpdate, @RequestParam String unidadMasaUpdate, RedirectAttributes redirectAttributes) {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(idPedidoUpdate);
         
         DetallePedido detalle = new DetallePedido();
         detalle.setIdDetalle(idDetalleUpdate);
-        detalle.setCantidad(Integer.parseInt(cantidadUpdate));
+        detalle.setCantidad(Double.parseDouble(cantidadUpdate));
+        detalle.setUnidadMasa(unidadMasaUpdate);
         
+        // System.out.println(" ID PRODUCTO UPDATE");
+        // System.out.println(idProductoUpdate);
         Producto producto = new Producto();
         producto.setIdProducto(Long.parseLong(idProductoUpdate));
         Producto productoResult = productoService.getProducto(producto);
 
         detalle.setProducto(productoResult);
+        detalle.setPedido(pedido);
         
-        if (producto.getEstado() == null) {
+        if (detalle.getEstado() == null) {
             Estado estado = new Estado();
             estado.setIdEstado((long)7); 
-            producto.setEstado(estado);
+            detalle.setEstado(estado);
         }
         
         detallePedidoService.updateDetallePedido(idDetalleUpdate, detalle);

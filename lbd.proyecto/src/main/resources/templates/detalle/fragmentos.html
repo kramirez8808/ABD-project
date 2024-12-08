@@ -104,10 +104,9 @@
                         <td>[[${detallePedido.unidadMasa}]]</td>
                         <td>[[${detallePedido.estado != null ? detallePedido.estado.descripcion : 'Sin estado'}]]</td>
                         <td>
-                            <!-- <a th:href="@{'/pedidos/' + ${idPedido} + '/detalle/editar/' + ${detallePedido.idDetalle}}" class="btn btn-secondary">Editar</a> -->
                             <button type="button" 
                                     data-bs-toggle="modal" 
-                                    th:data-bs-target="'#modalEditarDetalle'"
+                                    th:data-bs-target="'#modalEditarDetalle' + ${detallePedido.idDetalle}"
                                     class="btn btn-secondary">
                                     Editar
                             </button>
@@ -123,10 +122,12 @@
                 </p>
             </div>
 
+            <!-- Fragmento del Modal Editar -->
+            <section th:replace="~{detalle/fragmentos :: editar-detalle}"/>
+
         </div>
         <!-- Boton de agregar -->
         <div class="d-flex justify-content-center">
-            <!-- <a th:href="@{'/empleados/' + ${idEmpleado} + '/lic/agregar'}" class="btn btn-primary">Agregar licencia</a> -->
             <button type="button" 
                     data-bs-toggle="modal" 
                     th:data-bs-target="'#modalAgregarDetalle'"
@@ -138,103 +139,8 @@
         <!-- Fragmento del Modal Agregar -->
         <section th:replace="~{detalle/fragmentos :: agregar-detalle}"/>
         
-        <!-- Fragmento del Modal Editar -->
-        <section th:replace="~{detalle/fragmentos :: editar-detalle}"/>
-        
     </section>
 
-    <!-- Seccion del Titulo Actualizar Licencia -->
-    <section th:fragment="titulo-actualizar">
-        <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </g>
-            </svg>
-            <h2>Editar Licencia</h2>
-            <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, ingrese los nuevos datos de la licencia. Una vez que haya completado el formulario, haga clic en el botón "Editar" para actualizar la información.
-            </p>
-        </div>
-    </section>
-
-    <!-- Seccion de formulario actualizar -->
-    <section th:fragment="actualizar">
-        <div class="d-flex justify-content-center">
-            <div style="max-width: 40rem;">
-
-                <!-- Información de ubicación -->
-                <h4 class="mb-3">Información de la licencia</h4>
-
-                    <form th:action="@{/empleados/lic/update}"
-                        method="POST"
-                        class="needs-validation" novalidate="">
-
-                        <div class="row g-3">
-
-                        <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" placeholder="" required="">
-                        <input type="text" class="form-control" hidden name="idLicenciaEmpleado" id="idLicenciaEmpleado" th:value="${idLicenciaEmpleado}" placeholder="" required="">
-
-                        <!-- Tipo de Licencia -->
-                        <div class="col-md-4">
-                            <label for="licencia" class="form-label">Licencia</label>
-                            <select class="form-select" id="idLicencia" name="idLicencia" required="">
-                                <option th:each="licencia : ${licencias}" th:value="${licencia.idLicencia}">[[${licencia.tipo}]]</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione una licencia.
-                            </div>
-                        </div>
-  
-                        <div class="col-md-4">
-                            <label for="fechaExpedicion" class="form-label">Fecha de expedición</label>
-                            <input type="date" class="form-control" id="fechaExpedicion" name="fechaExpedicion" 
-                                   th:value="${licenciaEmpleado.fechaExpedicion}">
-                            <div class="invalid-feedback">
-                                Una fecha válida es requerida.
-                            </div>
-                        </div>
-
-                        <!-- Fecha de Vencimiento -->
-                        <div class="col-md-4">
-                            <label for="fechaVencimiento" class="form-label">Fecha de vencimiento</label>
-                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" 
-                                   th:value="${licenciaEmpleado.fechaVencimiento}">
-                            <div class="invalid-feedback">
-                                Una fecha válida es requerida.
-                            </div>
-                        </div>
-                        
-                        <!-- Estado -->
-                        <div class="col-md-12">
-                            <label for="carga" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="estado : ${estados}" 
-                                        th:value="${estado.idEstado}"
-                                        th:text="${estado.descripcion}" 
-                                        th:selected="${estado.idEstado == licenciaEmpleado.estado.idEstado}"> 
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un estado.
-                            </div>
-                        </div>
-                        
-                        <!-- Divisor -->
-                        <hr class="my-4">
-
-                        <button class="w-100 btn btn-primary btn-lg" type="submit">Editar</button>
-
-                        </div>
-                    </form>
-            </div>
-        </div>
-    </section>
 
     <!-- Fragmento para agregar detalle pedido, es la ventana modal -->
     <section th:fragment="agregar-detalle">
@@ -302,71 +208,70 @@
 
     <!-- Modal Editar Detalle -->
     <section th:fragment="editar-detalle">
-        <div th:each="detallePedido : ${detallesPedido}" class="modal fade" id="modalEditarDetalle" tabindex="-1" aria-labelledby="modalEditarDetalle" aria-hidden="true">
+        <div th:each="detallePedido : ${detallesPedido}" class="modal fade" th:id="'modalEditarDetalle' + ${detallePedido.idDetalle}" tabindex="-1" aria-labelledby="'modalEditarDetalleLabel' + ${detallePedido.idDetalle}" aria-hidden="true">
             <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Editar Producto</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form th:action="@{/pedidos/detalles/update}"
-                        ethod="POST"
-                        class="needs-validation" novalidate="">
-                    <div class="modal-body">
-                        <div class="row g-3">
-                            <!-- Pedido -->
-                            <input type="text" class="form-control" hidden name="idPedidoUpdate" id="idPedidoUpdate" th:value="${detallePedido.getPedido.idPedido}" placeholder="" required="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form th:action="@{/pedidos/detalles/update}" method="POST" class="needs-validation" novalidate="">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <!-- Pedido -->
+                                <input type="text" class="form-control" hidden name="idPedidoUpdate" id="idPedidoUpdate" th:value="${detallePedido.getPedido.idPedido}" placeholder="" required="">
 
-                            <!-- ID Detalle -->
-                            <input type="text" class="form-control" hidden name="idDetalleUpdate" id="idDetalleUpdate" th:value="${detallePedido.idDetalle}" placeholder="" required="">
+                                <!-- ID Detalle -->
+                                <input type="text" class="form-control" hidden name="idDetalleUpdate" id="idDetalleUpdate" th:value="${detallePedido.idDetalle}" placeholder="" required="">
 
-                            <!-- Producto -->
-                            <div class="col-md-4">
-                                <label for="idProductoUpdate" class="form-label">Producto</label>
-                                <select class="form-select" id="idProductoUpdate" name="idProductoUpdate" required>
-                                    <option value="">Seleccione...</option>
-                                    <option th:each="producto : ${productos}" 
-                                            th:value="${producto.idProducto}"
-                                            th:text="${producto.nombre}" 
-                                            th:selected="${producto.idProducto == detallePedido.producto.idProducto}"> 
-                                    </option>
-                                </select>
-                            </div>
+                                <!-- Producto -->
+                                <div class="col-md-4">
+                                    <label for="idProductoUpdate" class="form-label">Producto</label>
+                                    <select class="form-select" id="idProductoUpdate" name="idProductoUpdate" required>
+                                        <option value="">Seleccione...</option>
+                                        <option th:each="producto : ${productos}" 
+                                                th:value="${producto.idProducto}"
+                                                th:text="${producto.nombre}" 
+                                                th:selected="${producto.idProducto == detallePedido.producto.idProducto}"> 
+                                        </option>
+                                    </select>
+                                </div>
 
-                            <!-- Cantidad -->
-                            <div class="col-md-4">
-                                <label for="cantidadUpdate" class="form-label">Cantidad</label>
-                                <input type="number" class="form-control" name="cantidadUpdate" id="cantidadUpdate" placeholder="500" th:value="${detallePedido.getCantidad}">
-                                <div class="invalid-feedback">
-                                    Una cantidad válida es requerida.
+                                <!-- Cantidad -->
+                                <div class="col-md-4">
+                                    <label for="cantidadUpdate" class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control" name="cantidadUpdate" id="cantidadUpdate" placeholder="500" th:value="${detallePedido.getCantidad}">
+                                    <div class="invalid-feedback">
+                                        Una cantidad válida es requerida.
+                                    </div>
+                                </div>
+
+                                <!-- Unidad de Masa -->
+                                <div class="col-md-4">
+                                    <label for="unidadMasaUpdate" class="form-label">Unidad de Masa</label>
+                                    <select class="form-select" id="unidadMasaUpdate" name="unidadMasaUpdate" required>
+                                        <!-- Selected value from the object -->
+                                        <option th:selected="${detallePedido.unidadMasa == 'g'}" value="g">Gramos (g)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'kg'}" value="kg">Kilogramos (kg)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'mg'}" value="mg">Miligramos (mg)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'l'}" value="l">Litros (l)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'ml'}" value="ml">Mililitros (ml)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'm3'}" value="m3">Metros cúbicos (m3)</option>
+                                        <option th:selected="${detallePedido.unidadMasa == 'cm3'}" value="cm3">Centímetros cúbicos (cm3)</option>
+                                    </select>
                                 </div>
                             </div>
-
-                            <!-- Unidad de Masa -->
-                            <div class="col-md-4">
-                                <label for="unidadMasaUpdate" class="form-label">Unidad de Masa</label>
-                                <select class="form-select" id="unidadMasaUpdate" name="unidadMasaUpdate" required>
-                                    <!-- Selected value from the object -->
-                                    <option th:selected="${detallePedido.unidadMasa == 'g'}" value="g">Gramos (g)</option>
-                                    <option th:selected="${detallePedido.unidadMasa == 'kg'}" value="kg">Kilogramos (kg)</option>
-                                    <option th:selected="${detallePedido.unidadMasa == 'mg'}" value="mg">Miligramos (mg)</option>
-                                    <option th:selected="${detallePedido.unidadMasa == 'l'}" value="l">Litros (l)</option>
-                                    <option th:selected="${detallePedido.unidadMasa == 'ml'}" value="ml">Mililitros (ml)</option>
-                                    <option th:selected="${detallePedido.unidadMasa == 'm3'}" value="m3">Metros cúbicos (m3)</option>
-                                    <option th:selected="${detallePedido.unidadMasa == 'cm3'}" value="cm3">Centímetros cúbicos (cm3)</option>
-                                </select>
-                            </div>
-
-                    </div>
-                    <div class="modal-footer mt-4">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Editar</button>
-                    </div>
-                </form>
-              </div>
+                        </div>
+                        <div class="modal-footer mt-4">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Editar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </div>    
+        </div>    
     </section>
+
 
 </body>
 

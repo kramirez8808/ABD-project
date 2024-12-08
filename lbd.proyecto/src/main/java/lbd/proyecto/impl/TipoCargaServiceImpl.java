@@ -62,8 +62,8 @@ public class TipoCargaServiceImpl implements TipoCargaService {
 
                 // Set the input parameter
                 query.setParameter("p_id_tipo", tipoCarga.getIdTipo());
-                System.out.println(" ----- TEST 1 ------");
-                System.out.println(tipoCarga.toString());
+                // System.out.println(" ----- TEST 1 ------");
+                // System.out.println(tipoCarga.toString());
 
                 // Execute the stored procedure
                 try {

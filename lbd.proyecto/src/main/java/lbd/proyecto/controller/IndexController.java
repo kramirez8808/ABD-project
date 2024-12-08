@@ -695,15 +695,15 @@ public class IndexController {
         // }
 
         // Test searchDetallesByPedido
-        List<DetallePedido> detalles = detallePedidoService.searchDetallesByPedido(1L);
-        for (DetallePedido d : detalles) {
-            System.out.println("----- DETALLE -----");
-            System.out.println("ID Detalle: " + d.getIdDetalle());
-            System.out.println("Cantidad: " + d.getCantidad());
-            System.out.println("Nombre Producto: " + d.getProducto().getNombre());
-            System.out.println("Unidad: " + d.getUnidadMasa());
+        // List<DetallePedido> detalles = detallePedidoService.searchDetallesByPedido(1L);
+        // for (DetallePedido d : detalles) {
+        //     System.out.println("----- DETALLE -----");
+        //     System.out.println("ID Detalle: " + d.getIdDetalle());
+        //     System.out.println("Cantidad: " + d.getCantidad());
+        //     System.out.println("Nombre Producto: " + d.getProducto().getNombre());
+        //     System.out.println("Unidad: " + d.getUnidadMasa());
 
-        }
+        // }
 
         return "index-new";
     }
