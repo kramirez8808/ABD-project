@@ -26,18 +26,27 @@ grant dba to test1;
 GRANT RESOURCE TO test1;
 /
 --DESDE SQL PLUS
+/
 ALTER SYSTEM SET AUDIT_TRAIL=DB,EXTENDED SCOPE=SPFILE;
 SHUTDOWN IMMEDIATE;
 STARTUP;
 /
+
+/
 --Aumentar limite de cursores
 ALTER SYSTEM SET open_cursors = 1700 SCOPE=BOTH;
+/
+
 /
 --CREACION DEL PERFIL
 CREATE PROFILE FIDE_PROYECTO_FINAL_PROF LIMIT SESSIONS_PER_USER 2 FAILED_LOGIN_ATTEMPTS 5;
 /
+
+/
 --Asignacion del perfil
 ALTER USER test1 PROFILE FIDE_PROYECTO_FINAL_PROF;
+/
+
 /
 --CREACION TABLESPACE
 CREATE TABLESPACE FIDE_PROYECTO_FINAL_TBS
@@ -215,8 +224,8 @@ INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electrodomestic
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Ropa', 7); --5
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Jardin', 7); --6
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Deportes', 7); --7
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Juguetes' 7); --8
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Automoviles' 7); --9
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Juguetes', 7); --8
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Automoviles', 7); --9
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Libros', 7); --10
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Peliculas', 7); --11
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Mascotas', 7); --12
@@ -602,6 +611,7 @@ INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedici
 INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedicion, Fecha_Vencimiento, id_estado) VALUES (2, 13, TO_DATE('2030-03-03', 'YYYY-MM-DD'), TO_DATE('2035-03-03', 'YYYY-MM-DD'), 7);
 COMMIT;
 
+CREATE TABLE fide_clientes_tb (
     id_cliente NUMBER NOT NULL,
     nombre VARCHAR2(50),
     apellido VARCHAR2(50),
@@ -1577,9 +1587,9 @@ INSERT INTO fide_direcciones_cliente_tb (id_cliente, id_provincia, id_canton, id
 COMMIT;
 
 -- COMPROBAR QUE LAS TABLAS HAYAN SIDO AGREGADAS AL TABLESPACE CREADO
-SELECT TABLE_NAME, TABLESPACE_NAME
-FROM USER_TABLES
-WHERE TABLESPACE_NAME = 'FIDE_PROYECTO_FINAL_TBS';
+-- SELECT TABLE_NAME, TABLESPACE_NAME
+-- FROM USER_TABLES
+-- WHERE TABLESPACE_NAME = 'FIDE_PROYECTO_FINAL_TBS';
 
 -- FUNCIONES
 
@@ -3738,7 +3748,7 @@ END FIDE_PROYECTO_PUESTOS_PKG;
 /
 
 
-----------Creacion de tabla para encriptacion de contraseñas de usuarios--------
+----------Creacion de tabla para encriptacion de contraseï¿½as de usuarios--------
 CREATE TABLE FIDE_CLAVES_TB(
 ID_CLAVE NUMBER PRIMARY KEY,
 CLAVE RAW(32)
@@ -3753,7 +3763,7 @@ COMMIT;
 --Correr comando antes de ejecutar el Procedure
 GRANT EXECUTE ON DBMS_CRYPTO TO TEST1;
 
--- Procedimiento para encriptar contraseñas
+-- Procedimiento para encriptar contraseï¿½as
 CREATE OR REPLACE PROCEDURE FIDE_USUARIOS_ENCRIPTAR_CLAVE_SP(
     P_ID_USUARIO NUMBER,
     P_USUARIO VARCHAR2,
