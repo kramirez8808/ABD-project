@@ -200,28 +200,26 @@ BEGIN
 END;
 
 --INSERTS CATEGORIAS
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electronica', 7);
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Alimentos', 7);
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Salud', 7);
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electrodomesticos', 7);
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Arroz Integral', 'Grano entero y sin procesar, alto en fibra', 17, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Agricultura', 1, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Cosecha', 2, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Comida' 3, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum' 4, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 5, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 6, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 7, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 8, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 9, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 10, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 11, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 12, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 13, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 14, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 15, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 16, 7);
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Lorem ipsum', 16, 7);
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electronica', 7); --1
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Alimentos', 7); --2
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Salud', 7); --3
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electrodomesticos', 7); --4
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Ropa', 17, 7); --5
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Jardin', 1, 7); --6
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Deportes', 2, 7); --7
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Juguetes' 3, 7); --8
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Automoviles' 4, 7); --9
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Libros', 5, 7); --10
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Peliculas', 6, 7); --11
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Mascotas', 7, 7); --12
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Herramientas', 8, 7); --13
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Oficina', 9, 7); --14
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Camping', 10, 7); --15
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Arte', 11, 7); --16
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Joyeria', 12, 7); --17
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Instrumentos musicales', 13, 7); --18
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Belleza', 14, 7); --19
+INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Equipaje', 15, 7); --20
 COMMIT;
 
 CREATE TABLE fide_productos_tb (
@@ -257,28 +255,26 @@ BEGIN
 END;
 
 --INSERTS PRODUCTOS
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Granos', 'Materiales a granel como arroz, ma�z, trigo, etc.', 2, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Electrodomesticos', 'Productos como neveras, lavadoras, microondas, etc.', 4, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Camaras de Seguridad', 'Camaras de seguridad y sistemas de vigilancia', 1, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Medicamentos', 'Productos farmaceuticos que deben mantenerse a temperatura controlada durante el transporte', 3, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('MSI THIN 15bc', 'Laptop de alta potencia', 1, 7);
 INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arroz Integral', 'Grano entero y sin procesar, alto en fibra', 2, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maíz Amarillo', 'Grano seco utilizado en diversas preparaciones', 3, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Trigo', 'Grano básico para la elaboración de harinas', 4, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Avena', 'Grano usado en cereales y repostería', 5, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Lentejas', 'Legumbre nutritiva rica en proteínas', 6, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Cebada', 'Grano usado en la elaboración de bebidas y cereales', 7, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Sorgo', 'Grano utilizado para alimentación animal y humana', 8, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Quinoa', 'Grano andino alto en proteínas y aminoácidos', 9, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Chía', 'Semilla rica en omega-3 y antioxidantes', 10, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Frejol Negro', 'Legumbre común en la cocina latinoamericana', 11, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arveja', 'Legumbre usada en sopas y guisos', 12, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Mijo', 'Grano pequeño utilizado en panes y cereales', 13, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Centeno', 'Grano integral usado en panes y cervezas', 14, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Soja', 'Grano usado para hacer leche y otros productos vegetales', 15, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Trigo Sarraceno', 'Grano sin gluten usado en varias cocinas del mundo', 16, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arroz Jazmín', 'Variedad de arroz aromático usado en la cocina asiática', 17, 7);
-
-
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Paracetamol', 'Antiinflamatorio de receta general', 3, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Nevera Mave', 'Nevera inteligente', 4, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Camisa', 'Camiseta a escoger', 5, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pala', 'Pala de uso general', 6, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pesas', 'Pesas variadas', 7, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Set de Lego Star Wars', 'Estrella de la muerte', 8, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Neumaticos', 'Neumaticos 11cc', 9, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Frankenstein', 'Clasico literario', 10, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Rapidos y Furiosos', 'Pelicula del anio 2001', 11, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Collar', 'Collar para perro', 12, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Taladro', 'Taladro Phillips', 13, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Silla', 'Silla ergonomica', 14, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Tienda de camping', 'Tienda de camping para 4', 15, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pintura', 'Pintura acrilica', 16, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Anillo', 'Anillo de plata', 17, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Guitarra', 'Guitarra Les Paul', 18, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maquillaje', 'Bases', 19, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maleta', 'Maleta de viaje', 20, 7);
 COMMIT;
 
 CREATE TABLE fide_vehiculos_tb (
@@ -707,27 +703,27 @@ BEGIN
 END;
 
 --INSERTS CANTONES
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'San Jose', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'Escazu', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'Desamparados', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (2, 'Heredia', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (2, 'Barva', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (2, 'Santo Domingo', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'Cartago', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'Paraiso', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'La Union', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Orotina', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'San Carlos', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Zarcero', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Talamanca', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Siquirres', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Matina', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Osa', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Quepos', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Golfito', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Liberia', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Nicoya', 7);
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'La Cruz', 7);
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'San Jose', 7); --1
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'Escazu', 7); --2
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (1, 'Desamparados', 7); --3
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (2, 'Heredia', 7); --4
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (2, 'Barva', 7); --5
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (2, 'Santo Domingo', 7); --6
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'Cartago', 7); --7
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'Paraiso', 7); --8
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (3, 'La Union', 7); --9 
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Orotina', 7); --10
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'San Carlos', 7); --11
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Zarcero', 7); --12
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Talamanca', 7); --13
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Siquirres', 7); --14
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Matina', 7); --15
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Osa', 7); --16
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Quepos', 7); --17
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Golfito', 7); --18
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Liberia', 7); --19
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Nicoya', 7); --20
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'La Cruz', 7); --21
 COMMIT;
 
 CREATE TABLE fide_distritos_tb (
@@ -761,6 +757,19 @@ BEGIN
 END;
 
 --INSERTS DISTRITOS
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Orotina', 7); --10
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'San Carlos', 7); --11
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Zarcero', 7); --12
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Talamanca', 7); --13
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Siquirres', 7); --14
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Matina', 7); --15
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Osa', 7); --16
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Quepos', 7); --17
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Golfito', 7); --18
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Liberia', 7); --19
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Nicoya', 7); --20
+INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'La Cruz', 7); --21
+
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Carmen', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Merced', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Catedral', 7);
@@ -788,6 +797,22 @@ INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUE
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (3, 9, 'Tres Rios', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (3, 9, 'San Diego', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (3, 9, 'Concepcion', 7);
+
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (4, 10, 'Orotina', 7);
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (4, 11, 'La Fortuna', 7);
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (4, 12, 'Zarcero', 7);
+
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (5, 13, 'Cahuita', 7);
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (5, 14, 'Siquirees', 7);
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (5, 15, 'Matina', 7);
+
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (6, 16, 'Sierpe', 7);
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (6, 17, 'Savegre', 7);
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (6, 18, 'Golfito', 7);
+
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (7, 19, 'Liberia', 7);
+INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (7, 20, 'Nicoya', 7);
+
 COMMIT;
 
 CREATE TABLE fide_pedidos_tb (
@@ -1063,8 +1088,22 @@ INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_ma
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (1, 2, 50, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (2, 3, 200, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (2, 4, 25, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 1, 150, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 4, 30, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 5, 150, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 6, 30, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (4, 7, 100, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (4, 8, 50, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (5, 10, 200, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (5, 11, 25, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (6, 12, 150, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (6, 13, 30, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (7, 14, 100, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (7, 15, 50, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (8, 16, 200, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (8, 17, 25, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (9, 18, 150, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (9, 19, 30, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (10, 20, 200, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (10, 21, 25, 'kg', 7);
 COMMIT;
 
 CREATE TABLE fide_facturas_tb (
