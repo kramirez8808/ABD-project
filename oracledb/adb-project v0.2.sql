@@ -204,22 +204,22 @@ INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electronica', 7
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Alimentos', 7); --2
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Salud', 7); --3
 INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electrodomesticos', 7); --4
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Ropa', 17, 7); --5
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Jardin', 1, 7); --6
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Deportes', 2, 7); --7
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Juguetes' 3, 7); --8
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Automoviles' 4, 7); --9
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Libros', 5, 7); --10
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Peliculas', 6, 7); --11
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Mascotas', 7, 7); --12
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Herramientas', 8, 7); --13
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Oficina', 9, 7); --14
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Camping', 10, 7); --15
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Arte', 11, 7); --16
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Joyeria', 12, 7); --17
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Instrumentos musicales', 13, 7); --18
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Belleza', 14, 7); --19
-INSERT INTO fide_categorias_tb (descripcion, id_categoria) VALUES ('Equipaje', 15, 7); --20
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Ropa', 7); --5
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Jardin', 7); --6
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Deportes', 7); --7
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Juguetes' 7); --8
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Automoviles' 7); --9
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Libros', 7); --10
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Peliculas', 7); --11
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Mascotas', 7); --12
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Herramientas', 7); --13
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Oficina', 7); --14
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Camping', 7); --15
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Arte', 7); --16
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Joyeria', 7); --17
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Instrumentos musicales', 7); --18
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Belleza', 7); --19
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Equipaje', 7); --20
 COMMIT;
 
 CREATE TABLE fide_productos_tb (
@@ -757,19 +757,6 @@ BEGIN
 END;
 
 --INSERTS DISTRITOS
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Orotina', 7); --10
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'San Carlos', 7); --11
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (4, 'Zarcero', 7); --12
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Talamanca', 7); --13
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Siquirres', 7); --14
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (5, 'Matina', 7); --15
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Osa', 7); --16
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Quepos', 7); --17
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (6, 'Golfito', 7); --18
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Liberia', 7); --19
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'Nicoya', 7); --20
-INSERT INTO fide_cantones_tb (ID_Provincia, Nombre, id_estado) VALUES (7, 'La Cruz', 7); --21
-
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Carmen', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Merced', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (1, 1, 'Catedral', 7);
