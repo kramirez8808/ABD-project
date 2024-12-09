@@ -47,7 +47,7 @@
 <body>
     <!-- Header -->
     <header th:fragment="header" class="header">
-        <nav class="navbar navbar-expand-lg rounded mb-4" style="background-color: rgb(8, 8, 121)"
+        <nav class="navbar navbar-expand-lg rounded mb-4" style="background-color: rgb(7, 96, 144)"
             aria-label="Thirteenth navbar example">
             <div class="container" style="font-family:serif;">
 
@@ -59,17 +59,17 @@
 
                 <div class="collapse navbar-collapse d-lg-flex" id="navbarSupportedContent">
                     <a class="navbar-brand col-lg-3 me-0"
-                        style="font-family:verdana; font-weight: bold; font-size: 30px; color: rgb(243, 178, 15);"
+                        style="font-family:verdana; font-weight: bold; font-size: 30px; color: rgb(201, 244, 249);"
                         th:href="@{/}">COMAVI</a>
                     <ul class="navbar-nav col-lg-6 justify-content-lg-center">
 
                         <li class="nav-item" th:if="${(session.usuario != null && session.usuario.ID_ROL.descripcion == 'Usuario' || session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador')}">
-                            <a class="nav-link" style="font-size: 25px; color: rgb(243, 178, 15);" aria-current="page"
+                            <a class="nav-link" style="font-size: 25px; color: rgb(201, 244, 249);" aria-current="page"
                                 th:href="@{/}">Inicio</a>
                         </li>
 
                         <li class="nav-item dropdown" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(243, 178, 15);"
+                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(201, 244, 249);"
                                 href="#" data-bs-toggle="dropdown" aria-expanded="false">Clientes</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" th:href="@{/clientes/ver}">Ver</a></li>
@@ -78,7 +78,7 @@
                         </li>
 
                         <li class="nav-item dropdown" th:if="${(session.usuario != null && session.usuario.ID_ROL.descripcion == 'Usuario' || session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador')}">
-                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(243, 178, 15);"
+                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(201, 244, 249);"
                                 href="#" data-bs-toggle="dropdown" aria-expanded="false">Pedidos</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" th:href="@{/pedidos/ver}">Ver</a></li>
@@ -87,7 +87,7 @@
                         </li>
 
                         <li class="nav-item dropdown" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(243, 178, 15);"
+                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(201, 244, 249);"
                                 href="#" data-bs-toggle="dropdown" aria-expanded="false">Vehículos</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" th:href="@{/vehiculos/ver}">Ver</a></li>
@@ -96,7 +96,7 @@
                         </li>
 
                         <li class="nav-item dropdown" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(243, 178, 15);"
+                            <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(201, 244, 249);"
                                 href="#" data-bs-toggle="dropdown" aria-expanded="false">Empleados</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" th:href="@{/empleados/ver}">Ver</a></li>
@@ -105,7 +105,7 @@
                         </li>
 
                         <li class="nav-item" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-                            <a class="nav-link" style="font-size: 25px; color: rgb(243, 178, 15);" aria-current="page"
+                            <a class="nav-link" style="font-size: 25px; color: rgb(201, 244, 249);" aria-current="page"
                                 th:href="@{/facturas/ver}">Facturas</a>
                         </li>
                     </ul>
@@ -132,19 +132,19 @@
                     <use xlink:href="#bootstrap"></use>
                 </svg>
             </a>
-            <span class="mb-3 mb-md-0 text-light">© 2024 Todos los Derechos Reservados. Hecho por
+            <span class="mb-3 mb-md-0 text-light" style="font-family: serif;">© 2024 Todos los Derechos Reservados. Hecho por
                 ABD-Grupo5</span>
         </div>
-        <ul class="location_icon">
+        <ul class="location_icon text-light" style="font-family: serif;">
             <li><i class="fa fa-map-marker" aria-hidden="true"></i> Dirección: 50 metros este y 10
                 metros <br> norte de la rotonda Betania</li>
             <li><i class="fa fa-phone" aria-hidden="true"></i> Central : (506) 2202-7000</li>
             <li><i class="fa fa-envelope" aria-hidden="true"></i> Correo : consultas@comavi.com</li>
         </ul>
-        <form class="bottom_form">
+        <form class="bottom_form text-light">
             <h3>Newsletter</h3>
-            <input class="enter fo" placeholder="Ingrese su correo" type="text" name="Ingrese su correo">
-            <button class="sub_btn">Suscribase</button>
+            <input class="enter fo" style="font-family: serif;" placeholder="Ingrese su correo" type="text" name="Ingrese su correo">
+            <button class="sub_btn" style="font-family: serif;">Suscribase</button>
         </form>
         <!-- Social Media -->
         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">

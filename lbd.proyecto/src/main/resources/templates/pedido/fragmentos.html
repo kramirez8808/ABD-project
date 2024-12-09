@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html style="background-color: rgb(1, 35, 57);" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
 <head th:replace="~{layout/template-new :: head}">
     <title>COMAVI</title>
@@ -8,7 +8,7 @@
 <body>
     <!-- Seccion del Titulo Agregar -->
     <section th:fragment="titulo-agregar">
-        <div class="py-2 text-center">
+        <div class="py-2 text-center" style="font-family: serif;">
             <svg class="d-block mx-auto mb-2" fill="#ffffff" width="72px" height="72px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -26,7 +26,7 @@
 
     <!-- Seccion de formulario Agregar -->
     <section th:fragment="agregar">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" style="font-family: serif;">
             <div style="max-width: 40rem;">
 
                 <!-- Información General -->
@@ -39,7 +39,7 @@
                         <!-- Cliente asociado -->
                         <div class="col-12">
                             <label for="idCliente" class="form-label">Cliente Asociado</label>
-                            <select class="form-select text-light bg-secondary" id="idCliente" name="idCliente" required="">
+                            <select class="form-select text-dark bg-light" id="idCliente" name="idCliente" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}">[[${cliente.idCliente + ': ' + cliente.nombre + ' ' + cliente.apellido}]]</option>
                             </select>
@@ -51,7 +51,7 @@
                         <!-- Vehiculo asociado -->
                         <div class="col-12">
                             <label for="idVehiculo" class="form-label">Vehículo Asociado</label>
-                            <select class="form-select text-light bg-secondary" id="idVehiculo" name="idVehiculo" required="">
+                            <select class="form-select text-dark bg-light" id="idVehiculo" name="idVehiculo" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="vehiculo : ${vehiculos}" th:value="${vehiculo.idVehiculo}">[[${vehiculo.idVehiculo + ': ' + vehiculo.marca + ' ' + vehiculo.modelo}]]</option>
                             </select>
@@ -63,7 +63,7 @@
                         <!-- Licencia Empleado asociado -->
                         <div class="col-12">
                             <label for="idLicenciaEmpleado" class="form-label">Empleado Asociado</label>
-                            <select class="form-select text-light bg-secondary" id="idLicenciaEmpleado" name="idLicenciaEmpleado" required="">
+                            <select class="form-select text-dark bg-light" id="idLicenciaEmpleado" name="idLicenciaEmpleado" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="licenciaEmpleado : ${licenciasEmpleado}" th:value="${licenciaEmpleado.idLicenciaEmpleado}">[[${licenciaEmpleado.getLicencia.getTipo + ': ' + licenciaEmpleado.getEmpleado.getNombre + ' ' + licenciaEmpleado.getEmpleado.getApellido}]]</option>
                             </select>
@@ -81,7 +81,7 @@
                         <!-- Tipo de Carga -->
                         <div class="col-12">
                             <label for="idVehiculo" class="form-label">Tipo de Carga</label>
-                            <select class="form-select text-light bg-secondary" id="idTipo" name="idTipo" required="">
+                            <select class="form-select text-dark bg-light" id="idTipo" name="idTipo" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="tipoCarga : ${tiposCarga}" th:value="${tipoCarga.idTipo}">[[${tipoCarga.descripcion}]]</option>
                             </select>
@@ -93,7 +93,7 @@
                         <!-- Fecha del pedido -->
                         <div class="col-sm-6">
                             <label for="fechaPedido" class="form-label">Fecha del pedido</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaPedido" th:value="${fechaPedido}" name="fechaPedido" value="" required="">
+                            <input type="date" class="form-control text-dark bg-light" id="fechaPedido" th:value="${fechaPedido}" name="fechaPedido" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
@@ -102,7 +102,7 @@
                         <!-- Estado -->
                         <div class="col-sm-6">
                             <label for="idEstado" class="form-label">Estado</label>
-                            <select class="form-select text-light bg-secondary" id="idEstado" name="idEstado" required="">
+                            <select class="form-select text-dark bg-light" id="idEstado" name="idEstado" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="estado : ${estados}" th:value="${estado.idEstado}">[[${estado.descripcion}]]</option>
                             </select>
@@ -121,7 +121,7 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="container text-center">
+        <div class="container text-center" style="font-family: serif;">
             <div th:if="${pedidos != null and !pedidos.empty}">
                 <table class="table table-bordered table-striped table-hover">
                     <thead>

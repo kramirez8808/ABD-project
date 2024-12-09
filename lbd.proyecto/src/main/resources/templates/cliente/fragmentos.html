@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
 <head th:replace="~{layout/template-new :: head}">
     <title>COMAVI</title>
@@ -8,7 +8,7 @@
 <body>
     <!-- Seccion titulo Agregar -->
     <section th:fragment="titulo-agregar">
-        <div class="py-2 text-center">
+        <div class="py-2 text-center" >
             <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -43,7 +43,7 @@
                         <!-- Nombre -->
                         <div class="col-sm-6">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="nombre" id="nombre" placeholder="John"
+                            <input type="text" class="form-control text-dark bg-light" name="nombre" id="nombre" placeholder="John"
                                 value="" required="">
                             <div class="invalid-feedback">
                                 Un nombre válido es requerido.
@@ -53,7 +53,7 @@
                         <!-- Apellido -->
                         <div class="col-sm-6">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="apellido" id="apellido" placeholder="Doe"
+                            <input type="text" class="form-control text-dark bg-light" name="apellido" id="apellido" placeholder="Doe"
                                 value="" required="">
                             <div class="invalid-feedback">
                                 Un apellido válido es requerido.
@@ -65,7 +65,7 @@
                             <label for="email" class="form-label">Correo</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">@</span>
-                                <input type="text" class="form-control text-light bg-secondary" name="email" id="email"
+                                <input type="text" class="form-control text-dark bg-light" name="email" id="email"
                                     placeholder="you@example.com" required="">
                                 <div class="invalid-feedback">
                                     Un correo válido es requerido.
@@ -78,7 +78,7 @@
                             <label for="telefono" class="form-label">Teléfono</label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text">#</span>
-                                <input type="text" class="form-control text-light bg-secondary" name="telefono" id="telefono"
+                                <input type="text" class="form-control text-dark bg-light" name="telefono" id="telefono"
                                     placeholder="1234-5678" required="">
                                 <div class="invalid-feedback">
                                     Un número de teléfono válido es requerido.
@@ -96,10 +96,10 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="container text-center">
+        <div class="container text-center" style="font-family: serif;">
             <div th:if="${clientes != null and !clientes.empty}">
                 <table class="table table-bordered table-striped table-hover">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr table-active>
                             <th scope="col">ID</th>
                             <th scope="col">Nombre</th>
@@ -133,7 +133,7 @@
             </div>
             <div th:if="${clientes == null or clientes.empty}">
                 <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron clientes registrados :(
+                    No se encontraron clientes registrados!
                 </p>
             </div>
         </div>
@@ -141,12 +141,12 @@
 
     <!-- Seccion de filtros de busqueda -->
     <section th:fragment="filtros-busqueda">
-        <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex justify-content-center mb-4" style="font-family: serif;">
             <!-- ID -->
-            <div class="card mx-3 bg-light text-dark" style="width: 18rem;">
+            <div class="card mx-3 text-light" style="width: 18rem; background-color: rgb(121, 180, 212);">
                 <h5 class="card-header">Búsqueda</h5>
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-dark">Por ID</h6>
+                    <h6 class="card-subtitle mb-2 text-light">Por ID</h6>
                     <form th:action="@{/clientes/busqueda-id}" method="POST">
                         <div class="mb-3">
                             <input type="text" class="form-control" th:value="${idBusqueda}" name="idBusqueda"
@@ -157,10 +157,10 @@
                 </div>
             </div>
             <!-- Nombre -->
-            <div class="card mx-3 bg-light text-dark" style="width: 18rem;">
+            <div class="card mx-3 text-light" style="width: 18rem; background-color: rgb(121, 180, 212);">
                 <h5 class="card-header">Búsqueda</h5>
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-dark">Por Nombre</h6>
+                    <h6 class="card-subtitle mb-2 text-light">Por Nombre</h6>
                     <form th:action="@{/clientes/busqueda-nombre}" method="POST">
                         <div class="mb-3">
                             <input type="text" class="form-control" th:value="${nombreBusqueda}" name="nombreBusqueda"
@@ -171,10 +171,10 @@
                 </div>
             </div>
             <!-- Email -->
-            <div class="card mx-3 bg-light text-dark" style="width: 18rem;">
+            <div class="card mx-3 text-light" style="width: 18rem; background-color: rgb(121, 180, 212);">
                 <h5 class="card-header">Búsqueda</h5>
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-dark">Por Email</h6>
+                    <h6 class="card-subtitle mb-2 text-light">Por Email</h6>
                     <form th:action="@{/clientes/busqueda-email}" method="POST">
                         <div class="mb-3">
                             <input type="text" class="form-control" th:value="${emailBusqueda}" name="emailBusqueda"
@@ -189,7 +189,7 @@
 
     <!-- Seccion titulo Actualizar -->
     <section th:fragment="titulo-actualizar">
-        <div class="py-2 text-center">
+        <div class="py-2 text-center" style="font-family: serif;">
             <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -204,7 +204,7 @@
                 </g>
             </svg>
             <h2>Editar Cliente</h2>
-            <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+            <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem; font-family: serif">
                 Por favor, ingrese los nuevos datos del cliente. Una vez que haya completado el formulario, haga clic en
                 el botón "Editar" para actualizar la información.
             </p>
@@ -213,7 +213,7 @@
 
     <!-- Seccion de formulario Actualizar -->
     <section th:fragment="actualizar">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" style="font-family: serif;">
             <div style="max-width: 40rem;">
 
                 <!-- Información de Contacto -->

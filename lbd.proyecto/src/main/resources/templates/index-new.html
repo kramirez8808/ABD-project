@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" style="background-image: url('https://wallpaperaccess.com/full/2316703.jpg');
-background-repeat: no-repeat;
-background-attachment: fixed;
-background-size: cover;" 
+<html  style="background-color: rgb(1, 35, 57);" 
 xmlns:th="http://www.thymeleaf.org" 
 xmlns="http://www.w3.org/1999/xhtml">
 
@@ -20,11 +17,11 @@ xmlns="http://www.w3.org/1999/xhtml">
 
 </head>
 
-<body class="container py-2 text-light" style="background-color: rgb(51, 50, 50);">
+<body class="container py-2 text-light" style="background-color: rgb(27, 72, 97)">
   <header th:replace="~{layout/template-new :: header}" />
 
   <!-- Header -->
-  <div class="p-5 mb-4 d-flex rounded-3 text-center" style="background-color: rgb(57, 3, 87);
+  <div class="p-5 mb-4 d-flex rounded-3 text-center" style="background-color: rgb(3, 18, 87);
 background-repeat: no-repeat;
 background-attachment: fixed;
 background-size: cover;  ">
@@ -68,7 +65,7 @@ background-size: cover;  ">
   <!-- Cards -->
   <div class="row">
     <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-      <div class="card bg-light text-dark text-center">
+      <div class="card text-light text-center fw-bold" style="background-color: rgb(121, 180, 212);font-family: serif">
         <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/4288/4288270.png" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">Empleados</h5>
@@ -78,7 +75,7 @@ background-size: cover;  ">
     </div>
 
     <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-      <div class="card bg-light text-dark text-center">
+      <div class="card text-light text-center" style="background-color: rgb(121, 180, 212);font-family: serif">
         <img class="card-img-top"
           src="https://icons.veryicon.com/png/o/miscellaneous/cloud-his-icon/29-customer-information.png"
           alt="Card image cap">
@@ -90,7 +87,7 @@ background-size: cover;  ">
     </div>
 
     <div class="col-sm-4" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-      <div class="card bg-light text-dark text-center">
+      <div class="card text-light text-center" style="background-color: rgb(121, 180, 212);font-family: serif">
         <img class="card-img-top" src="https://i.iplsc.com/-/000IJ11KFGYGGW64-C461-F4.jpg" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">Vehículos</h5>
@@ -100,7 +97,7 @@ background-size: cover;  ">
     </div>
 
     <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Usuario'}">
-      <div class="card bg-light text-dark text-center">
+      <div class="card text-light text-center" style="background-color: rgb(121, 180, 212);font-family: serif">
         <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/3481/3481069.png" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">Pedidos</h5>
@@ -110,12 +107,12 @@ background-size: cover;  ">
     </div>
 
     <div class="col-sm" th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
-      <div class="card bg-light text-dark text-center">
+      <div class="card text-light text-center" style="background-color: rgb(121, 180, 212);font-family: serif">
         <img class="card-img-top"
-          src="https://png.pngtree.com/png-clipart/20191121/original/pngtree-invoice-icon-png-image_5105603.jpg"
+          src="https://static.vecteezy.com/system/resources/previews/029/893/447/non_2x/invoice-with-paid-stamp-in-clipboard-accounting-concept-customer-service-stock-illustration-vector.jpg"
           alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">Facturas</h5>
+          <h5 class="card-title" style="font-family: serif;">Facturas</h5>
           <a th:href="@{/facturas/ver}" class="btn btn-primary center">Consultar</a>
         </div>
       </div>

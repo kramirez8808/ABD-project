@@ -8,7 +8,7 @@
 <body>
     <!-- Seccion del Titulo Agregar -->
     <section th:fragment="titulo-agregar">
-        <div class="py-2 text-center">
+        <div class="py-2 text-center" style="font-family: serif;">
             <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -26,7 +26,7 @@
 
     <!-- Seccion de formulario Agregar -->
     <section th:fragment="agregar">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" style="font-family: serif;">
             <div style="max-width: 40rem;">
 
                 <!-- Información Personal -->
@@ -39,7 +39,7 @@
                         <!-- Nombre -->
                         <div class="col-sm-6">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="nombre" id="nombre" placeholder="John" value="" required="">
+                            <input type="text" class="form-control text-dark bg-light" name="nombre" id="nombre" placeholder="John" value="" required="">
                             <div class="invalid-feedback">
                                 Un nombre válido es requerido.
                             </div>
@@ -48,7 +48,7 @@
                         <!-- Apellido -->
                         <div class="col-sm-6">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="apellido" id="apellido" placeholder="Doe" value="" required="">
+                            <input type="text" class="form-control text-dark bg-light" name="apellido" id="apellido" placeholder="Doe" value="" required="">
                             <div class="invalid-feedback">
                                 Un apellido válido es requerido.
                             </div>
@@ -57,7 +57,7 @@
                         <!-- Fecha de nacimiento -->
                         <div class="col-sm-12">
                             <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaNacimiento" name="fechaNacimiento" value="" required="">
+                            <input type="date" class="form-control text-dark bg-light" id="fechaNacimiento" name="fechaNacimiento" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha de nacimiento válida es requerida.
                             </div>
@@ -72,7 +72,7 @@
                         <!-- Puesto -->
                         <div class="col-md-6">
                             <label for="carga" class="form-label">Puesto</label>
-                            <select class="form-select text-light bg-secondary" id="idPuesto" name="idPuesto" required="">
+                            <select class="form-select text-dark bg-light" id="idPuesto" name="idPuesto" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="puesto : ${puestos}" th:value="${puesto.idPuesto}">[[${puesto.descripcion}]]</option>
                             </select>
@@ -84,7 +84,7 @@
                         <!-- Fecha de contratación -->
                         <div class="col-sm-6">
                             <label for="fechaContratacion" class="form-label">Fecha de contratación</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaContratacion" name="fechaContratacion" value="" required="">
+                            <input type="date" class="form-control text-dark bg-light" id="fechaContratacion" name="fechaContratacion" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
@@ -100,7 +100,7 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="container text-center">
+        <div class="container text-center" style="font-family: serif;">
             <div th:if="${empleados != null and !empleados.empty}">
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
@@ -155,7 +155,7 @@
 
     <!-- Seccion del Titulo Actualizar -->
     <section th:fragment="titulo-actualizar">
-        <div class="py-2 text-center">
+        <div class="py-2 text-center" style="font-family: serif;">
             <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -189,7 +189,7 @@
                         <!-- Nombre -->
                         <div class="col-sm-6">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="nombre" id="nombre" th:value="${nombre}" placeholder="John" value="" required="">
+                            <input type="text" class="form-control text-dark bg-light" name="nombre" id="nombre" th:value="${nombre}" placeholder="John" value="" required="">
                             <div class="invalid-feedback">
                                 Un nombre válido es requerido.
                             </div>
@@ -198,7 +198,7 @@
                         <!-- Apellido -->
                         <div class="col-sm-6">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="apellido" id="apellido" th:value="${apellido}" placeholder="Doe" value="" required="">
+                            <input type="text" class="form-control text-dark bg-light" name="apellido" id="apellido" th:value="${apellido}" placeholder="Doe" value="" required="">
                             <div class="invalid-feedback">
                                 Un apellido válido es requerido.
                             </div>
@@ -207,7 +207,7 @@
                         <!-- Fecha de nacimiento -->
                         <div class="col-sm-12">
                             <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaNacimiento" th:value="${fechaNacimiento}" name="fechaNacimiento" value="" required="">
+                            <input type="date" class="form-control text-dark bg-light" id="fechaNacimiento" th:value="${fechaNacimiento}" name="fechaNacimiento" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha de nacimiento válida es requerida.
                             </div>
@@ -222,7 +222,7 @@
                         <!-- Puesto -->
                         <div class="col-md-6">
                             <label for="carga" class="form-label">Puesto</label>
-                            <select class="form-select text-light bg-secondary" id="puesto" name="idPuesto" required="">
+                            <select class="form-select text-dark bg-light" id="puesto" name="idPuesto" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="puesto : ${puestos}" th:value="${puesto.idPuesto}">[[${puesto.descripcion}]]</option>
                             </select>
@@ -234,7 +234,7 @@
                         <!-- Fecha de contratación -->
                         <div class="col-sm-6">
                             <label for="fechaContratacion" class="form-label">Fecha de contratación</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaContratacion" th:value="${fechaContratacion}" name="fechaContratacion" value="" required="">
+                            <input type="date" class="form-control text-dark bg-light" id="fechaContratacion" th:value="${fechaContratacion}" name="fechaContratacion" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>

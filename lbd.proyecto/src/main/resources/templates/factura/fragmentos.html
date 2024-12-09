@@ -21,7 +21,7 @@ background-size: cover;"  xmlns:th="http://www.thymeleaf.org" xmlns="http://www.
   <header th:replace="~{layout/template-new :: header}" />
   <!-- Seccion de ver listado -->
   <section th:fragment="ver">
-    <div class="container text-center">
+    <div class="container text-center" style="font-family: serif;">
       <div th:if="${facturas != null and !facturas.empty}">
         <table class="table table-bordered table-striped table-hover">
           <thead>
@@ -56,7 +56,7 @@ background-size: cover;"  xmlns:th="http://www.thymeleaf.org" xmlns="http://www.
 
   <!-- Seccion de filtros de busqueda -->
   <section th:fragment="filtros-busqueda">
-    <div class="d-flex justify-content-center mb-4">
+    <div class="d-flex justify-content-center mb-4" style="font-family: serif;">
       <!-- ID -->
       <div class="card mx-3 bg-light text-dark" style="width: 18rem;">
         <h5 class="card-header">Búsqueda</h5>
