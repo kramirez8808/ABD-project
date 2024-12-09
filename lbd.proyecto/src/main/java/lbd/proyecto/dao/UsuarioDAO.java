@@ -19,4 +19,9 @@ public interface UsuarioDAO extends JpaRepository<Usuario, Long>{
     // Method to call an stored procedure to insert a new client
     @Procedure(procedureName = "FIDE_Usuarios_TB_VALIDAR_USUARIO_SP")
     Usuario login(String usuario, String contrasena);
+    
+    // Method to call an stored procedure to insert a new client
+    @Procedure(procedureName = "FIDE_USUARIOS_ENCRIPTAR_CLAVE_SP")
+    void insertUser(String usuario, String contrasena,Long idRol);
+    
 }

@@ -13,10 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import lbd.proyecto.dao.UsuarioDAO;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import javax.sql.DataSource;
+
 import lbd.proyecto.domain.Rol;
 import lbd.proyecto.domain.Usuario;
 import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.UsuarioService;
+import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +36,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private EstadoService estadoService;
+
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     public Usuario Login(Usuario usuario) {
@@ -74,8 +82,17 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    //@Transactional
     public void insertUsuario(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_Usuarios_TB_VALIDAR_USUARIO_SP");
+        System.out.println("Nombre_usuario Service: " + usuario.getUsuario());
+        if (usuarioExiste(usuario.getUsuario())) {
+            throw new IllegalArgumentException("El nombre de usuario ya existe.");
+            //System.out.println("El usuario ya existe Service");
+        } else {
+            //System.out.println("Nombre_usuario Service2: " + usuario.getUsuario());
+            usuarioDAO.insertUser(usuario.getUsuario(), usuario.getContrasena(), usuario.getID_ROL().getIdRol());
+        }
     }
 
     @Override
@@ -96,5 +113,29 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void inactivarUsuario(Long idUsuario) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean usuarioExiste(String nombreUsuario) {
+        String fn = "{ ? = call FIDE_Usuarios_TB_USUARIO_EXISTE_FN(?) }";
+
+        try ( Connection connection = dataSource.getConnection();  CallableStatement callableStatement = connection.prepareCall(fn)) {
+
+            callableStatement.registerOutParameter(1, OracleTypes.NUMBER);
+            callableStatement.setString(2, nombreUsuario);
+
+            callableStatement.execute();
+
+            int resultado = callableStatement.getInt(1);
+            System.out.println("Resultado de la funcion:" + resultado);
+            if (resultado == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar el procedimiento almacenado.");
+            throw new RuntimeException("Error al validar si el usuario existe", e);
+        }
     }
 }

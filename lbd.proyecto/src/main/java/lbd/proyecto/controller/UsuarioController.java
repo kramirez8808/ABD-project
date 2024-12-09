@@ -7,6 +7,7 @@ package lbd.proyecto.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lbd.proyecto.domain.Rol;
 import lbd.proyecto.domain.Usuario;
 import lbd.proyecto.impl.UsuarioServiceImpl;
 import lbd.proyecto.service.UsuarioService;
@@ -58,4 +59,43 @@ public class UsuarioController {
         System.out.println("ID de sesión después de invalidar: " + session.getId()); // El ID de sesión será diferente o nulo
         return "usuario/login";
     }
+    
+    @RequestMapping("/registro/nuevo")
+    public String Registropage(Model model) {
+        //model.addAttribute("attribute", "value");
+        
+        return "usuario/registro";
+    }
+    
+    @PostMapping("/registrar")
+    public String crearUsuario(@RequestParam String username,@RequestParam String password,Model model) {
+        //Validar que el username y el password no esten vacios
+        if(username.isEmpty() || password.isEmpty()){
+            model.addAttribute("error", "El nombre de usuario y la contraseña no pueden estar vacíos.");
+            return "usuario/registro";
+        }
+        try{
+            Usuario usuario = new Usuario();
+        usuario.setUsuario(username);
+        usuario.setContrasena(password);
+        
+        Rol rol = new Rol();
+        rol.setIdRol((long)2);
+        usuario.setID_ROL(rol);
+        
+        usuarioService.insertUsuario(usuario);
+        //Si todo sale bien lo redirige al login
+        return "redirect:/usuarios/login";
+        
+        //Excepciones
+        }catch (IllegalArgumentException e) {
+        model.addAttribute("error", e.getMessage());
+        return "usuario/registro";
+        }catch(Exception e){
+            model.addAttribute("error", "Hubo un error al registrar al usuario");
+            return "usuario/registro";
+        }
+    }
+    
+    
 }

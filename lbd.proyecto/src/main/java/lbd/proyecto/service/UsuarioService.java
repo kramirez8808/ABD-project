@@ -21,4 +21,8 @@ public interface UsuarioService {
     void inactivarUsuario(Long idUsuario);
     
     Usuario Login(Usuario usuario);
+    
+    //Metodo para validar si el nombreUsuario existe
+    boolean usuarioExiste(String nombreUsuario);
+
 }
