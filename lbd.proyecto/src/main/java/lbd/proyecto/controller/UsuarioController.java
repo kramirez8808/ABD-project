@@ -37,7 +37,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/validar")
-    public String ValidarCredenciales(@RequestParam String username, @RequestParam String password, HttpSession session) {
+    public String ValidarCredenciales(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
         Usuario usuario = new Usuario();
         usuario.setUsuario(username);
         usuario.setContrasena(password);
@@ -45,6 +45,7 @@ public class UsuarioController {
         Usuario usuarioRetorno = usuarioService.Login(usuario);
 
         if (usuarioRetorno.getUsuario() == null) {
+            model.addAttribute("error", "Credenciales inválidas.");
             return "usuario/login";
         }
 

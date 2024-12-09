@@ -41,51 +41,56 @@ public class UsuarioServiceImpl implements UsuarioService {
     private DataSource dataSource;
 
     @Override
-    public Usuario Login(Usuario usuario) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_Usuarios_TB_VALIDAR_USUARIO_SP");
+public Usuario Login(Usuario usuario) {
+    StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_Usuarios_TB_VALIDAR_USUARIO_SP");
+    
+    //String contrasenaDesen = desencriptarContrasena(usuario.getUsuario());
 
-        // Registrar los parámetros de entrada y salida
-        query.registerStoredProcedureParameter("P_USUARIO", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("P_USUARIO_RETORNO", String.class, ParameterMode.OUT);
-        query.registerStoredProcedureParameter("P_CONTRASENA", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("P_ROL", String.class, ParameterMode.OUT);
+    
+    // Registrar los parámetros de entrada y salida
+    query.registerStoredProcedureParameter("P_USUARIO", String.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter("P_USUARIO_RETORNO", String.class, ParameterMode.OUT);
+    query.registerStoredProcedureParameter("P_CONTRASENA", String.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter("P_ROL", String.class, ParameterMode.OUT);
 
-        // Establecer los valores de los parámetros de entrada
-        query.setParameter("P_USUARIO", usuario.getUsuario());
-        query.setParameter("P_CONTRASENA", usuario.getContrasena());
+    // Establecer los valores de los parámetros de entrada
+    query.setParameter("P_USUARIO", usuario.getUsuario());
+    query.setParameter("P_CONTRASENA", usuario.getContrasena()); // Contraseña en texto plano
 
-        // Ejecutar el procedimiento
-        try {
-            query.execute();
+        //System.out.println("contrasena: " +contrasenaDesen);
+    // Ejecutar el procedimiento
+    try {
+        query.execute();
 
-            // Recuperar los parámetros de salida
-            String usuarioRetornado = (String) query.getOutputParameterValue("P_USUARIO_RETORNO");
-            String rolRetornado = (String) query.getOutputParameterValue("P_ROL");
+        // Recuperar los parámetros de salida
+        String usuarioRetornado = (String) query.getOutputParameterValue("P_USUARIO_RETORNO");
+        String rolRetornado = (String) query.getOutputParameterValue("P_ROL");
+        // Comprobar si los parámetros de salida no son nulos
+        if (usuarioRetornado != null && !usuarioRetornado.isEmpty() && rolRetornado != null && !rolRetornado.isEmpty() ) {
+            
+            Usuario usuarioRetorno = new Usuario();
+            Rol rolAsignado = new Rol();
+            usuarioRetorno.setUsuario(usuarioRetornado);
+            rolAsignado.setDescripcion(rolRetornado);
+            usuarioRetorno.setID_ROL(rolAsignado);
 
-            // Comprobar si los parámetros de salida no son nulos
-            if (usuarioRetornado != null && !usuarioRetornado.isEmpty() && rolRetornado != null && !rolRetornado.isEmpty()) {
-                Usuario usuarioRetorno = new Usuario();
-                Rol rolAsignado = new Rol();
-                usuarioRetorno.setUsuario(usuarioRetornado);
-                rolAsignado.setDescripcion(rolRetornado);
-                usuarioRetorno.setID_ROL(rolAsignado);
-
-                return usuarioRetorno;
-            } else {
-                return new Usuario();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error al ejecutar el procedimiento almacenado.");
+            return usuarioRetorno;
+        } else {
+            
             return new Usuario();
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error al ejecutar el procedimiento almacenado.");
+        return new Usuario();
     }
+}
 
     @Override
     //@Transactional
     public void insertUsuario(Usuario usuario) {
         //StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_Usuarios_TB_VALIDAR_USUARIO_SP");
-        System.out.println("Nombre_usuario Service: " + usuario.getUsuario());
+        
         if (usuarioExiste(usuario.getUsuario())) {
             throw new IllegalArgumentException("El nombre de usuario ya existe.");
             //System.out.println("El usuario ya existe Service");
@@ -138,4 +143,27 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new RuntimeException("Error al validar si el usuario existe", e);
         }
     }
+    /*
+    public String desencriptarContrasena(String usuario){
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_USUARIOS_TB_DESENCRIPTAR_DATOS_SP");
+        
+        query.registerStoredProcedureParameter("P_USUARIO", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("P_CONTRASENA", String.class, ParameterMode.OUT);
+        
+        query.setParameter("P_USUARIO", usuario);
+
+    // Ejecutar el procedimiento
+    try {
+        query.execute();
+
+        // Recuperar el parámetro de salida
+        return (String) query.getOutputParameterValue("P_CONTRASENA");
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error al desencriptar la contraseña.");
+        return null;
+    }
+    }
+    */
+    
 }
