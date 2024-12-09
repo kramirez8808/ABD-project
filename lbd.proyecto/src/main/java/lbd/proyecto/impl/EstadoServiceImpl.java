@@ -74,7 +74,7 @@ public class EstadoServiceImpl implements EstadoService {
                 }
 
                 // Print the output parameter
-                System.out.println("Descripcion: " + query.getOutputParameterValue("P_DESCRIPCION"));
+                // System.out.println("Descripcion: " + query.getOutputParameterValue("P_DESCRIPCION"));
 
                 // Map the output parameters to a Estado object
                 Estado estadoResult = new Estado();
