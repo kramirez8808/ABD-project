@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.j2objc.annotations.AutoreleasePool;
+import jakarta.servlet.http.HttpSession;
 
 import lbd.proyecto.domain.Cliente;
 import lbd.proyecto.domain.Empleado;
@@ -47,6 +48,7 @@ import lbd.proyecto.domain.Producto;
 import lbd.proyecto.domain.Categoria;
 
 import lbd.proyecto.domain.DetallePedido;
+import lbd.proyecto.domain.Usuario;
 import lbd.proyecto.service.DetallePedidoService;
 
 @Controller
@@ -103,9 +105,16 @@ public class IndexController {
     @Autowired
     DetallePedidoService detallePedidoService;
 
-    // Muestra la página principal
+// Muestra la página principal
     @RequestMapping("/")
-    public String page(Model model) {
+    public String page(Model model, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (usuario != null) {
+            System.out.println("Hay una sesion activa");
+        } else {
+            System.out.println("Sesion Muerta!!!");
+        }
 
         // Test getPedido
         // Pedido pedido = new Pedido();

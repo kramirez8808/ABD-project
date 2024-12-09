@@ -9,17 +9,22 @@
     <!-- Seccion del Titulo Direccion Cliente -->
     <section th:fragment="titulo-dir-cliente">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </g>
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
             </svg>
             <h2>Nueva Direccion de Cliente</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva dirección que desea agregar. Podrá modificar sus datos una vez se haya creado con éxito.
+                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva dirección que desea
+                agregar. Podrá modificar sus datos una vez se haya creado con éxito.
             </p>
         </div>
     </section>
@@ -32,19 +37,19 @@
                 <!-- Información de ubicación -->
                 <h4 class="mb-3">Información de la dirección</h4>
 
-                    <form th:action="@{/clientes/dir/add}"
-                        method="POST"
-                        class="needs-validation" novalidate="">
+                <form th:action="@{/clientes/dir/add}" method="POST" class="needs-validation" novalidate="">
 
-                        <div class="row g-3">
+                    <div class="row g-3">
 
                         <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idCliente" id="idCliente" th:value="${idCliente}" placeholder="" required="">
-                        
+                        <input type="text" class="form-control" hidden name="idCliente" id="idCliente"
+                            th:value="${idCliente}" placeholder="" required="">
+
+
 
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="provincia" required="">
+                            <select class="form-select text-light bg-secondary" id="provincia" required="">
                                 <option value="">Seleccione...</option>
                                 <option value="1">San José</option>
                                 <option value="2">Heredia</option>
@@ -57,7 +62,7 @@
 
                         <div class="col-md-4">
                             <label for="canton" class="form-label">Cantón</label>
-                            <select class="form-select" id="canton" required="">
+                            <select class="form-select text-light bg-secondary" id="canton" required="">
                                 <option value="">Seleccione...</option>
                             </select>
                             <div class="invalid-feedback">
@@ -67,7 +72,8 @@
 
                         <div class="col-md-4">
                             <label for="distrito" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" name="idDistrito" required="">
+                            <select class="form-select text-light bg-secondary" id="idDistrito" name="idDistrito"
+                                required="">
                                 <option value="">Seleccione...</option>
                             </select>
                             <div class="invalid-feedback">
@@ -77,7 +83,8 @@
 
                         <div class="col-12">
                             <label for="address" class="form-label">Indicaciones</label>
-                            <input type="text" class="form-control" id="detalles" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
+                            <input type="text" class="form-control text-light bg-secondary" id="detalles"
+                                name="detalles" placeholder="Calle El Sol, Av. 12" required="">
                             <div class="invalid-feedback">
                                 Por favor, ingrese una dirección válida.
                             </div>
@@ -88,7 +95,10 @@
 
                         <!-- Google Maps -->
                         <div class="text-center">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr"
+                                width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
                         <!-- Divisor -->
@@ -96,48 +106,49 @@
 
                         <button class="w-100 btn btn-primary btn-lg" type="submit">Crear dirección</button>
 
-                        </div>
-                    </form>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
 
     <!-- Seccion de ver listado direcciones cliente -->
     <section th:fragment="ver-dir-cliente">
-        <div class="d-flex justify-content-center">
-            <div th:if="${direcciones != null and !direcciones.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${direcciones != null and !direcciones.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
-                      <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Detalles</th>
-                        <th scope="col">Provincia</th>
-                        <th scope="col">Cantón</th>
-                        <th scope="col">Distrito</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Detalles</th>
+                            <th scope="col">Provincia</th>
+                            <th scope="col">Cantón</th>
+                            <th scope="col">Distrito</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
                     </thead>
-                    <tbody>
-                      <tr th:each="direccion : ${direcciones}">
-                        <th scope="row">[[${direccion.idDireccion}]]</th>
-                        <td>[[${direccion.detalles}]]</td>
-                        <td>[[${direccion.getDistrito().getCanton().getProvincia().getNombre()}]]</td>                        
-                        <td>[[${direccion.getDistrito().getCanton().getNombre()}]]</td>
-                        <td>[[${direccion.getDistrito().getNombre()}]]</td>
-                        <td>[[${direccion.estado != null ? direccion.estado.descripcion : 'Sin estado'}]]</td>
-                        <td>
-                            <a th:href="@{'/clientes/' + ${idCliente} + '/dir/editar/' + ${direccion.idDireccion}}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{'/clientes/' + ${idCliente} + '/dir/inactivar/' + ${direccion.idDireccion}}" class="btn btn-danger">Inactivar</a>
-                        </td>
-                      </tr>
+                    <tbody class="table-light">
+                        <tr th:each="direccion : ${direcciones}">
+                            <th scope="row">[[${direccion.idDireccion}]]</th>
+                            <td>[[${direccion.detalles}]]</td>
+                            <td>[[${direccion.getDistrito().getCanton().getProvincia().getNombre()}]]</td>
+                            <td>[[${direccion.getDistrito().getCanton().getNombre()}]]</td>
+                            <td>[[${direccion.getDistrito().getNombre()}]]</td>
+                            <td>
+                                <a th:href="@{'/clientes/' + ${idCliente} + '/dir/editar/' + ${direccion.idDireccion}}"
+                                    class="btn btn-secondary">Editar</a>
+                                <a th:href="@{'/clientes/' + ${idCliente} + '/dir/eliminar/' + ${direccion.idDireccion}}"
+                                    class="btn btn-danger">Eliminar</a>
+                                <!-- <a th:href="@{/clientes/editar/} + ${cliente.idCliente}" class="btn btn-secondary">Editar</a>
+                            <a th:href="@{/clientes/eliminar/} + ${cliente.idCliente}" class="btn btn-danger">Eliminar</a> -->
+                            </td>
+                        </tr>
                     </tbody>
-                  </table>
+                </table>
             </div>
             <div th:if="${direcciones == null or direcciones.empty}">
-                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron direcciones registradas :(
-                </p>
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">No se encontraron direcciones
+                    registradas!</p>
             </div>
 
         </div>
@@ -150,17 +161,22 @@
     <!-- Seccion del Titulo Actualizar Direccion Cliente -->
     <section th:fragment="titulo-act-dir-cliente">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </g>
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
             </svg>
             <h2>Editar Direccion de Cliente</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, ingrese los nuevos datos de la dirección. Una vez que haya completado el formulario, haga clic en el botón "Editar" para actualizar la información.
+                Por favor, ingrese los nuevos datos de la dirección. Una vez que haya completado el formulario, haga
+                clic en el botón "Editar" para actualizar la información.
             </p>
         </div>
     </section>
@@ -174,66 +190,66 @@
                 <h4 class="mb-3">Información de la dirección</h4>
 
                 <form th:action="@{/clientes/dir/update}" method="POST" class="needs-validation" novalidate="">
+
                     <div class="row g-3">
 
                         <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idCliente" id="idCliente" th:value="${idCliente}" placeholder="" required="">
-                        <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" placeholder="" required="">
-                            
+                        <input type="text" class="form-control" hidden name="idCliente" id="idCliente"
+                            th:value="${idCliente}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion"
+                            th:value="${idDireccion}" placeholder="" required="">
+
                         <h5>Datos Anteriores</h5>
-                        <spam>Provincia: <spam>[[${provinciaOld.nombre}]]</spam></spam>
-                        <spam>Cantón: <spam>[[${cantonOld.nombre}]]</spam></spam>
-                        <spam>Distrito: <spam>[[${distritoOld.nombre}]]</spam></spam>
+                        <spam>Provincia: <spam>[[${provinciaOld.nombre}]]</spam>
+                        </spam>
+                        <spam>Cantón: <spam>[[${cantonOld.nombre}]]</spam>
+                        </spam>
+                        <spam>Distrito: <spam>[[${distritoOld.nombre}]]</spam>
+                        </spam>
 
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="provincia" required="">
+                            <select class="form-select text-light bg-secondary" id="provincia" required="">
                                 <option value="">Seleccione...</option>
                                 <option value="1">San José</option>
                                 <option value="2">Heredia</option>
                                 <option value="3">Cartago</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione una provincia.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione una provincia.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="canton" class="form-label">Cantón</label>
-                            <select class="form-select" id="canton" th:value="${canton}" required="">
+                            <select class="form-select text-light bg-secondary" id="canton" th:value="${canton}"
+                                required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un cantón.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un cantón.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="distrito" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" th:value="${idDistrito}" name="idDistrito" required="">
+                            <select class="form-select text-light bg-secondary" id="idDistrito" th:value="${idDistrito}"
+                                name="idDistrito" required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un distrito.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un distrito.</div>
                         </div>
 
                         <div class="col-12">
                             <label for="address" class="form-label">Indicaciones</label>
-                            <input type="text" class="form-control" id="detalles" th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
-                            <div class="invalid-feedback">
-                                Por favor, ingrese una dirección válida.
-                            </div>
+                            <input type="text" class="form-control text-light bg-secondary" id="detalles"
+                                th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
+                            <div class="invalid-feedback">Por favor, ingrese una dirección válida.</div>
                         </div>
-                            
+
                         <div class="col-md-12">
                             <label for="carga" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                            <select class="form-select text-light bg-secondary" id="idEstado" name="idEstado" required="">
                                 <option value="">Seleccione...</option>
-                                <option th:each="estado : ${estados}" 
-                                        th:value="${estado.idEstado}"
-                                        th:text="${estado.descripcion}" 
-                                        th:selected="${estado.idEstado == direccion.estado.idEstado}"> 
+                                <option th:each="estado : ${estados}" th:value="${estado.idEstado}"
+                                    th:text="${estado.descripcion}"
+                                    th:selected="${estado.idEstado == direccion.estado.idEstado}">
                                 </option>
                             </select>
                             <div class="invalid-feedback">
@@ -246,13 +262,17 @@
 
                         <!-- Google Maps -->
                         <div class="text-center">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr"
+                                width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
                         <!-- Divisor -->
                         <hr class="my-4">
 
                         <button class="w-100 btn btn-primary btn-lg" type="submit">Editar</button>
+
                     </div>
                 </form>
             </div>
@@ -260,20 +280,25 @@
     </section>
 
     <!-- EMPLEADOS -->
-     <!-- Seccion del Titulo Direccion Empleado -->
+    <!-- Seccion del Titulo Direccion Empleado -->
     <section th:fragment="titulo-dir-empleado">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </g>
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
             </svg>
             <h2>Nueva Direccion de Empleado</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva dirección que desea agregar. Podrá modificar sus datos una vez se haya creado con éxito.
+                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva dirección que desea
+                agregar. Podrá modificar sus datos una vez se haya creado con éxito.
             </p>
         </div>
     </section>
@@ -286,54 +311,46 @@
                 <!-- Información de ubicación -->
                 <h4 class="mb-3">Información de la dirección</h4>
 
-                    <form th:action="@{/empleados/dir/add}"
-                        method="POST"
-                        class="needs-validation" novalidate="">
+                <form th:action="@{/empleados/dir/add}" method="POST" class="needs-validation" novalidate="">
 
-                        <div class="row g-3">
+                    <div class="row g-3">
 
                         <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado"
+                            th:value="${idEmpleado}" placeholder="" required="">
 
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="provincia" required="">
+                            <select class="form-select text-light bg-secondary" id="provincia" required="">
                                 <option value="">Seleccione...</option>
                                 <option value="1">San José</option>
                                 <option value="2">Heredia</option>
                                 <option value="3">Cartago</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione una provincia.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione una provincia.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="canton" class="form-label">Cantón</label>
-                            <select class="form-select" id="canton" required="">
+                            <select class="form-select text-light bg-secondary" id="canton" required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un cantón.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un cantón.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="distrito" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" name="idDistrito" required="">
+                            <select class="form-select text-light bg-secondary" id="idDistrito" name="idDistrito" required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un distrito.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un distrito.</div>
                         </div>
 
                         <div class="col-12">
                             <label for="address" class="form-label">Indicaciones</label>
-                            <input type="text" class="form-control" id="detalles" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
-                            <div class="invalid-feedback">
-                                Por favor, ingrese una dirección válida.
-                            </div>
+                            <input type="text" class="form-control text-light bg-secondary" id="detalles" name="detalles"
+                                placeholder="Calle El Sol, Av. 12" required="">
+                            <div class="invalid-feedback">Por favor, ingrese una dirección válida.</div>
                         </div>
 
                         <!-- Divisor -->
@@ -341,7 +358,10 @@
 
                         <!-- Google Maps -->
                         <div class="text-center">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr"
+                                width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
                         <!-- Divisor -->
@@ -349,48 +369,49 @@
 
                         <button class="w-100 btn btn-primary btn-lg" type="submit">Crear dirección</button>
 
-                        </div>
-                    </form>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
 
     <!-- Seccion de ver listado direcciones empleado -->
     <section th:fragment="ver-dir-empleado">
-        <div class="d-flex justify-content-center">
-            <div th:if="${direcciones != null and !direcciones.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${direcciones != null and !direcciones.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
-                      <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Detalles</th>
-                        <th scope="col">Provincia</th>
-                        <th scope="col">Cantón</th>
-                        <th scope="col">Distrito</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
+                        <tr table-active>
+                            <th scope="col">ID</th>
+                            <th scope="col">Detalles</th>
+                            <th scope="col">Provincia</th>
+                            <th scope="col">Cantón</th>
+                            <th scope="col">Distrito</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
                     </thead>
-                    <tbody>
-                      <tr th:each="direccion : ${direcciones}">
-                        <th scope="row">[[${direccion.idDireccion}]]</th>
-                        <td>[[${direccion.detalles}]]</td>
-                        <td>[[${direccion.getDistrito().getCanton().getProvincia().getNombre()}]]</td>                        
-                        <td>[[${direccion.getDistrito().getCanton().getNombre()}]]</td>
-                        <td>[[${direccion.getDistrito().getNombre()}]]</td>
-                        <td>[[${direccion.estado != null ? direccion.estado.descripcion : 'Sin estado'}]]</td>
-                        <td>
-                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/dir/editar/' + ${direccion.idDireccion}}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{'/empleados/' + ${idEmpleado} + '/dir/inactivar/' + ${direccion.idDireccion}}" class="btn btn-danger">Inactivar</a>
-                        </td>
-                      </tr>
+                    <tbody class="table-light">
+                        <tr th:each="direccion : ${direcciones}">
+                            <th scope="row">[[${direccion.idDireccion}]]</th>
+                            <td>[[${direccion.detalles}]]</td>
+                            <td>[[${direccion.getDistrito().getCanton().getProvincia().getNombre()}]]</td>
+                            <td>[[${direccion.getDistrito().getCanton().getNombre()}]]</td>
+                            <td>[[${direccion.getDistrito().getNombre()}]]</td>
+                            <td>
+                                <a th:href="@{'/empleados/' + ${idEmpleado} + '/dir/editar/' + ${direccion.idDireccion}}"
+                                    class="btn btn-secondary">Editar</a>
+                                <a th:href="@{'/empleados/' + ${idEmpleado} + '/dir/eliminar/' + ${direccion.idDireccion}}"
+                                    class="btn btn-danger">Eliminar</a>
+                                <!-- <a th:href="@{/clientes/editar/} + ${cliente.idCliente}" class="btn btn-secondary">Editar</a>
+                            <a th:href="@{/clientes/eliminar/} + ${cliente.idCliente}" class="btn btn-danger">Eliminar</a> -->
+                            </td>
+                        </tr>
                     </tbody>
-                  </table>
+                </table>
             </div>
             <div th:if="${direcciones == null or direcciones.empty}">
-                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron direcciones registradas :(
-                </p>
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">No se encontraron direcciones
+                    registradas!</p>
             </div>
 
         </div>
@@ -403,21 +424,27 @@
     <!-- Seccion del Titulo Actualizar Direccion Empleado -->
     <section th:fragment="titulo-act-dir-empleado">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </g>
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
             </svg>
             <h2>Editar Direccion de Empleado</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, ingrese los nuevos datos de la dirección. Una vez que haya completado el formulario, haga clic en el botón "Editar" para actualizar la información.
+                Por favor, ingrese los nuevos datos de la dirección. Una vez que haya completado el formulario, haga
+                clic en el botón "Editar" para actualizar la información.
             </p>
         </div>
     </section>
-    
+
+    <!-- Seccion de formulario -->
     <section th:fragment="actualizar-dir-empleado">
         <div class="d-flex justify-content-center">
             <div style="max-width: 40rem;">
@@ -428,36 +455,36 @@
                 <form th:action="@{/empleados/dir/update}" method="POST" class="needs-validation" novalidate="">
 
                     <div class="row g-3">
+
                         <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" required="">
-                        <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" required="">
-                            
+                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado"
+                            th:value="${idEmpleado}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion"
+                            th:value="${idDireccion}" placeholder="" required="">
+
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="provincia" required="">
+                            <select class="form-select text-light bg-secondary" id="provincia" required="">
                                 <option value="">Seleccione...</option>
                                 <option value="1">San José</option>
                                 <option value="2">Heredia</option>
                                 <option value="3">Cartago</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione una provincia.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione una provincia.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="canton" class="form-label">Cantón</label>
-                            <select class="form-select" id="canton" th:value="${canton}" required="">
+                            <select class="form-select text-light bg-secondary" id="canton" th:value="${canton}" required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un cantón.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un cantón.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="distrito" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" th:value="${idDistrito}" name="idDistrito" required="">
+                            <select class="form-select text-light bg-secondary" id="idDistrito" th:value="${idDistrito}" name="idDistrito"
+                                required="">
                                 <option value="">Seleccione...</option>
                             </select>
                             <div class="invalid-feedback">
@@ -465,28 +492,11 @@
                             </div>
                         </div>
 
-                        <!-- Detalles de la dirección -->
                         <div class="col-12">
-                            <label for="detalles" class="form-label">Indicaciones</label>
-                            <input type="text" class="form-control" id="detalles" th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
-                            <div class="invalid-feedback">
-                                Por favor, ingrese una dirección válida.
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-12">
-                            <label for="carga" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="estado : ${estados}" 
-                                        th:value="${estado.idEstado}"
-                                        th:text="${estado.descripcion}" 
-                                        th:selected="${estado.idEstado == direccion.estado.idEstado}"> 
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un estado.
-                            </div>
+                            <label for="address" class="form-label">Indicaciones</label>
+                            <input type="text" class="form-control text-light bg-secondary" id="detalles" th:value="${detalles}" name="detalles"
+                                placeholder="Calle El Sol, Av. 12" required="">
+                            <div class="invalid-feedback">Por favor, ingrese una dirección válida.</div>
                         </div>
 
                         <!-- Divisor -->
@@ -494,7 +504,10 @@
 
                         <!-- Google Maps -->
                         <div class="text-center">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr"
+                                width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
                         <!-- Divisor -->
@@ -508,195 +521,26 @@
         </div>
     </section>
 
-    
-    
-    
-    <!--
-    <section th:fragment="actualizar-dir-empleado">
-        <div class="d-flex justify-content-center">
-            <div style="max-width: 40rem;">
-
-                <!-- Información de ubicación --
-                <h4 class="mb-3">Información de la dirección</h4>
-
-                <form th:action="@{/empleados/dir/update}" method="POST" class="needs-validation" novalidate="">
-
-                    <div class="row g-3">
-
-                        <!-- ID --
-                        <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" placeholder="" required="">
-                        <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" placeholder="" required="">
-
-                        <span><strong>Valores previos</strong></span>
-                        <span><strong>Provincia: </strong><span th:text="${provincia.nombre}"></span></span>
-                        <span><strong>Cantón: </strong><span th:text="${canton.nombre}"></span></span>
-                        <span><strong>Distrito: </strong><span th:text="${distrito.nombre}"></span></span>
-                        
-                        <!-- Provincia --
-                        <div class="col-md-4">
-                            <label for="idProvincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="idProvincia" name="idProvincia" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="provincia : ${provincias}" th:value="${provincia.idProvincia}">[[${provincia.nombre}]]</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione una provincia.
-                            </div>
-                        </div>
-
-                        <!-- Cantón --
-                        <div class="col-md-4">
-                            <label for="idCanton" class="form-label">Cantón</label>
-                            <select class="form-select" id="idCanton" name="idCanton" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="canton : ${cantones}" th:value="${canton.idCanton}" 
-                                        th:text="${canton.nombre}" 
-                                        th:selected="${canton.idCanton == canton.idCanton}"></option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un cantón.
-                            </div>
-                        </div>
-
-                        <!-- Distrito --
-                        <div class="col-md-4">
-                            <label for="idDistrito" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" name="idDistrito" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="distrito : ${distritos}" th:value="${distrito.idDistrito}">[[${distrito.nombre}]]</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un distrito.
-                            </div>
-                        </div>
-
-                        <!-- Detalles de la dirección --
-                        <div class="col-12">
-                            <label for="detalles" class="form-label">Indicaciones</label>
-                            <input type="text" class="form-control" id="detalles" th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
-                            <div class="invalid-feedback">
-                                Por favor, ingrese una dirección válida.
-                            </div>
-                        </div>
-
-                        <!-- Divisor --
-                        <hr class="my-4">
-
-                        <!-- Google Maps --
-                        <div class="text-center">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-
-                        <!-- Divisor --
-                        <hr class="my-4">
-
-                        <button class="w-100 btn btn-primary btn-lg" type="submit">Editar</button>
-
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-     comment -->
-
-    <!-- Seccion de formulario 
-    <section th:fragment="actualizar-dir-empleado">
-        <div class="d-flex justify-content-center">
-            <div style="max-width: 40rem;">
-
-                <!-- Información de ubicación 
-                <h4 class="mb-3">Información de la dirección</h4>
-
-                    <form th:action="@{/empleados/dir/update}"
-                        method="POST"
-                        class="needs-validation" novalidate="">
-
-                        <div class="row g-3">
-
-                            <!-- ID --
-                            <input type="text" class="form-control" hidden name="idEmpleado" id="idEmpleado" th:value="${idEmpleado}" placeholder="" required="">
-                            <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" placeholder="" required="">
-
-                            <!-- Verificar que Provincia, Canton y Distrito están correctamente accedidos --
-                            <span th:text="${provincia.idProvincia}"></span>
-                            <span th:text="${canton.idCanton}"></span>
-                            <span th:text="${distrito.idDistrito}"></span>
-                            
-                            <div class="col-md-4">
-                                <label for="carga" class="form-label">Provincia</label>
-                                <select class="form-select" id="idProvincia" name="idProvincia" required="">
-                                    <option value="">Seleccione...</option>
-                                    <option th:each="provincia : ${provincias}" th:value="${provincia.idProvincia}">[[${provincia.nombre}]]</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Por favor, seleccione una provincia.
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="carga" class="form-label">Cantón</label>
-                                <select class="form-select" id="idCanton" name="idCanton" required="">
-                                    <option value="">Seleccione...</option>
-                                    <option th:each="canton : ${cantones}" th:value="${canton.idCanton}">[[${canton.nombre}]]</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Por favor, seleccione una cantón.
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <label for="carga" class="form-label">Distrito</label>
-                                <select class="form-select" id="idDistrito" name="idDistrito" required="">
-                                    <option value="">Seleccione...</option>
-                                    <option th:each="distrito : ${distritos}" th:value="${distrito.idDistrito}">[[${distrito.nombre}]]</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Por favor, seleccione una distrito.
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="address" class="form-label">Indicaciones</label>
-                                <input type="text" class="form-control" id="detalles" th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
-                                <div class="invalid-feedback">
-                                    Por favor, ingrese una dirección válida.
-                                </div>
-                            </div>
-
-                            <!-- Divisor -->
-                            <hr class="my-4">
-
-                            <!-- Google Maps --
-                            <div class="text-center">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
-
-                            <!-- Divisor --
-                            <hr class="my-4">
-
-                            <button class="w-100 btn btn-primary btn-lg" type="submit">Editar</button>
-
-                        </div>
-                    </form>
-            </div>
-        </div>
-    </section> -->
-
     <!-- PEDIDOS -->
-     <!-- Seccion del Titulo Direccion Pedido -->
-     <section th:fragment="titulo-dir-pedido">
+    <!-- Seccion del Titulo Direccion Pedido -->
+    <section th:fragment="titulo-dir-pedido">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </g>
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
             </svg>
             <h2>Nueva Direccion de Pedido</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva dirección que desea agregar. Podrá modificar sus datos una vez se haya creado con éxito.
+                Por favor, proceda a completar el siguiente formulario con los detalles de la nueva dirección que desea
+                agregar. Podrá modificar sus datos una vez se haya creado con éxito.
             </p>
         </div>
     </section>
@@ -709,51 +553,46 @@
                 <!-- Información de ubicación -->
                 <h4 class="mb-3">Información de la dirección</h4>
 
-                    <form th:action="@{/pedidos/dir/add}"
-                        method="POST"
-                        class="needs-validation" novalidate="">
+                <form th:action="@{/pedidos/dir/add}" method="POST" class="needs-validation" novalidate="">
 
-                        <div class="row g-3">
+                    <div class="row g-3">
 
                         <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idPedido" id="idPedido" th:value="${idPedido}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idPedido" id="idPedido"
+                            th:value="${idPedido}" placeholder="" required="">
 
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="provincia" required="">
+                            <select class="form-select text-light bg-secondary" id="provincia" required="">
                                 <option value="">Seleccione...</option>
                                 <option value="1">San José</option>
                                 <option value="2">Heredia</option>
                                 <option value="3">Cartago</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione una provincia.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione una provincia.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="canton" class="form-label">Cantón</label>
-                            <select class="form-select" id="canton" required="">
+                            <select class="form-select text-light bg-secondary" id="canton" required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un cantón.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un cantón.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="distrito" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" name="idDistrito" required="">
+                            <select class="form-select text-light bg-secondary" id="idDistrito" name="idDistrito"
+                                required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un distrito.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un distrito.</div>
                         </div>
 
                         <div class="col-12">
                             <label for="address" class="form-label">Indicaciones</label>
-                            <input type="text" class="form-control" id="detalles" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
+                            <input type="text" class="form-control text-light bg-secondary" id="detalles"
+                                name="detalles" placeholder="Calle El Sol, Av. 12" required="">
                             <div class="invalid-feedback">
                                 Por favor, ingrese una dirección válida.
                             </div>
@@ -764,7 +603,10 @@
 
                         <!-- Google Maps -->
                         <div class="text-center">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr"
+                                width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
                         <!-- Divisor -->
@@ -772,48 +614,49 @@
 
                         <button class="w-100 btn btn-primary btn-lg" type="submit">Crear dirección</button>
 
-                        </div>
-                    </form>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
 
     <!-- Seccion de ver listado direcciones pedido -->
     <section th:fragment="ver-dir-pedido">
-        <div class="d-flex justify-content-center">
-            <div th:if="${direcciones != null and !direcciones.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${direcciones != null and !direcciones.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
-                      <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Detalles</th>
-                        <th scope="col">Provincia</th>
-                        <th scope="col">Cantón</th>
-                        <th scope="col">Distrito</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Detalles</th>
+                            <th scope="col">Provincia</th>
+                            <th scope="col">Cantón</th>
+                            <th scope="col">Distrito</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
                     </thead>
-                    <tbody>
-                      <tr th:each="direccion : ${direcciones}">
-                        <th scope="row">[[${direccion.idDireccion}]]</th>
-                        <td>[[${direccion.detalles}]]</td>
-                        <td>[[${direccion.getDistrito().getCanton().getProvincia().getNombre()}]]</td>                        
-                        <td>[[${direccion.getDistrito().getCanton().getNombre()}]]</td>
-                        <td>[[${direccion.getDistrito().getNombre()}]]</td>
-                        <td>[[${direccion.estado != null ? direccion.estado.descripcion : 'Sin estado'}]]</td>
-                        <td>
-                            <a th:href="@{'/pedidos/' + ${idPedido} + '/dir/editar/' + ${direccion.idDireccion}}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{'/pedidos/' + ${idPedido} + '/dir/inactivar/' + ${direccion.idDireccion}}" class="btn btn-danger">Inactivar</a>
-                        </td>
-                      </tr>
+                    <tbody class="table-light">
+                        <tr th:each="direccion : ${direcciones}">
+                            <th scope="row">[[${direccion.idDireccion}]]</th>
+                            <td>[[${direccion.detalles}]]</td>
+                            <td>[[${direccion.getDistrito().getCanton().getProvincia().getNombre()}]]</td>
+                            <td>[[${direccion.getDistrito().getCanton().getNombre()}]]</td>
+                            <td>[[${direccion.getDistrito().getNombre()}]]</td>
+                            <td>
+                                <a th:href="@{'/pedidos/' + ${idPedido} + '/dir/editar/' + ${direccion.idDireccion}}"
+                                    class="btn btn-secondary">Editar</a>
+                                <a th:href="@{'/pedidos/' + ${idPedido} + '/dir/eliminar/' + ${direccion.idDireccion}}"
+                                    class="btn btn-danger">Eliminar</a>
+                                <!-- <a th:href="@{/clientes/editar/} + ${cliente.idCliente}" class="btn btn-secondary">Editar</a>
+                            <a th:href="@{/clientes/eliminar/} + ${cliente.idCliente}" class="btn btn-danger">Eliminar</a> -->
+                            </td>
+                        </tr>
                     </tbody>
-                  </table>
+                </table>
             </div>
             <div th:if="${direcciones == null or direcciones.empty}">
-                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron direcciones registradas :(
-                </p>
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">No se encontraron direcciones
+                    registradas!</p>
             </div>
 
         </div>
@@ -826,17 +669,22 @@
     <!-- Seccion del Titulo Actualizar Direccion Pedido -->
     <section th:fragment="titulo-act-dir-pedido">
         <div class="py-2 text-center">
-            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </g>
+            <svg class="d-block mx-auto mb-2" width="72px" height="72px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#ffffff"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
             </svg>
             <h2>Editar Direccion de Pedido</h2>
             <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                Por favor, ingrese los nuevos datos de la dirección. Una vez que haya completado el formulario, haga clic en el botón "Editar" para actualizar la información.
+                Por favor, ingrese los nuevos datos de la dirección. Una vez que haya completado el formulario, haga
+                clic en el botón "Editar" para actualizar la información.
             </p>
         </div>
     </section>
@@ -849,24 +697,19 @@
                 <!-- Información de ubicación -->
                 <h4 class="mb-3">Información de la dirección</h4>
 
-                    <form th:action="@{/pedidos/dir/update}"
-                        method="POST"
-                        class="needs-validation" novalidate="">
+                <form th:action="@{/pedidos/dir/update}" method="POST" class="needs-validation" novalidate="">
 
-                        <div class="row g-3">
+                    <div class="row g-3">
 
                         <!-- ID -->
-                        <input type="text" class="form-control" hidden name="idPedido" id="idPedido" th:value="${idPedido}" placeholder="" required="">
-                        <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion" th:value="${idDireccion}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idPedido" id="idPedido"
+                            th:value="${idPedido}" placeholder="" required="">
+                        <input type="text" class="form-control" hidden name="idDireccion" id="idDireccion"
+                            th:value="${idDireccion}" placeholder="" required="">
 
-                        <h5>Datos Anteriores</h5>
-                        <spam>Provincia: <spam>[[${provinciaOld.nombre}]]</spam></spam>
-                        <spam>Cantón: <spam>[[${cantonOld.nombre}]]</spam></spam>
-                        <spam>Distrito: <spam>[[${distritoOld.nombre}]]</spam></spam>
-                            
                         <div class="col-md-4">
                             <label for="provincia" class="form-label">Provincia</label>
-                            <select class="form-select" id="provincia" required="">
+                            <select class="form-select text-light bg-secondary" id="provincia" required="">
                                 <option value="">Seleccione...</option>
                                 <option value="1">San José</option>
                                 <option value="2">Heredia</option>
@@ -879,45 +722,27 @@
 
                         <div class="col-md-4">
                             <label for="canton" class="form-label">Cantón</label>
-                            <select class="form-select" id="canton" th:value="${canton}" required="">
+                            <select class="form-select text-light bg-secondary" id="canton" th:value="${canton}"
+                                required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un cantón.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un cantón.</div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="distrito" class="form-label">Distrito</label>
-                            <select class="form-select" id="idDistrito" th:value="${idDistrito}" name="idDistrito" required="">
+                            <select class="form-select text-light bg-secondary" id="idDistrito" th:value="${idDistrito}"
+                                name="idDistrito" required="">
                                 <option value="">Seleccione...</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un distrito.
-                            </div>
+                            <div class="invalid-feedback">Por favor, seleccione un distrito.</div>
                         </div>
 
                         <div class="col-12">
                             <label for="address" class="form-label">Indicaciones</label>
-                            <input type="text" class="form-control" id="detalles" th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
-                            <div class="invalid-feedback">
-                                Por favor, ingrese una dirección válida.
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-12">
-                            <label for="carga" class="form-label">Estado</label>
-                            <select class="form-select" id="idEstado" name="idEstado" required="">
-                                <option value="">Seleccione...</option>
-                                <option th:each="estado : ${estados}" 
-                                        th:value="${estado.idEstado}"
-                                        th:text="${estado.descripcion}" 
-                                        th:selected="${estado.idEstado == direccion.estado.idEstado}"> 
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor, seleccione un estado.
-                            </div>
+                            <input type="text" class="form-control text-light bg-secondary" id="detalles"
+                                th:value="${detalles}" name="detalles" placeholder="Calle El Sol, Av. 12" required="">
+                            <div class="invalid-feedback">Por favor, ingrese una dirección válida.</div>
                         </div>
 
                         <!-- Divisor -->
@@ -925,7 +750,10 @@
 
                         <!-- Google Maps -->
                         <div class="text-center">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr" width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1964.9863664728093!2d-84.09704356634963!3d9.9362266399501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scr!4v1721535923648!5m2!1ses!2scr"
+                                width="608" height="404" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
                         <!-- Divisor -->
@@ -933,8 +761,8 @@
 
                         <button class="w-100 btn btn-primary btn-lg" type="submit">Editar</button>
 
-                        </div>
-                    </form>
+                    </div>
+                </form>
             </div>
         </div>
     </section>

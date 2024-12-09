@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html data-bs-theme="dark" 
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns="http://www.w3.org/1999/xhtml">
-    <head th:replace="~{layout/template-new :: head}">
-        <title>COMAVI</title>        
-    </head>
-    <body class="container py-2">
-        <header th:replace="~{layout/template-new :: header}"/>
+<html data-bs-theme="dark" style="background-image: url('https://wallpaperaccess.com/full/2316703.jpg');
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-size: cover;" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
-        
-        <!-- <section th:replace="~{factura/fragmentos :: filtros-busqueda}"/> -->
-        <section th:replace="~{factura/fragmentos :: ver}"/>
+<head th:replace="~{layout/template-new :: head}">
+    <title>Factura</title>
+</head>
 
-        <footer th:replace="~{layout/template-new :: footer}"/>          
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    </body>
+<body class="container py-2">
+    <header th:replace="~{layout/template-new :: header}" />
+
+
+    <!-- <section th:replace="~{factura/fragmentos :: filtros-busqueda}"/> -->
+    <section th:replace="~{factura/fragmentos :: ver}" />
+
+    <footer th:replace="~{layout/template-new :: footer}" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
 </html>

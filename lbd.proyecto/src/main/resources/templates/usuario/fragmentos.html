@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
-<head th:replace="~{layout/template-new :: head}">
+<!--<head th:replace="~{layout/template-new :: head}">
     <title>COMAVI</title>
-</head>
+</head>-->
 
 <body>
     <!-- Seccion del Titulo Agregar -->
@@ -39,7 +39,7 @@
                         <!-- Nombre -->
                         <div class="col-sm-6">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="nombre" id="nombre" placeholder="John" value="" required="">
+                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="John" value="" required="">
                             <div class="invalid-feedback">
                                 Un nombre válido es requerido.
                             </div>
@@ -48,7 +48,7 @@
                         <!-- Apellido -->
                         <div class="col-sm-6">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="apellido" id="apellido" placeholder="Doe" value="" required="">
+                            <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Doe" value="" required="">
                             <div class="invalid-feedback">
                                 Un apellido válido es requerido.
                             </div>
@@ -57,12 +57,11 @@
                         <!-- Fecha de nacimiento -->
                         <div class="col-sm-12">
                             <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaNacimiento" name="fechaNacimiento" value="" required="">
+                            <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha de nacimiento válida es requerida.
                             </div>
                         </div>
-
                         <!-- Divisor -->
                         <hr class="my-4">
 
@@ -72,7 +71,7 @@
                         <!-- Puesto -->
                         <div class="col-md-6">
                             <label for="carga" class="form-label">Puesto</label>
-                            <select class="form-select text-light bg-secondary" id="idPuesto" name="idPuesto" required="">
+                            <select class="form-select" id="idPuesto" name="idPuesto" required="">
                                 <option value="">Seleccione...</option>
                                 <option th:each="puesto : ${puestos}" th:value="${puesto.idPuesto}">[[${puesto.descripcion}]]</option>
                             </select>
@@ -84,7 +83,7 @@
                         <!-- Fecha de contratación -->
                         <div class="col-sm-6">
                             <label for="fechaContratacion" class="form-label">Fecha de contratación</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaContratacion" name="fechaContratacion" value="" required="">
+                            <input type="date" class="form-control" id="fechaContratacion" name="fechaContratacion" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>
@@ -100,9 +99,10 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="container text-center">
-            <div th:if="${empleados != null and !empleados.empty}">
-                <table class="table table-bordered table-striped table-hover">
+        <div class="d-flex justify-content-center">
+            <div><h1>Hola</h1></div>
+<!--            <div th:if="${empleados != null and !empleados.empty}" style="width: 80rem;">
+                <table class="table">
                     <thead>
                       <tr>
                         <th scope="col">ID</th>
@@ -111,10 +111,11 @@
                         <th scope="col">Puesto</th>
                         <th scope="col">Salario</th>
                         <th scope="col">Fecha de Contratación</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody class="table-light">
+                    <tbody>
                       <tr th:each="empleado : ${empleados}">
                         <th scope="row">[[${empleado.idEmpleado}]]</th>
                         <td>[[${empleado.nombre}]]</td>
@@ -122,6 +123,7 @@
                         <td>[[${empleado.puesto.descripcion}]]</td>
                         <td>[[${empleado.puesto.salario}]]</td>
                         <td>[[${empleado.fechaContratacion}]]</td>
+                        <td>[[${empleado.estado != null ? empleado.estado.descripcion : 'Sin estado'}]]</td>
                         <td>
                             <a th:if="${empleado.isDriver}" th:href="@{/empleados/} + ${empleado.idEmpleado} + '/lic/ver'" class="btn btn-warning px-1 py-0">
                                 <svg height="32px" width="32px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000">
@@ -139,17 +141,35 @@
                                     </g>
                                 </svg>
                             </a>
+                            <a th:if="${!empleado.isDriver}" class="btn btn-dark px-1 py-0 disabled" role="button" aria-disabled="true">
+                                <svg height="32px" width="32px" version="1.1" id="_x32_" viewBox="0 0 512 512" xml:space="preserve" fill="#000000">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <style type="text/css">
+                                            .st0 {
+                                                fill: #000000;
+                                            }
+                                        </style>
+                                        <g>
+                                            <path class="st0" ></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
                             <a th:href="@{/empleados/} + ${empleado.idEmpleado} + '/dir/ver'" class="btn btn-primary">Direcciones</a>
                             <a th:href="@{/empleados/editar/} + ${empleado.idEmpleado}" class="btn btn-secondary">Editar</a>
-                            <a th:href="@{/empleados/eliminar/} + ${empleado.idEmpleado}" class="btn btn-danger">Eliminar</a>
+                            <a th:href="@{/empleados/inactivar/} + ${empleado.idEmpleado}" class="btn btn-danger">Inactivar</a>
                         </td>
                       </tr>
                     </tbody>
                   </table>
-            </div>
-            <div th:if="${empleados == null or empleados.empty}">
-                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">No se encontraron empleados registrados!</p>
-            </div>
+            </div>-->
+<!--            <div th:if="${empleados == null or empleados.empty}">
+                <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
+                    No se encontraron empleados registrados :(
+                </p>
+            </div>-->
         </div>
     </section>
 
@@ -189,7 +209,7 @@
                         <!-- Nombre -->
                         <div class="col-sm-6">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="nombre" id="nombre" th:value="${nombre}" placeholder="John" value="" required="">
+                            <input type="text" class="form-control" name="nombre" id="nombre" th:value="${nombre}" placeholder="John" value="" required="">
                             <div class="invalid-feedback">
                                 Un nombre válido es requerido.
                             </div>
@@ -198,18 +218,34 @@
                         <!-- Apellido -->
                         <div class="col-sm-6">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control text-light bg-secondary" name="apellido" id="apellido" th:value="${apellido}" placeholder="Doe" value="" required="">
+                            <input type="text" class="form-control" name="apellido" id="apellido" th:value="${apellido}" placeholder="Doe" value="" required="">
                             <div class="invalid-feedback">
                                 Un apellido válido es requerido.
                             </div>
                         </div>
 
                         <!-- Fecha de nacimiento -->
-                        <div class="col-sm-12">
+                        <div class="col-sm-4">
                             <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaNacimiento" th:value="${fechaNacimiento}" name="fechaNacimiento" value="" required="">
+                            <input type="date" class="form-control" id="fechaNacimiento" th:value="${fechaNacimiento}" name="fechaNacimiento" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha de nacimiento válida es requerida.
+                            </div>
+                        </div>
+                        
+                        <!-- Estado -->
+                        <div class="col-md-8">
+                            <label for="carga" class="form-label">Estado</label>
+                            <select class="form-select" id="idEstado" name="idEstado" required="">
+                                <option value="">Seleccione...</option>
+                                <option th:each="estado : ${estados}" 
+                                        th:value="${estado.idEstado}"
+                                        th:text="${estado.descripcion}" 
+                                        th:selected="${estado.idEstado == empleado.estado.idEstado}"> 
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un estado.
                             </div>
                         </div>
 
@@ -222,9 +258,13 @@
                         <!-- Puesto -->
                         <div class="col-md-6">
                             <label for="carga" class="form-label">Puesto</label>
-                            <select class="form-select text-light bg-secondary" id="puesto" name="idPuesto" required="">
+                            <select class="form-select" id="idPuesto" name="idPuesto" required="">
                                 <option value="">Seleccione...</option>
-                                <option th:each="puesto : ${puestos}" th:value="${puesto.idPuesto}">[[${puesto.descripcion}]]</option>
+                                <option th:each="puesto : ${puestos}" 
+                                        th:value="${puesto.idPuesto}"
+                                        th:text="${puesto.descripcion}" 
+                                        th:selected="${puesto.idPuesto == empleado.puesto.idPuesto}"> 
+                                </option>
                             </select>
                             <div class="invalid-feedback">
                                 Por favor, seleccione un puesto.
@@ -234,7 +274,7 @@
                         <!-- Fecha de contratación -->
                         <div class="col-sm-6">
                             <label for="fechaContratacion" class="form-label">Fecha de contratación</label>
-                            <input type="date" class="form-control text-light bg-secondary" id="fechaContratacion" th:value="${fechaContratacion}" name="fechaContratacion" value="" required="">
+                            <input type="date" class="form-control" id="fechaContratacion" th:value="${fechaContratacion}" name="fechaContratacion" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
                             </div>

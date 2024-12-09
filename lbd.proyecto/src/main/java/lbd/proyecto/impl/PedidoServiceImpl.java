@@ -406,59 +406,78 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Pedido> searchPedidosByCliente(Long idCliente) {
-        Session session = entityManager.unwrap(Session.class);
-        List<Pedido> pedidos = new ArrayList<>();
+@Override
+@Transactional(readOnly = true)
+public List<Pedido> searchPedidosByCliente(Long idCliente) {
+    Session session = entityManager.unwrap(Session.class);
+    List<Pedido> pedidos = new ArrayList<>();
 
-        session.doWork(new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_PEDIDOS_TB_BUSCAR_POR_CLIENTE_FN(?) }")) {
-                    callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
-                    callableStatement.setLong(2, idCliente);
-                    callableStatement.execute();
+    session.doWork(new Work() {
+        @Override
+        public void execute(Connection connection) throws SQLException {
+            CallableStatement callableStatement = null;
+            ResultSet rs = null;
 
-                    try (ResultSet rs = (ResultSet) callableStatement.getObject(1)) {
-                        while (rs.next()) {
-                            Pedido pedido = new Pedido();
-                            pedido.setIdPedido(rs.getLong("id_pedido"));
-                            //pedido.setDescripcion(rs.getString("descripcion"));
-                            pedido.setFechaPedido(rs.getDate("fecha"));
+            try {
+                callableStatement = connection.prepareCall("{ ? = call FIDE_PEDIDOS_TB_BUSCAR_POR_CLIENTE_FN(?) }");
+                callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
+                callableStatement.setLong(2, idCliente);
+                callableStatement.execute();
 
-                            Cliente cliente = new Cliente();
-                            cliente.setIdCliente(rs.getLong("id_cliente"));
-                            pedido.setCliente(clienteService.getCliente(cliente));
+                rs = (ResultSet) callableStatement.getObject(1);
 
-                            Vehiculo vehiculo = new Vehiculo();
-                            vehiculo.setIdVehiculo(rs.getLong("id_vehiculo"));
-                            pedido.setVehiculo(vehiculoService.getVehiculo(vehiculo));
+                while (rs.next()) {
+                    Pedido pedido = new Pedido();
+                    pedido.setIdPedido(rs.getLong("id_pedido"));
+                    //pedido.setDescripcion(rs.getString("descripcion"));
+                    pedido.setFechaPedido(rs.getDate("fecha"));
 
-                            TipoCarga tipoCarga = new TipoCarga();
-                            tipoCarga.setIdTipo(rs.getLong("id_tipo_carga"));
-                            pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
+                    Cliente cliente = new Cliente();
+                    cliente.setIdCliente(rs.getLong("id_cliente"));
+                    pedido.setCliente(clienteService.getCliente(cliente));
 
-                            Estado estado = new Estado();
-                            estado.setIdEstado(rs.getLong("id_estado"));
-                            pedido.setEstado(estadoService.getEstado(estado));
+                    Vehiculo vehiculo = new Vehiculo();
+                    vehiculo.setIdVehiculo(rs.getLong("id_vehiculo"));
+                    pedido.setVehiculo(vehiculoService.getVehiculo(vehiculo));
 
-                            LicenciaEmpleado licenciaEmpleado = new LicenciaEmpleado();
-                            licenciaEmpleado.setIdLicenciaEmpleado(rs.getLong("id_licencia_empleado"));
-                            pedido.setLicenciaEmpleado(licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado));
+                    TipoCarga tipoCarga = new TipoCarga();
+                    tipoCarga.setIdTipo(rs.getLong("id_tipo_carga"));
+                    pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
 
-                            pedidos.add(pedido);
-                        }
-                    } 
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } 
-                    
+                    Estado estado = new Estado();
+                    estado.setIdEstado(rs.getLong("id_estado"));
+                    pedido.setEstado(estadoService.getEstado(estado));
+
+                    LicenciaEmpleado licenciaEmpleado = new LicenciaEmpleado();
+                    licenciaEmpleado.setIdLicenciaEmpleado(rs.getLong("id_licencia_empleado"));
+                    pedido.setLicenciaEmpleado(licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado));
+
+                    pedidos.add(pedido);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException e) {
+                        System.err.println("Failed to close ResultSet: " + e.getMessage());
+                    }
+                }
+                if (callableStatement != null) {
+                    try {
+                        callableStatement.close();
+                    } catch (SQLException e) {
+                        System.err.println("Failed to close CallableStatement: " + e.getMessage());
+                    }
+                }
             }
-        });
+        }
+    });
 
-        return pedidos;
-    }
+    return pedidos;
+}
+
 
     //Function to get the date returned by the HTML input and convert it to a java.sql.Date
     public java.sql.Date convertDate(String input) {
