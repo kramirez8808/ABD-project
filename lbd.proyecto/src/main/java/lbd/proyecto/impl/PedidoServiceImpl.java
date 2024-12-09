@@ -362,22 +362,27 @@ public class PedidoServiceImpl implements PedidoService {
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(rs.getLong("ID_Cliente"));
                 pedido.setCliente(clienteService.getCliente(cliente));
+                // pedido.setCliente(cliente);
 
                 Vehiculo vehiculo = new Vehiculo();
                 vehiculo.setIdVehiculo(rs.getLong("ID_Vehiculo"));
                 pedido.setVehiculo(vehiculoService.getVehiculo(vehiculo));
+                // pedido.setVehiculo(vehiculo);
 
                 TipoCarga tipoCarga = new TipoCarga();
                 tipoCarga.setIdTipo(rs.getLong("ID_Tipo_Carga"));
                 pedido.setTipoCarga(tipoCargaService.getTipoCarga(tipoCarga));
+                // pedido.setTipoCarga(tipoCarga);
 
                 Estado estado = new Estado();
                 estado.setIdEstado(rs.getLong("ID_Estado"));
                 pedido.setEstado(estadoService.getEstado(estado));
+                // pedido.setEstado(estado);
 
                 LicenciaEmpleado licenciaEmpleado = new LicenciaEmpleado();
                 licenciaEmpleado.setIdLicenciaEmpleado(rs.getLong("ID_Licencia_Empleado"));
                 pedido.setLicenciaEmpleado(licenciaEmpleadoService.getLicenciaEmpleado(licenciaEmpleado));
+                // pedido.setLicenciaEmpleado(licenciaEmpleado);
 
                 Factura factura = new Factura();
                 factura.setPedido(pedido);
