@@ -138,121 +138,104 @@ public class FacturaServiceImpl implements FacturaService {
         });
     }
 
-   @Override
-@Transactional(readOnly = true)
-public List<Factura> getAllFacturas() {
-    StoredProcedureQuery query = null;
-    ResultSet rs = null;
-    CallableStatement callableStatement = null;
-    try {
-        query = entityManager.createStoredProcedureQuery("FIDE_FACTURAS_TB_VER_FACTURAS_SP");
+    @Override
+    @Transactional(readOnly = true)
+    public List<Factura> getAllFacturas() {
+        // Create a StoredProcedureQuery instance for the stored procedure "ver_facturas"
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_FACTURAS_TB_VER_FACTURAS_SP");
+
+        // Register the output parameters
         query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
 
-        query.execute();
-        callableStatement = query.unwrap(CallableStatement.class); // Ensure this statement is safe to use
-        rs = (ResultSet) callableStatement.getObject(1);
-
-        List<Factura> facturas = new ArrayList<>();
-        while (rs.next()) {
-            Factura factura = new Factura();
-            factura.setIdFactura(rs.getLong("id_factura"));
-            factura.setFecha(rs.getDate("fecha"));
-            factura.setTotal(rs.getDouble("total"));
-
-            Long idEstado = rs.getLong("id_estado");
-            if (idEstado != null) {
-                Estado estado = new Estado();
-                estado.setIdEstado(idEstado);
-                factura.setEstado(estadoService.getEstado(estado));
-            }
-
-            Long idPedido = rs.getLong("id_pedido");
-            if (idPedido != null) {
-                Pedido pedido = new Pedido();
-                pedido.setIdPedido(idPedido);
-                factura.setPedido(pedidoService.getPedido(pedido));
-            }
-
-            facturas.add(factura);
-        }
-
-        return facturas;
-    } catch (PersistenceException e) {
-        if (e.getCause() instanceof SQLException) {
-            SQLException sqlException = (SQLException) e.getCause();
-            System.err.println("Error Code: " + sqlException.getErrorCode());
-            System.err.println("SQL State: " + sqlException.getSQLState());
-            System.err.println("Message: " + sqlException.getMessage());
-            return null;
-        } else {
-            throw e;
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return null;
-    } finally {
+        // Execute the stored procedure
         try {
-            if (rs != null) rs.close();
-            if (callableStatement != null) callableStatement.close();
+            query.execute();
+        } catch (PersistenceException e) {
+            if (e.getCause() instanceof SQLException) {
+                // Handle the SQLException
+                SQLException sqlException = (SQLException) e.getCause();
+                System.err.println("Error Code: " + sqlException.getErrorCode());
+                System.err.println("SQL State: " + sqlException.getSQLState());
+                System.err.println("Message: " + sqlException.getMessage());
+                return null;
+            } else {
+                throw e;
+            }
+        }
+
+        // Get the result set
+        ResultSet rs = (ResultSet) query.getOutputParameterValue(1);
+
+        // Create a list to store the results
+        List<Factura> facturas = new ArrayList<>();
+
+        // Iterate over the result set
+        try {
+            while (rs.next()) {
+                Factura factura = new Factura();
+                factura.setIdFactura(rs.getLong("id_factura"));
+                factura.setFecha(rs.getDate("fecha"));
+                factura.setTotal(rs.getDouble("total"));
+
+                Estado estado = new Estado();
+                estado.setIdEstado(rs.getLong("id_estado"));
+                factura.setEstado(estadoService.getEstado(estado));
+
+                Pedido pedido = new Pedido();
+                pedido.setIdPedido(rs.getLong("id_pedido"));
+                factura.setPedido(pedidoService.getPedido(pedido));
+
+                facturas.add(factura);
+                
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return facturas;
     }
-}
 
+    @Override
+    @Transactional(readOnly = true)
+    public Factura searchFacturaByPedido(Long idPedido) {
+        Session session = entityManager.unwrap(Session.class);
+        Factura facturaResult = new Factura();
 
-@Override
-@Transactional(readOnly = true)
-public Factura searchFacturaByPedido(Long idPedido) {
-    Session session = entityManager.unwrap(Session.class);
-    Factura facturaResult = new Factura();
+        session.doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                try (CallableStatement callableStatement = connection.prepareCall("{ ? = call FIDE_FACTURAS_TB_BUSCAR_POR_PEDIDO_FN(?) }")) {
+                    callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
+                    callableStatement.setString(2, idPedido.toString());
+                    callableStatement.execute();
 
-    session.doWork(new Work() {
-        @Override
-        public void execute(Connection connection) throws SQLException {
-            CallableStatement callableStatement = null;
-            ResultSet rs = null;
+                    try (ResultSet rs = (ResultSet) callableStatement.getObject(1)) {
+                        while (rs.next()) {
+                            facturaResult.setIdFactura(rs.getLong("id_factura"));
+                            facturaResult.setFecha(rs.getDate("fecha"));
+                            facturaResult.setTotal(rs.getDouble("total"));
 
-            try {
-                callableStatement = connection.prepareCall("{ ? = call FIDE_FACTURAS_TB_BUSCAR_POR_PEDIDO_FN(?) }");
-                callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
-                callableStatement.setString(2, idPedido.toString());
-                callableStatement.execute();
+                            Estado estado = new Estado();
+                            estado.setIdEstado(rs.getLong("id_estado"));
+                            facturaResult.setEstado(estadoService.getEstado(estado));
 
-                rs = (ResultSet) callableStatement.getObject(1);
+                            Pedido pedido = new Pedido();
+                            pedido.setIdPedido(rs.getLong("id_pedido"));
+                            // facturaResult.setPedido(pedidoService.getPedido(pedido));
+                            facturaResult.setPedido(pedido);
 
-                while (rs.next()) {
-                    facturaResult.setIdFactura(rs.getLong("id_factura"));
-                    facturaResult.setFecha(rs.getDate("fecha"));
-                    facturaResult.setTotal(rs.getDouble("total"));
+                        }
+                    }
 
-                    Estado estado = new Estado();
-                    estado.setIdEstado(rs.getLong("id_estado"));
-                    facturaResult.setEstado(estadoService.getEstado(estado));
-
-                    Pedido pedido = new Pedido();
-                    pedido.setIdPedido(rs.getLong("id_pedido"));
-                    // facturaResult.setPedido(pedidoService.getPedido(pedido));
-                    facturaResult.setPedido(pedido);
-                }
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            } finally {
-                // Closing the ResultSet
-                if (rs != null) {
-                    rs.close();
-                }
-                // Closing the CallableStatement
-                if (callableStatement != null) {
-                    callableStatement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
             }
-        }
-    });
+        });
 
-    return facturaResult;
-}
+        return facturaResult;
+
+    }
 
     //Function to get the date returned by the HTML input and convert it to a java.sql.Date
     public java.sql.Date convertDate(String input) {
