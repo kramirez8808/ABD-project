@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html style="background-color: rgb(1, 35, 57);" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 
 <head th:replace="~{layout/template-new :: head}">
     <title>COMAVI</title>
@@ -87,10 +87,10 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="d-flex justify-content-center">
-            <div th:if="${productos != null and !productos.empty}" style="width: 80rem;">
-                <table class="table">
-                    <thead>
+        <div class="container text-center" style="font-family: serif;">
+            <div th:if="${productos != null and !productos.empty}">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="thead-dark">
                       <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
@@ -100,7 +100,7 @@
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-light">
                       <tr th:each="producto : ${productos}">
                         <th scope="row">[[${producto.idProducto}]]</th>
                         <td>[[${producto.nombre}]]</td>
@@ -117,7 +117,7 @@
             </div>
             <div th:if="${productos == null or productos.empty}">
                 <p class="lead text-center" style="margin-left: 8rem; margin-right: 8rem;">
-                    No se encontraron productos registrados :(
+                    No se encontraron productos registrados!
                 </p>
             </div>
         </div>

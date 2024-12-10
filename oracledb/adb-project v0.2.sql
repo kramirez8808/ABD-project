@@ -170,113 +170,6 @@ INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('E
 INSERT INTO fide_usuarios_tb (usuario, contrasena, id_rol, id_estado) VALUES ('Irene', 'irene123', 2, 7); --USUARIO
 COMMIT;
 
-CREATE TABLE fide_categorias_tb (
-    id_categoria NUMBER NOT NULL,
-    descripcion VARCHAR2(50),
-    id_estado NUMBER
-);
-ALTER TABLE fide_categorias_tb MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
-
---LLAVES
-ALTER TABLE FIDE_CATEGORIAS_TB ADD CONSTRAINT FIDE_CATEGORIAS_TB_ID_CATEGORIA_PK PRIMARY KEY (ID_CATEGORIA);
-ALTER TABLE FIDE_CATEGORIAS_TB ADD CONSTRAINT FIDE_CATEGORIAS_TB_ID_ESTADO_FK FOREIGN KEY (ID_ESTADO) REFERENCES FIDE_ESTADOS_TB (ID_ESTADO);
-
---SEQUENCIA AUTOINCREMENTAL
-CREATE SEQUENCE FIDE_CATEGORIAS_SEQ
-START WITH 1
-INCREMENT BY 1;
-
---Resetear secuencia
---DROP SEQUENCE FIDE_CATEGORIAS_SEQ;
-
---TRIGGER PARA ID AUTOINCREMENTAL
-CREATE OR REPLACE TRIGGER FIDE_CATEGORIAS_TB_ID_AUTOINCREMENTAL_TRG
-BEFORE INSERT ON FIDE_CATEGORIAS_TB
-FOR EACH ROW
-BEGIN
-    IF :NEW.ID_CATEGORIA IS NULL THEN
-        :NEW.ID_CATEGORIA := FIDE_CATEGORIAS_SEQ.NEXTVAL;
-    END IF;
-END;
-
---INSERTS CATEGORIAS
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electronica', 7); --1
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Alimentos', 7); --2
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Salud', 7); --3
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electrodomesticos', 7); --4
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Ropa', 7); --5
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Jardin', 7); --6
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Deportes', 7); --7
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Juguetes' 7); --8
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Automoviles' 7); --9
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Libros', 7); --10
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Peliculas', 7); --11
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Mascotas', 7); --12
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Herramientas', 7); --13
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Oficina', 7); --14
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Camping', 7); --15
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Arte', 7); --16
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Joyeria', 7); --17
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Instrumentos musicales', 7); --18
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Belleza', 7); --19
-INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Equipaje', 7); --20
-COMMIT;
-
-CREATE TABLE fide_productos_tb (
-    id_producto NUMBER NOT NULL,
-    nombre VARCHAR2(50),
-    descripcion VARCHAR2(100),
-    id_categoria NUMBER,
-    id_estado NUMBER
-);
-ALTER TABLE fide_productos_tb MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
-
---LLAVES
-ALTER TABLE FIDE_PRODUCTOS_TB ADD CONSTRAINT FIDE_PRODUCTOS_TB_ID_PRODUCTO_PK PRIMARY KEY (ID_PRODUCTO);
-ALTER TABLE FIDE_PRODUCTOS_TB ADD CONSTRAINT FIDE_PRODUCTOS_TB_ID_CATEGORIA_FK FOREIGN KEY (ID_CATEGORIA) REFERENCES FIDE_CATEGORIAS_TB (ID_CATEGORIA);
-ALTER TABLE FIDE_PRODUCTOS_TB ADD CONSTRAINT FIDE_PRODUCTOS_TB_ID_ESTADO_FK FOREIGN KEY (ID_ESTADO) REFERENCES FIDE_ESTADOS_TB (ID_ESTADO);
-
---SEQUENCIA AUTOINCREMENTAL
-CREATE SEQUENCE FIDE_PRODUCTOS_SEQ
-START WITH 1
-INCREMENT BY 1;
-
---Resetear secuencia
---DROP SEQUENCE FIDE_PRODUCTOS_SEQ;
-
---TRIGGER PARA ID AUTOINCREMENTAL
-CREATE OR REPLACE TRIGGER FIDE_PRODUCTOS_TB_ID_AUTOINCREMENTAL_TRG
-BEFORE INSERT ON FIDE_PRODUCTOS_TB
-FOR EACH ROW
-BEGIN
-    IF :NEW.ID_PRODUCTO IS NULL THEN
-        :NEW.ID_PRODUCTO := FIDE_PRODUCTOS_SEQ.NEXTVAL;
-    END IF;
-END;
-
---INSERTS PRODUCTOS
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('MSI THIN 15bc', 'Laptop de alta potencia', 1, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arroz Integral', 'Grano entero y sin procesar, alto en fibra', 2, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Paracetamol', 'Antiinflamatorio de receta general', 3, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Nevera Mave', 'Nevera inteligente', 4, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Camisa', 'Camiseta a escoger', 5, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pala', 'Pala de uso general', 6, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pesas', 'Pesas variadas', 7, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Set de Lego Star Wars', 'Estrella de la muerte', 8, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Neumaticos', 'Neumaticos 11cc', 9, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Frankenstein', 'Clasico literario', 10, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Rapidos y Furiosos', 'Pelicula del anio 2001', 11, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Collar', 'Collar para perro', 12, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Taladro', 'Taladro Phillips', 13, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Silla', 'Silla ergonomica', 14, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Tienda de camping', 'Tienda de camping para 4', 15, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pintura', 'Pintura acrilica', 16, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Anillo', 'Anillo de plata', 17, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Guitarra', 'Guitarra Les Paul', 18, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maquillaje', 'Bases', 19, 7);
-INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maleta', 'Maleta de viaje', 20, 7);
-COMMIT;
-
 CREATE TABLE fide_vehiculos_tb (
     id_vehiculo NUMBER NOT NULL,
     marca VARCHAR2(50),
@@ -580,6 +473,7 @@ INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedici
 INSERT INTO fide_licencias_empleado_tb (ID_Empleado, ID_Licencia, Fecha_Expedicion, Fecha_Vencimiento, id_estado) VALUES (2, 13, TO_DATE('2030-03-03', 'YYYY-MM-DD'), TO_DATE('2035-03-03', 'YYYY-MM-DD'), 7);
 COMMIT;
 
+CREATE TABLE fide_clientes_tb (
     id_cliente NUMBER NOT NULL,
     nombre VARCHAR2(50),
     apellido VARCHAR2(50),
@@ -800,6 +694,115 @@ INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUE
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (7, 19, 'Liberia', 7);
 INSERT INTO fide_distritos_tb (ID_Provincia, ID_Canton, Nombre, id_estado) VALUES (7, 20, 'Nicoya', 7);
 
+COMMIT;
+
+CREATE TABLE fide_categorias_tb (
+    id_categoria NUMBER NOT NULL,
+    descripcion VARCHAR2(50),
+    id_estado NUMBER
+);
+ALTER TABLE fide_categorias_tb MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
+
+--LLAVES
+ALTER TABLE FIDE_CATEGORIAS_TB ADD CONSTRAINT FIDE_CATEGORIAS_TB_ID_CATEGORIA_PK PRIMARY KEY (ID_CATEGORIA);
+ALTER TABLE FIDE_CATEGORIAS_TB ADD CONSTRAINT FIDE_CATEGORIAS_TB_ID_ESTADO_FK FOREIGN KEY (ID_ESTADO) REFERENCES FIDE_ESTADOS_TB (ID_ESTADO);
+
+--SEQUENCIA AUTOINCREMENTAL
+CREATE SEQUENCE FIDE_CATEGORIAS_SEQ
+START WITH 1
+INCREMENT BY 1;
+
+--Resetear secuencia
+--DROP SEQUENCE FIDE_CATEGORIAS_SEQ;
+
+--TRIGGER PARA ID AUTOINCREMENTAL
+CREATE OR REPLACE TRIGGER FIDE_CATEGORIAS_TB_ID_AUTOINCREMENTAL_TRG
+BEFORE INSERT ON FIDE_CATEGORIAS_TB
+FOR EACH ROW
+BEGIN
+    IF :NEW.ID_CATEGORIA IS NULL THEN
+        :NEW.ID_CATEGORIA := FIDE_CATEGORIAS_SEQ.NEXTVAL;
+    END IF;
+END;
+
+--INSERTS CATEGORIAS
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electronica', 7); --1
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Alimentos', 7); --2
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Salud', 7); --3
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Electrodomesticos', 7); --4
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Ropa', 7); --5
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Jardin', 7); --6
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Deportes', 7); --7
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Juguetes' 7); --8
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Automoviles' 7); --9
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Libros', 7); --10
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Peliculas', 7); --11
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Mascotas', 7); --12
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Herramientas', 7); --13
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Oficina', 7); --14
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Camping', 7); --15
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Arte', 7); --16
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Joyeria', 7); --17
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Instrumentos musicales', 7); --18
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Belleza', 7); --19
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Equipaje', 7); --20
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Taller', 7);
+INSERT INTO fide_categorias_tb (descripcion, id_estado) VALUES ('Papeleria', 7);
+COMMIT;
+
+CREATE TABLE fide_productos_tb (
+    id_producto NUMBER NOT NULL,
+    nombre VARCHAR2(50),
+    descripcion VARCHAR2(100),
+    id_categoria NUMBER,
+    id_estado NUMBER
+);
+ALTER TABLE fide_productos_tb MOVE TABLESPACE FIDE_PROYECTO_FINAL_TBS;
+
+--LLAVES
+ALTER TABLE FIDE_PRODUCTOS_TB ADD CONSTRAINT FIDE_PRODUCTOS_TB_ID_PRODUCTO_PK PRIMARY KEY (ID_PRODUCTO);
+ALTER TABLE FIDE_PRODUCTOS_TB ADD CONSTRAINT FIDE_PRODUCTOS_TB_ID_CATEGORIA_FK FOREIGN KEY (ID_CATEGORIA) REFERENCES FIDE_CATEGORIAS_TB (ID_CATEGORIA);
+ALTER TABLE FIDE_PRODUCTOS_TB ADD CONSTRAINT FIDE_PRODUCTOS_TB_ID_ESTADO_FK FOREIGN KEY (ID_ESTADO) REFERENCES FIDE_ESTADOS_TB (ID_ESTADO);
+
+--SEQUENCIA AUTOINCREMENTAL
+CREATE SEQUENCE FIDE_PRODUCTOS_SEQ
+START WITH 1
+INCREMENT BY 1;
+
+--Resetear secuencia
+--DROP SEQUENCE FIDE_PRODUCTOS_SEQ;
+
+--TRIGGER PARA ID AUTOINCREMENTAL
+CREATE OR REPLACE TRIGGER FIDE_PRODUCTOS_TB_ID_AUTOINCREMENTAL_TRG
+BEFORE INSERT ON FIDE_PRODUCTOS_TB
+FOR EACH ROW
+BEGIN
+    IF :NEW.ID_PRODUCTO IS NULL THEN
+        :NEW.ID_PRODUCTO := FIDE_PRODUCTOS_SEQ.NEXTVAL;
+    END IF;
+END;
+
+--INSERTS PRODUCTOS
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('MSI THIN 15bc', 'Laptop de alta potencia', 1, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Arroz Integral', 'Grano entero y sin procesar, alto en fibra', 2, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Paracetamol', 'Antiinflamatorio de receta general', 3, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Nevera Mave', 'Nevera inteligente', 4, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Camisa', 'Camiseta a escoger', 5, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pala', 'Pala de uso general', 6, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pesas', 'Pesas variadas', 7, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Set de Lego Star Wars', 'Estrella de la muerte', 8, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Neumaticos', 'Neumaticos 11cc', 9, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Frankenstein', 'Clasico literario', 10, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Rapidos y Furiosos', 'Pelicula del anio 2001', 11, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Collar', 'Collar para perro', 12, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Taladro', 'Taladro Phillips', 13, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Silla', 'Silla ergonomica', 14, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Tienda de camping', 'Tienda de camping para 4', 15, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Pintura', 'Pintura acrilica', 16, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Anillo', 'Anillo de plata', 17, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Guitarra', 'Guitarra Les Paul', 18, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maquillaje', 'Bases', 19, 7);
+INSERT INTO fide_productos_tb (nombre, descripcion, id_categoria, id_estado) VALUES ('Maleta', 'Maleta de viaje', 20, 7);
 COMMIT;
 
 CREATE TABLE fide_pedidos_tb (
@@ -1071,26 +1074,27 @@ BEGIN
 END;
 
 --INSERTS DETALLES PEDIDO
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (1, 1, 100, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (1, 1, 100, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (1, 2, 50, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (2, 3, 200, 'unidades', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (2, 4, 25, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 5, 150, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 6, 30, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (4, 7, 100, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (2, 4, 25, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 5, 150, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (3, 6, 30, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (4, 7, 100, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (4, 8, 50, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (4, 9, 50, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (5, 10, 200, 'unidades', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (5, 11, 25, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (6, 12, 150, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (6, 13, 30, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (7, 14, 100, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (5, 11, 25, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (6, 12, 150, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (6, 13, 30, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (7, 14, 100, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (7, 15, 50, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (8, 16, 200, 'unidades', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (8, 17, 25, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (9, 18, 150, 'kg', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (9, 19, 30, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (8, 17, 25, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (9, 18, 150, 'unidades', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (9, 19, 30, 'unidades', 7);
 INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (10, 20, 200, 'unidades', 7);
-INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (10, 21, 25, 'kg', 7);
+INSERT INTO fide_detalles_pedido_tb (id_pedido, id_producto, cantidad, unidad_masa, id_estado) VALUES (10, 21, 200, 'unidades', 7);
 COMMIT;
 
 CREATE TABLE fide_facturas_tb (
@@ -3009,7 +3013,7 @@ END;
 
 AUDIT ALL BY test1 BY ACCESS;
 AUDIT SELECT TABLE, UPDATE TABLE, INSERT TABLE, DELETE TABLE BY test1 BY ACCESS;
-AUDIT EXECUTE,PROCEDURE BY test1 BY ACCESS;
+AUDIT EXECUTE PROCEDURE BY test1 BY ACCESS;
 /
 create audit policy auditoria actions all on FIDE_CLIENTES_TB;
 /

@@ -66,14 +66,15 @@
 
     <!-- Seccion de ver listado -->
     <section th:fragment="ver">
-        <div class="d-flex justify-content-center">
-            <div th:if="${categorias != null and !categorias.empty}" style="width: 80rem;">
-                <table class="table">
+        <div class="container text-center">
+            <div th:if="${categorias != null and !categorias.empty}">
+                <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Descripción</th>
                         <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
