@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html data-bs-theme="dark" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+  <head th:replace="~{layout/template-new :: head}">
+    <title>COMAVI</title>        
+  </head>
+  <body>
+    <header th:replace="~{layout/template-new :: header}"/>
+    
+    <!-- Para mostrar errores si los hay -->
+    
+
+    <div class="container my-5">
+            <div class="row align-items-center"> 
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success">
+                            <h2>Registro</h2>
+                        </div>
+                      <div th:if="${error}" style="color: red;">
+        <div class="alert alert-danger text-center fw-bold" role="alert">
+                <p th:text="${error}"></p>
+           </div>
+    </div>
+                        <div class="card-body">
+                            <form method="POST" th:action="@{/usuarios/registrar}">
+                                <div class="form-group row my-3">
+                                    <label class="col-md-5 my-auto" for="username">
+                                        <i class="fas fa-user-lock"></i>
+                                        Usuario
+                                    </label>
+                                    <div class="col-md-7 my-auto">
+                                        <input class="form-control" type="text" name="username" id="username"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row my-3">
+                                    <label class="col-md-5 my-auto" for="password">
+                                        <i class="fas fa-key"></i>
+                                        Contraseña
+                                    </label>
+                                    <div class="col-md-7 my-auto">
+                                        <input class="form-control" type="password" name="password" id="password"/>
+                                    </div>
+                                </div>
+                                <div class="card-footer col text-center">
+                                    <button class="btn btn-success" type="submit">
+                                        <span class="btn">
+                                            <i class="fas fa-sign-in-alt"></i>
+                                            Registrar
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>           
+        </div>
+
+
+    <footer th:replace="~{layout/template-new :: footer}"/>   
+  </body>
+</html>

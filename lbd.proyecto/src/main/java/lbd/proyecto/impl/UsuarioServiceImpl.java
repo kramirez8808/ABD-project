@@ -13,10 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import lbd.proyecto.dao.UsuarioDAO;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import javax.sql.DataSource;
+
 import lbd.proyecto.domain.Rol;
 import lbd.proyecto.domain.Usuario;
 import lbd.proyecto.service.EstadoService;
 import lbd.proyecto.service.UsuarioService;
+import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,50 +37,67 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private EstadoService estadoService;
 
+    @Autowired
+    private DataSource dataSource;
+
     @Override
-    public Usuario Login(Usuario usuario) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_Usuarios_TB_VALIDAR_USUARIO_SP");
+public Usuario Login(Usuario usuario) {
+    StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_Usuarios_TB_VALIDAR_USUARIO_SP");
+    
+    //String contrasenaDesen = desencriptarContrasena(usuario.getUsuario());
 
-        // Registrar los parámetros de entrada y salida
-        query.registerStoredProcedureParameter("P_USUARIO", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("P_USUARIO_RETORNO", String.class, ParameterMode.OUT);
-        query.registerStoredProcedureParameter("P_CONTRASENA", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("P_ROL", String.class, ParameterMode.OUT);
+    
+    // Registrar los parámetros de entrada y salida
+    query.registerStoredProcedureParameter("P_USUARIO", String.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter("P_USUARIO_RETORNO", String.class, ParameterMode.OUT);
+    query.registerStoredProcedureParameter("P_CONTRASENA", String.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter("P_ROL", String.class, ParameterMode.OUT);
 
-        // Establecer los valores de los parámetros de entrada
-        query.setParameter("P_USUARIO", usuario.getUsuario());
-        query.setParameter("P_CONTRASENA", usuario.getContrasena());
+    // Establecer los valores de los parámetros de entrada
+    query.setParameter("P_USUARIO", usuario.getUsuario());
+    query.setParameter("P_CONTRASENA", usuario.getContrasena()); // Contraseña en texto plano
 
-        // Ejecutar el procedimiento
-        try {
-            query.execute();
+        //System.out.println("contrasena: " +contrasenaDesen);
+    // Ejecutar el procedimiento
+    try {
+        query.execute();
 
-            // Recuperar los parámetros de salida
-            String usuarioRetornado = (String) query.getOutputParameterValue("P_USUARIO_RETORNO");
-            String rolRetornado = (String) query.getOutputParameterValue("P_ROL");
+        // Recuperar los parámetros de salida
+        String usuarioRetornado = (String) query.getOutputParameterValue("P_USUARIO_RETORNO");
+        String rolRetornado = (String) query.getOutputParameterValue("P_ROL");
+        // Comprobar si los parámetros de salida no son nulos
+        if (usuarioRetornado != null && !usuarioRetornado.isEmpty() && rolRetornado != null && !rolRetornado.isEmpty() ) {
+            
+            Usuario usuarioRetorno = new Usuario();
+            Rol rolAsignado = new Rol();
+            usuarioRetorno.setUsuario(usuarioRetornado);
+            rolAsignado.setDescripcion(rolRetornado);
+            usuarioRetorno.setID_ROL(rolAsignado);
 
-            // Comprobar si los parámetros de salida no son nulos
-            if (usuarioRetornado != null && !usuarioRetornado.isEmpty() && rolRetornado != null && !rolRetornado.isEmpty()) {
-                Usuario usuarioRetorno = new Usuario();
-                Rol rolAsignado = new Rol();
-                usuarioRetorno.setUsuario(usuarioRetornado);
-                rolAsignado.setDescripcion(rolRetornado);
-                usuarioRetorno.setID_ROL(rolAsignado);
-
-                return usuarioRetorno;
-            } else {
-                return new Usuario();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error al ejecutar el procedimiento almacenado.");
+            return usuarioRetorno;
+        } else {
+            
             return new Usuario();
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error al ejecutar el procedimiento almacenado.");
+        return new Usuario();
     }
+}
 
     @Override
+    //@Transactional
     public void insertUsuario(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_Usuarios_TB_VALIDAR_USUARIO_SP");
+        
+        if (usuarioExiste(usuario.getUsuario())) {
+            throw new IllegalArgumentException("El nombre de usuario ya existe.");
+            //System.out.println("El usuario ya existe Service");
+        } else {
+            //System.out.println("Nombre_usuario Service2: " + usuario.getUsuario());
+            usuarioDAO.insertUser(usuario.getUsuario(), usuario.getContrasena(), usuario.getID_ROL().getIdRol());
+        }
     }
 
     @Override
@@ -97,4 +119,51 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void inactivarUsuario(Long idUsuario) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public boolean usuarioExiste(String nombreUsuario) {
+        String fn = "{ ? = call FIDE_Usuarios_TB_USUARIO_EXISTE_FN(?) }";
+
+        try ( Connection connection = dataSource.getConnection();  CallableStatement callableStatement = connection.prepareCall(fn)) {
+
+            callableStatement.registerOutParameter(1, OracleTypes.NUMBER);
+            callableStatement.setString(2, nombreUsuario);
+
+            callableStatement.execute();
+
+            int resultado = callableStatement.getInt(1);
+            System.out.println("Resultado de la funcion:" + resultado);
+            if (resultado == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar el procedimiento almacenado.");
+            throw new RuntimeException("Error al validar si el usuario existe", e);
+        }
+    }
+    /*
+    public String desencriptarContrasena(String usuario){
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("FIDE_USUARIOS_TB_DESENCRIPTAR_DATOS_SP");
+        
+        query.registerStoredProcedureParameter("P_USUARIO", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("P_CONTRASENA", String.class, ParameterMode.OUT);
+        
+        query.setParameter("P_USUARIO", usuario);
+
+    // Ejecutar el procedimiento
+    try {
+        query.execute();
+
+        // Recuperar el parámetro de salida
+        return (String) query.getOutputParameterValue("P_CONTRASENA");
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error al desencriptar la contraseña.");
+        return null;
+    }
+    }
+    */
+    
 }
