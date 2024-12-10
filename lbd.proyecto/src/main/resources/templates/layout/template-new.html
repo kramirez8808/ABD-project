@@ -91,7 +91,7 @@
                         </li>
 
                         <li class="nav-item dropdown"
-                            th:if="${(session.usuario != null && session.usuario.ID_ROL.descripcion == 'Usuario' || session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador')}">
+                            th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
                             <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(201, 244, 249);"
                                 href="#" data-bs-toggle="dropdown" aria-expanded="false">Productos</a>
                             <ul class="dropdown-menu">
@@ -101,7 +101,7 @@
                         </li>
 
                         <li class="nav-item dropdown"
-                            th:if="${(session.usuario != null && session.usuario.ID_ROL.descripcion == 'Usuario' || session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador')}">
+                            th:if="${session.usuario != null && session.usuario.ID_ROL.descripcion == 'Administrador'}">
                             <a class="nav-link dropdown-toggle" style="font-size: 25px; color: rgb(201, 244, 249);"
                                 href="#" data-bs-toggle="dropdown" aria-expanded="false">Categorias</a>
                             <ul class="dropdown-menu">
