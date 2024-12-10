@@ -17,7 +17,7 @@ public interface PedidoDAO extends JpaRepository<Pedido, Long> {
     void insertPedido(Long idCliente, Long idVehiculo, Long idTipoCarga, java.sql.Date fecha, Long idEstado, Long idLicenciaEmpleado);
     
     // Method to call an stored procedure to update an order
-    @Procedure(procedureName = "FIDE_PEDIDOS_TB_VER_ACTUALIZAR_SP")
+    @Procedure(procedureName = "FIDE_PEDIDOS_TB_ACTUALIZAR_SP")
     void updatePedido(Long idPedido, Long idCliente, Long idVehiculo, Long idTipoCarga, java.sql.Date fecha, Long idEstado, Long idLicenciaEmpleado);
 
     // Method to call an stored procedure to delete an order

@@ -126,7 +126,6 @@
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">ID</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Vehículo</th>
                         <th scope="col">Fecha</th>
@@ -136,7 +135,6 @@
                     </thead>
                     <tbody class="table-light">
                       <tr th:each="pedido : ${pedidos}">
-                        <th scope="row">[[${pedido.idPedido}]]</th>
                         <td>[[${pedido.getCliente.getNombre + ' ' + pedido.getCliente.getApellido}]]</td>                        
                         <td>[[${pedido.getVehiculo.getMarca + ' ' + pedido.getVehiculo.getModelo}]]</td>
                         <td>[[${pedido.fechaPedido}]]</td>

@@ -105,7 +105,6 @@
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellido</th>
                         <th scope="col">Puesto</th>
@@ -116,7 +115,6 @@
                     </thead>
                     <tbody class="table-light">
                       <tr th:each="empleado : ${empleados}">
-                        <th scope="row">[[${empleado.idEmpleado}]]</th>
                         <td>[[${empleado.nombre}]]</td>
                         <td>[[${empleado.apellido}]]</td>                        
                         <td>[[${empleado.puesto.descripcion}]]</td>
@@ -237,6 +235,18 @@
                             <input type="date" class="form-control text-dark bg-light" id="fechaContratacion" th:value="${fechaContratacion}" name="fechaContratacion" value="" required="">
                             <div class="invalid-feedback">
                                 Una fecha válida es requerida.
+                            </div>
+                        </div>
+                        
+                        <!-- Estado -->
+                        <div class="col-sm-12">
+                            <label for="idEstado" class="form-label">Estado</label>
+                            <select class="form-select text-dark bg-light" id="idEstado" name="idEstado" required="">
+                                <option value="">Seleccione...</option>
+                                <option th:each="estado : ${estados}" th:value="${estado.idEstado}">[[${estado.descripcion}]]</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un estado.
                             </div>
                         </div>
                         

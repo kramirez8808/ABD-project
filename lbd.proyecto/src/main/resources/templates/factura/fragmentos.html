@@ -26,7 +26,6 @@ background-size: cover;"  xmlns:th="http://www.thymeleaf.org" xmlns="http://www.
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr table-active>
-              <th scope="col">ID</th>
               <th scope="col">Cliente</th>
               <th scope="col">Monto</th>
               <th scope="col">Fecha</th>
@@ -35,7 +34,6 @@ background-size: cover;"  xmlns:th="http://www.thymeleaf.org" xmlns="http://www.
           </thead>
           <tbody class="table-light">
             <tr th:each="factura : ${facturas}">
-              <th scope="row">[[${factura.idFactura}]]</th>
               <td>[[${factura.getPedido.getCliente.getNombre + ' ' + factura.getPedido.getCliente.getApellido}]]</td>
               <td>[[${factura.total}]]</td>
               <td>[[${factura.fecha}]]</td>

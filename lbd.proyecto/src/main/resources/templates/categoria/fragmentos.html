@@ -71,7 +71,6 @@
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">ID</th>
                         <th scope="col">Descripción</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
@@ -79,7 +78,6 @@
                     </thead>
                     <tbody>
                       <tr th:each="categoria : ${categorias}">
-                        <th scope="row">[[${categoria.idCategoria}]]</th>
                         <td>[[${categoria.descripcion}]]</td>
                         <td>[[${categoria.estado != null ? categoria.estado.descripcion : 'Sin estado'}]]</td>
                         <td>

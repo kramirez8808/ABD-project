@@ -89,7 +89,6 @@
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr table-active>
-                        <th scope="col">ID</th>
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
                         <th scope="col">Placa</th>
@@ -100,7 +99,6 @@
                     </thead>
                     <tbody class="table-light">
                       <tr th:each="vehiculo : ${vehiculos}">
-                        <th scope="row">[[${vehiculo.idVehiculo}]]</th>
                         <td>[[${vehiculo.marca}]]</td>
                         <td>[[${vehiculo.modelo}]]</td>                        
                         <td>[[${vehiculo.placa}]]</td>
