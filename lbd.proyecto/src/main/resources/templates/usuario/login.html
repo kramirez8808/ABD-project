@@ -14,8 +14,13 @@
             </div>
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header text-center text-light" style="background-color: rgb(78, 102, 213);">
+                    <div class="card-header text-center text-light" style="background-color: rgb(15, 145, 252);">
                         <h2>Iniciar Sesión</h2>
+                    </div>
+                    <div th:if="${error}" style="color: red;">
+                        <div class="alert alert-danger text-center fw-bold" role="alert">
+                            <p th:text="${error}"></p>
+                        </div>
                     </div>
                     <div class="card-body">
                         <form method="POST" th:action="@{/usuarios/validar}">
@@ -33,7 +38,7 @@
                             </div>
                             <div class="card-footer col text-center">
                                 <button class="btn btn-primary">
-                                    <a th:href="@{/registro/nuevo}" class="btn text-light">Registrar</a>
+                                    <a th:href="@{/usuarios/registro/nuevo}" class="btn text-light">Registrar</a>
                                 </button>
                                 <button class="btn btn-success text-light" type="submit">
                                     <span class="btn text-light">Iniciar Sesión</span>
