@@ -56,6 +56,7 @@ public class UsuarioController {
     @PostMapping("/cerrar-sesion")
     public String cerrarSesion(HttpSession session) {
         System.out.println("ID de sesión antes de invalidar: " + session.getId());
+        session.setAttribute("usuario", null); // Elimina el atributo de la sesión
         session.invalidate();  // Invalida la sesión
         System.out.println("ID de sesión después de invalidar: " + session.getId()); // El ID de sesión será diferente o nulo
         return "usuario/login";

@@ -51,6 +51,10 @@ import lbd.proyecto.domain.DetallePedido;
 import lbd.proyecto.domain.Usuario;
 import lbd.proyecto.service.DetallePedidoService;
 
+import lbd.proyecto.domain.Usuario;
+import lbd.proyecto.service.UsuarioService;
+import lbd.proyecto.domain.Rol;
+
 @Controller
 public class IndexController {
 
@@ -105,6 +109,9 @@ public class IndexController {
     @Autowired
     DetallePedidoService detallePedidoService;
 
+    @Autowired
+    UsuarioService usuarioService;
+    
 // Muestra la página principal
     @RequestMapping("/")
     public String page(Model model, HttpSession session) {
@@ -713,6 +720,17 @@ public class IndexController {
         //     System.out.println("Unidad: " + d.getUnidadMasa());
 
         // }
+        
+        // Test insertUsuario
+//        Rol rol = new Rol();
+//        rol.setIdRol(1L);
+//        
+//        Usuario user = new Usuario();
+//        user.setUsuario("test");
+//        user.setContrasena("123");
+//        user.setID_ROL(rol);
+//        
+//        usuarioService.insertUsuario(user);
 
         return "index-new";
     }
