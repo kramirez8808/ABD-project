@@ -36,6 +36,7 @@ public class CategoriaController {
     
     @GetMapping("/agregar")
     public String agregarCategoria(Model model) { 
+        model.addAttribute("estados", estadoService.getAllEstados());
         return "categoria/agregar";
     }
 
